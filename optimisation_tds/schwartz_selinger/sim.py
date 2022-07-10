@@ -1,8 +1,5 @@
-import sys
 import sympy as sp
 from compute_profile_depth import automatic_vertices
-
-sys.path.append("../../")
 import FESTIM as F
 
 fluence = 1.5e25
@@ -56,18 +53,18 @@ def festim_sim(E_p1, n1, initial_number_cells=500):
                 k_0=2.4e-7 / (1.1e-10**2 * 6 * atom_density_W),
                 E_k=0.39,
                 p_0=1e13,
+                E_p=0.9134,
+                density=3.9927e22,
+                materials=tungsten,
+            ),
+            F.Trap(
+                k_0=4.1e-7 / (1.1e-10**2 * 6 * atom_density_W),
+                E_k=0.39,
+                p_0=1e13,
                 E_p=E_p1,
                 density=n1,
                 materials=tungsten,
             ),
-            # F.Trap(
-            #     k_0=4.1e-7 / (1.1e-10**2 * 6 * atom_density_W),
-            #     E_k=0.39,
-            #     p_0=1e13,
-            #     E_p=E_p2,
-            #     density=n2,
-            #     materials=tungsten,
-            # ),
         ]
     )
 
@@ -118,7 +115,7 @@ def festim_sim(E_p1, n1, initial_number_cells=500):
     solute = F.TotalVolume("solute", volume=1)
     retention = F.TotalVolume("retention", volume=1)
     trap_1 = F.TotalVolume("1", volume=1)
-    # trap_2 = F.TotalVolume("2", volume=1)
+    trap_2 = F.TotalVolume("2", volume=1)
     my_derived_quantities.derived_quantities = [
         average_T,
         H_flux_left,
@@ -126,7 +123,7 @@ def festim_sim(E_p1, n1, initial_number_cells=500):
         solute,
         retention,
         trap_1,
-        # trap_2,
+        trap_2,
     ]
 
     my_exports = F.Exports(
@@ -170,5 +167,8 @@ def festim_sim(E_p1, n1, initial_number_cells=500):
 
 
 if __name__ == "__main__":
-    # festim_sim(E_p1=0.87, n1=8.219e25, E_p2=1.0, n2=2.529e25)
+    # 0 dpa values
+    # E_p1=0.9134, n1=3.9927e22
+    #
+    # 0.001 dpa values
     festim_sim(E_p1=0.9134, n1=3.9927e22)

@@ -8,7 +8,7 @@ resting_time = 0.5 * 24 * 3600
 
 tds_data_folder = "../../data/tds_data/"
 
-tds_dpa_0 = "tds_data/0_dpa.csv"
+tds_dpa_0 = "tds_data/0.001_dpa.csv"
 
 data = np.genfromtxt(tds_dpa_0, delimiter=",")
 
@@ -66,7 +66,8 @@ plt.plot(T_sim, -np.asarray(flux1) - np.asarray(flux2))
 #         plt.plot(T_sim, derivatives[i], linewidth=width, linestyle=style, label=legends[i], alpha=1)
 
 # plt.xlim(300, 1000)
-plt.ylim(0, 1e16)
+# plt.ylim(0, 1e16)
+plt.ylim(bottom=0)
 # plt.vlines(490, 0, 2e16, color="grey", linestyle="dashed")
 # plt.vlines(540, 0, 2e16, color="grey", linestyle="dashed")
 # plt.ylim(1e13, 1e18)
