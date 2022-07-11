@@ -60,7 +60,7 @@ def mean_absolute_error(y1, y2, x=None, bounds=None, weight=None):
     return err
 
 
-def error(p, scaling_factors=None, restart_data=None):
+def error(p, norms=None, restart_data=None):
     """
     Compute average absolute error between simulation and reference
     """
@@ -85,7 +85,7 @@ def error(p, scaling_factors=None, restart_data=None):
             raise ValueError("Unknown {} norm".format(norm))
 
     print("Real parameters are:")
-    print("[{:.4f}, {:.4e}]".format(p_real[0], p_real[1]))
+    print("[{:.4e}, {:.4f}, {:.4e}]".format(p_real[0], p_real[1], p_real[2]))
 
     # if any parameter is negative, return a very high error
     # this is a way to artificially constrain Nelder-Mead
@@ -136,9 +136,14 @@ def error(p, scaling_factors=None, restart_data=None):
         normalised_desorption_ref,
         normalised_desorption_sim,
         T_ref,
-        bounds=[[485, 545]],
-        weight=[5],
+        # for 0 dpa
+        # bounds=[[485, 545]],
+        # weight=[5],
+        # for 0.023 dpa
+        bounds=[[460, 530], [750, 800]],
+        weight=[5, 5],
     )
+
     # uncomment to compute MSE
     # diff = normalised_desorption_ref - normalised_desorption_sim
     # err = (diff**2).mean()
@@ -163,7 +168,7 @@ def error(p, scaling_factors=None, restart_data=None):
 
 # READ REFERENCE DATA
 
-data_ref = np.genfromtxt("tds_data/0.001_dpa.csv", delimiter=",")
+data_ref = np.genfromtxt("tds_data/0.023_dpa.csv", delimiter=",")
 T_ref = data_ref[:, 0]
 # data in D/s, needs to convert to D/(m2 s)
 desorption_ref = data_ref[:, 1] / (12e-03 * 15e-03)
@@ -177,12 +182,14 @@ if __name__ == "__main__":
     j = 0
 
     # build initial guess
-    E_p1 = 1
-    n1 = np.log10(4e22)
+    E_p1 = 0.9134
+    n1 = np.log10(3.9927e22)
+    E_p2 = 1.1
+    n2 = np.log10(4e22)
 
-    initial_guess = np.array([E_p1, n1])
+    initial_guess = np.array([n1, E_p2, n2])
 
-    norms = ["linear", "log"]
+    norms = ["log", "linear", "log"]
 
     # tolerances
     fatol = 1e-03
