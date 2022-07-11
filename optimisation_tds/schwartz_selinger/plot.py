@@ -8,14 +8,65 @@ resting_time = 0.5 * 24 * 3600
 
 tds_data_folder = "../../data/tds_data/"
 
-tds_dpa_0 = "tds_data/0.001_dpa.csv"
+tds_dpa_0 = "tds_data/0_dpa.csv"
+tds_dpa_0_001 = "tds_data/0.001_dpa.csv"
+tds_dpa_0_005 = "tds_data/0.005_dpa.csv"
+tds_dpa_0_023 = "tds_data/0.023_dpa.csv"
+tds_dpa_0_1 = "tds_data/0.1_dpa.csv"
+tds_dpa_0_23 = "tds_data/0.23_dpa.csv"
+tds_dpa_0_5 = "tds_data/0.5_dpa.csv"
+tds_dpa_2_5 = "tds_data/2.5_dpa.csv"
 
-data = np.genfromtxt(tds_dpa_0, delimiter=",")
+data_0 = np.genfromtxt(tds_dpa_0, delimiter=",")
+data_0_001 = np.genfromtxt(tds_dpa_0_001, delimiter=",")
+data_0_005 = np.genfromtxt(tds_dpa_0_005, delimiter=",")
+data_0_023 = np.genfromtxt(tds_dpa_0_023, delimiter=",")
+data_0_1 = np.genfromtxt(tds_dpa_0_1, delimiter=",")
+data_0_23 = np.genfromtxt(tds_dpa_0_23, delimiter=",")
+data_0_5 = np.genfromtxt(tds_dpa_0_5, delimiter=",")
+data_2_5 = np.genfromtxt(tds_dpa_2_5, delimiter=",")
 
-T = data[:, 0]
-flux = data[:, 1] / (12e-03 * 15e-03)
+T_0 = data_0[:, 0]
+T_0_001 = data_0_001[:, 0]
+T_0_005 = data_0_005[:, 0]
+T_0_023 = data_0_023[:, 0]
+T_0_1 = data_0_1[:, 0]
+T_0_23 = data_0_23[:, 0]
+T_0_5 = data_0_5[:, 0]
+T_2_5 = data_2_5[:, 0]
 
-plt.scatter(T, flux, label="exp", color="black")
+area = 12e-03 * 15e-03
+
+flux_0 = data_0[:, 1] / area
+flux_0_001 = data_0_001[:, 1] / area
+flux_0_005 = data_0_005[:, 1] / area
+flux_0_023 = data_0_023[:, 1] / area
+flux_0_1 = data_0_1[:, 1] / area
+flux_0_23 = data_0_23[:, 1] / area
+flux_0_5 = data_0_5[:, 1] / area
+flux_2_5 = data_2_5[:, 1] / area
+
+# plt.scatter(T_0, flux_0, label="0 dpa")
+# plt.scatter(T_0_001, flux_0_001, label="0.001 dpa")
+# plt.scatter(T_0_005, flux_0_005, label="0.005 dpa")
+plt.scatter(T_0_023, flux_0_023, label="0.023 dpa")
+# plt.scatter(T_0_1, flux_0_1, label="0.1 dpa")
+# plt.scatter(T_0_23, flux_0_23, label="0.23 dpa", color="black")
+# plt.scatter(T_0_5, flux_0_5, label="0.5 dpa", color="black")
+# plt.scatter(T_2_5, flux_2_5, label="2.5 dpa", color="black")
+
+# plt.axvspan(
+#     460,
+#     530,
+#     color="tab:blue",
+#     alpha=0.5,
+# )
+# plt.axvspan(
+#     750,
+#     800,
+#     color="tab:blue",
+#     alpha=0.5,
+# )
 
 T_sim = []
 flux1, flux2 = [], []
