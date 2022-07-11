@@ -14,7 +14,7 @@ size = 8e-04
 atom_density_W = 6.3222e28
 
 
-def festim_sim(E_p1, n1, initial_number_cells=500):
+def festim_sim(n1, E_p2, n2, E_p1=0.9134, initial_number_cells=500):
     """Runs a FESTIM simulation
 
     Args:
@@ -53,16 +53,16 @@ def festim_sim(E_p1, n1, initial_number_cells=500):
                 k_0=2.4e-7 / (1.1e-10**2 * 6 * atom_density_W),
                 E_k=0.39,
                 p_0=1e13,
-                E_p=0.9134,
-                density=3.9927e22,
+                E_p=E_p1,
+                density=n1,
                 materials=tungsten,
             ),
             F.Trap(
                 k_0=4.1e-7 / (1.1e-10**2 * 6 * atom_density_W),
                 E_k=0.39,
                 p_0=1e13,
-                E_p=E_p1,
-                density=n1,
+                E_p=E_p2,
+                density=n2,
                 materials=tungsten,
             ),
         ]
