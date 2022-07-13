@@ -150,7 +150,7 @@ def festim_sim(n1, E_p2, n2, E_p1=0.9134, initial_number_cells=500):
         1,
         stepsize_change_ratio=1.08,
         t_stop=implantation_time + resting_time * 0.6,
-        dt_min=1e-5,
+        dt_min=1e-4,
         stepsize_stop_max=50,
     )
 
