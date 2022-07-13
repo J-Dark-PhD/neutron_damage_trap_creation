@@ -154,13 +154,13 @@ def error(p, norms=None, restart_data=None):
     print("Absolute tolerance: {:.2e}".format(xatol))
 
     # add parameters and error to csv file
-    with open("simulations_results_scaled.csv", "a") as f:
-        writer = csv.writer(f, lineterminator="\n", delimiter=",")
-        writer.writerow([*p, err])
+    # with open("simulations_results_scaled.csv", "a") as f:
+    #     writer = csv.writer(f, lineterminator="\n", delimiter=",")
+    #     writer.writerow([*p, err])
 
-    with open("simulations_results.csv", "a") as f:
-        writer = csv.writer(f, lineterminator="\n", delimiter=",")
-        writer.writerow([*p_real, err])
+    # with open("simulations_results.csv", "a") as f:
+    #     writer = csv.writer(f, lineterminator="\n", delimiter=",")
+    #     writer.writerow([*p_real, err])
 
     # RETURN ERROR
     return err
