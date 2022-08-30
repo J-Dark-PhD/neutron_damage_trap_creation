@@ -85,7 +85,11 @@ def error(p, norms=None, restart_data=None):
             raise ValueError("Unknown {} norm".format(norm))
 
     print("Real parameters are:")
-    print("[{:.4e}, {:.4f}, {:.4e}]".format(p_real[0], p_real[1], p_real[2]))
+    print(
+        "[{:.4f}, {:.4e}, {:.4f}, {:.4e}]".format(
+            p_real[0], p_real[1], p_real[2], p_real[3]
+        )
+    )
 
     # if any parameter is negative, return a very high error
     # this is a way to artificially constrain Nelder-Mead
@@ -140,8 +144,8 @@ def error(p, norms=None, restart_data=None):
         # bounds=[[485, 545]],
         # weight=[5],
         # for 0.023 dpa
-        bounds=[[460, 530], [750, 800]],
-        weight=[5, 5],
+        # bounds=[[460, 530], [750, 800]],
+        # weight=[5, 5],
     )
 
     # uncomment to compute MSE
@@ -183,13 +187,13 @@ if __name__ == "__main__":
 
     # build initial guess
     E_p1 = 0.9134
-    n1 = np.log10(3.9927e22)
-    E_p2 = 1.1
-    n2 = np.log10(4e22)
+    n1 = np.log10(1.5e24)
+    E_p2 = 1.45
+    n2 = np.log10(1.7e23)
 
-    initial_guess = np.array([n1, E_p2, n2])
+    initial_guess = np.array([E_p1, n1, E_p2, n2])
 
-    norms = ["log", "linear", "log"]
+    norms = ["linear", "log", "linear", "log"]
 
     # tolerances
     fatol = 1e-03
