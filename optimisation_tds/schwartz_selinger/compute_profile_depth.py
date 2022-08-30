@@ -39,16 +39,19 @@ def automatic_vertices(r_p, size, mat, traps, nb_cells, T, implantation_time, fl
         )
     )
     dx = 3e-6 / 300
-    tolerance = 1
+    tolerance = 1.5
     number_of_cells_required = int(
         round((max_penetration_depth * tolerance - 3 * r_p) / dx)
     )
+    number_of_cells_required = int(number_of_cells_required * 2)
 
     vertices = np.concatenate(
         [
             np.linspace(0, 3 * r_p, 100),  # highly refined around implantation
             np.linspace(
-                3 * r_p, max_penetration_depth * tolerance, number_of_cells_required
+                3 * r_p,
+                max_penetration_depth * tolerance,
+                number_of_cells_required,
             ),  # refined in affected region
             np.linspace(
                 max_penetration_depth * tolerance, size, nb_cells
