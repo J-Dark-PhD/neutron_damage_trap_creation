@@ -91,30 +91,37 @@ with open("Results/last.csv", "r") as csvfile:
                 solute.append(float(row[4]))
                 ret.append(float(row[5]))
                 trap1.append(float(row[6]))
-                # trap2.append(float(row[7]))
+                trap2.append(float(row[7]))
 
 
-# # fields = [ret, solute, trap1, trap2]
-# # derivatives = [[] for i in range(len(fields))]
+fields = [ret, solute, trap1, trap2]
+derivatives = [[] for i in range(len(fields))]
 
-# # legends = ["Total", "Solute", "Trap 1", "Trap 2"]
-# # for i in range(len(ret)-1):
-# #     for j in range(0, len(derivatives)):
-# #         derivatives[j].append(-(fields[j][i+1] - fields[j][i])/(t[i+1] - t[i]))
+legends = ["Total", "Solute", "Trap 1", "Trap 2"]
+for i in range(len(ret) - 1):
+    for j in range(0, len(derivatives)):
+        derivatives[j].append(-(fields[j][i + 1] - fields[j][i]) / (t[i + 1] - t[i]))
 
 plt.plot(T_sim, -np.asarray(flux1) - np.asarray(flux2))
 # plt.plot(T_sim, -np.asarray(flux2), label="flux2")
-# T_sim.pop(0)
-# for i in range(0, len(derivatives)):
-#     if i != 0:
-#         style = "dashed"
-#         width = 0.8
-#         plt.fill_between(T_sim, 0, derivatives[i], facecolor='grey', alpha=0.1)
-#     else:
-#         style = "-"
-#         width = 1.7
-#     if i != 1:
-#         plt.plot(T_sim, derivatives[i], linewidth=width, linestyle=style, label=legends[i], alpha=1)
+T_sim.pop(0)
+for i in range(0, len(derivatives)):
+    if i != 0:
+        style = "dashed"
+        width = 0.8
+        plt.fill_between(T_sim, 0, derivatives[i], facecolor="grey", alpha=0.1)
+    else:
+        style = "-"
+        width = 1.7
+    if i != 1:
+        plt.plot(
+            T_sim,
+            derivatives[i],
+            linewidth=width,
+            linestyle=style,
+            label=legends[i],
+            alpha=1,
+        )
 
 # plt.xlim(300, 1000)
 # plt.ylim(0, 1e16)
