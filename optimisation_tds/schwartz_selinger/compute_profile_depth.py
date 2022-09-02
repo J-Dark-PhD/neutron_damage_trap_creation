@@ -31,33 +31,66 @@ def automatic_vertices(r_p, size, mat, traps, nb_cells, T, implantation_time, fl
     ks = k_0s * np.exp(-E_ks / k_B / T)
     cmax = r_p * flux / D
     max_penetration_depth = r_p + r_d(cmax, implantation_time, D, ns, ks, ps)
-    if max_penetration_depth > size:
-        max_penetration_depth = size * 0.9
-    print(
-        "The estimated maximum penetration depth is: {:.2e} m".format(
-            max_penetration_depth
-        )
-    )
     dx = 3e-6 / 300
-    tolerance = 1.5
-    number_of_cells_required = int(
-        round((max_penetration_depth * tolerance - 3 * r_p) / dx)
-    )
-    number_of_cells_required = int(number_of_cells_required * 1.5)
+    tolerance = 1.2
 
-    vertices = np.concatenate(
-        [
-            np.linspace(0, 3 * r_p, 100),  # highly refined around implantation
-            np.linspace(
-                3 * r_p,
-                max_penetration_depth * tolerance,
-                number_of_cells_required,
-            ),  # refined in affected region
-            np.linspace(
-                max_penetration_depth * tolerance, size, nb_cells
-            ),  # coarser elswhere
-        ]
-    )
+    if max_penetration_depth * tolerance > size * 0.9:
+        max_penetration_depth = size
+        print(
+            "The estimated maximum penetration depth is: {:.2e} m".format(
+                max_penetration_depth
+            )
+        )
+        number_of_cells_required = int(round((max_penetration_depth - 3 * r_p) / dx))
+        number_of_cells_required = int(number_of_cells_required)
+
+        N = 3000
+        damage_zone_total = np.linspace(0, 7e-06, num=N)
+
+        vertices = np.concatenate(
+            [
+                np.linspace(0, 3 * r_p, 100),  # highly refined around implantation
+                damage_zone_total,  # refined in damaged area
+                np.linspace(
+                    3 * r_p,
+                    max_penetration_depth,
+                    number_of_cells_required,
+                ),  # refined in affected region
+            ]
+        )
+        vertices = np.sort(np.unique(vertices))
+
+    else:
+        print(
+            "The estimated maximum penetration depth is: {:.2e} m".format(
+                max_penetration_depth
+            )
+        )
+
+        number_of_cells_required = int(
+            round((max_penetration_depth * tolerance - 3 * r_p) / dx)
+        )
+        number_of_cells_required = int(number_of_cells_required)
+
+        N = 3000
+        damage_zone_total = np.linspace(0, 7e-06, num=N)
+
+        vertices = np.concatenate(
+            [
+                np.linspace(0, 3 * r_p, 100),  # highly refined around implantation
+                damage_zone_total,
+                np.linspace(
+                    3 * r_p,
+                    max_penetration_depth * tolerance,
+                    number_of_cells_required,
+                ),  # refined in affected region
+                np.linspace(
+                    max_penetration_depth * tolerance, size, nb_cells
+                ),  # coarser elswhere
+            ]
+        )
+        vertices = np.sort(np.unique(vertices))
+
     print("The mesh size is: {}".format(len(vertices)))
     return vertices
 
