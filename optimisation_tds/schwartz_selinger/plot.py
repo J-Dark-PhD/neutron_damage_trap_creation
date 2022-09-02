@@ -76,7 +76,8 @@ ret = []
 t = []
 trap1 = []
 trap2 = []
-# trap3 = []
+trap3 = []
+trap4 = []
 
 
 with open("Results/last.csv", "r") as csvfile:
@@ -92,12 +93,15 @@ with open("Results/last.csv", "r") as csvfile:
                 ret.append(float(row[5]))
                 trap1.append(float(row[6]))
                 trap2.append(float(row[7]))
+                trap3.append(float(row[8]))
+                # trap4.append(float(row[9]))
 
 
-fields = [ret, solute, trap1, trap2]
+fields = [ret, solute, trap1, trap2, trap3]
+# fields = [ret, solute, trap1]
 derivatives = [[] for i in range(len(fields))]
 
-legends = ["Total", "Solute", "Trap 1", "Trap 2"]
+legends = ["Total", "Solute", "Trap 1", "Trap 2", "Trap 3", "Trap 4"]
 for i in range(len(ret) - 1):
     for j in range(0, len(derivatives)):
         derivatives[j].append(-(fields[j][i + 1] - fields[j][i]) / (t[i + 1] - t[i]))
