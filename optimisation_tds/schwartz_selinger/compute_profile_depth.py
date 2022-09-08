@@ -44,13 +44,10 @@ def automatic_vertices(r_p, size, mat, traps, nb_cells, T, implantation_time, fl
         number_of_cells_required = int(round((max_penetration_depth - 3 * r_p) / dx))
         number_of_cells_required = int(number_of_cells_required)
 
-        N = 3000
-        damage_zone_total = np.linspace(0, 7e-06, num=N)
-
         vertices = np.concatenate(
             [
                 np.linspace(0, 3 * r_p, 100),  # highly refined around implantation
-                damage_zone_total,  # refined in damaged area
+                # damage_zone_total,  # refined in damaged area
                 np.linspace(
                     3 * r_p,
                     max_penetration_depth,
@@ -72,13 +69,10 @@ def automatic_vertices(r_p, size, mat, traps, nb_cells, T, implantation_time, fl
         )
         number_of_cells_required = int(number_of_cells_required)
 
-        N = 3000
-        damage_zone_total = np.linspace(0, 7e-06, num=N)
-
         vertices = np.concatenate(
             [
                 np.linspace(0, 3 * r_p, 100),  # highly refined around implantation
-                damage_zone_total,
+                # damage_zone_total,
                 np.linspace(
                     3 * r_p,
                     max_penetration_depth * tolerance,
@@ -131,3 +125,15 @@ def r_d(c_max, t, D, n, k, p):
     R_d = R_d**0.5
 
     return R_d
+
+
+# festim_sim(
+#     n1=1.75e25,
+#     E_p1=1.15,
+#     n2=1e25,
+#     E_p2=1.3,
+#     n3=6e24,
+#     E_p3=1.5,
+#     n4=2e25,
+#     E_p4=1.85,
+# )
