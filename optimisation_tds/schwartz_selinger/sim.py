@@ -15,7 +15,7 @@ size = 8e-04
 atom_density_W = 6.3222e28
 
 
-def festim_sim(E_p1=1, n1=1, E_p2=1, n2=1, E_p3=1, n3=1, initial_number_cells=500):
+def festim_sim(n1=1, n2=1, n3=1, n4=1, initial_number_cells=500):
     """Runs a FESTIM simulation
 
     Args:
@@ -53,34 +53,42 @@ def festim_sim(E_p1=1, n1=1, E_p2=1, n2=1, E_p3=1, n3=1, initial_number_cells=50
                 k_0=2.4e-7 / (1.1e-10**2 * 6 * atom_density_W),
                 E_k=0.39,
                 p_0=1e13,
-                E_p=0.9134,
-                density=3.9927e22,
+                E_p=1.0,
+                density=2e22,
                 materials=tungsten,
             ),
             F.Trap(
-                k_0=3e-7 / (1.1e-10**2 * 6 * atom_density_W),
+                k_0=2.4e-7 / (1.1e-10**2 * 6 * atom_density_W),
                 E_k=0.39,
                 p_0=1e13,
-                E_p=E_p1,
-                density=n1 / (1 + sp.exp((F.x - 3e-06) / 5e-07)) + 3.9927e22,
+                E_p=1.15,
+                density=n1 / (1 + sp.exp((F.x - 3e-06) / 5e-07)),
                 materials=tungsten,
             ),
             F.Trap(
-                k_0=3.5e-7 / (1.1e-10**2 * 6 * atom_density_W),
+                k_0=2.4e-7 / (1.1e-10**2 * 6 * atom_density_W),
                 E_k=0.39,
                 p_0=1e13,
-                E_p=E_p2,
-                density=n2 / (1 + sp.exp((F.x - 3e-06) / 5e-07)) + 3.9927e22,
+                E_p=1.3,
+                density=n2 / (1 + sp.exp((F.x - 3e-06) / 5e-07)),
                 materials=tungsten,
             ),
-            # F.Trap(
-            #     k_0=4.1e-7 / (1.1e-10**2 * 6 * atom_density_W),
-            #     E_k=0.39,
-            #     p_0=4e13,
-            #     E_p=E_p3,
-            #     density=n3 * (F.x <= 2.5e-06),
-            #     materials=tungsten,
-            # ),
+            F.Trap(
+                k_0=2.4e-7 / (1.1e-10**2 * 6 * atom_density_W),
+                E_k=0.39,
+                p_0=1e13,
+                E_p=1.5,
+                density=n3 / (1 + sp.exp((F.x - 3e-06) / 5e-07)),
+                materials=tungsten,
+            ),
+            F.Trap(
+                k_0=2.4e-7 / (1.1e-10**2 * 6 * atom_density_W),
+                E_k=0.39,
+                p_0=1e13,
+                E_p=1.85,
+                density=n4 / (1 + sp.exp((F.x - 3e-06) / 5e-07)),
+                materials=tungsten,
+            ),
         ]
     )
 
@@ -133,7 +141,8 @@ def festim_sim(E_p1=1, n1=1, E_p2=1, n2=1, E_p3=1, n3=1, initial_number_cells=50
     trap_1 = F.TotalVolume("1", volume=1)
     trap_2 = F.TotalVolume("2", volume=1)
     trap_3 = F.TotalVolume("3", volume=1)
-    # trap_4 = F.TotalVolume("4", volume=1)
+    trap_4 = F.TotalVolume("4", volume=1)
+    trap_5 = F.TotalVolume("5", volume=1)
     my_derived_quantities.derived_quantities = [
         average_T,
         H_flux_left,
@@ -143,7 +152,8 @@ def festim_sim(E_p1=1, n1=1, E_p2=1, n2=1, E_p3=1, n3=1, initial_number_cells=50
         trap_1,
         trap_2,
         trap_3,
-        # trap_4,
+        trap_4,
+        trap_5,
     ]
 
     my_exports = F.Exports(
@@ -178,12 +188,18 @@ def festim_sim(E_p1=1, n1=1, E_p2=1, n2=1, E_p3=1, n3=1, initial_number_cells=50
                 checkpoint=False,
                 mode=1,
             ),
-            # F.XDMFExport(
-            #     "4",
-            #     folder=folder_results,
-            #     checkpoint=False,
-            #     mode=1,
-            # ),
+            F.XDMFExport(
+                "4",
+                folder=folder_results,
+                checkpoint=False,
+                mode=1,
+            ),
+            F.XDMFExport(
+                "5",
+                folder=folder_results,
+                checkpoint=False,
+                mode=1,
+            ),
             my_derived_quantities,
         ]
     )
@@ -192,8 +208,8 @@ def festim_sim(E_p1=1, n1=1, E_p2=1, n2=1, E_p3=1, n3=1, initial_number_cells=50
     # define settings
     my_model.dt = F.Stepsize(
         1,
-        stepsize_change_ratio=1.08,
-        t_stop=implantation_time + resting_time * 0.6,
+        stepsize_change_ratio=1.1,
+        t_stop=implantation_time + resting_time * 0.5,
         dt_min=1e-4,
         stepsize_stop_max=50,
     )
@@ -204,7 +220,7 @@ def festim_sim(E_p1=1, n1=1, E_p2=1, n2=1, E_p3=1, n3=1, initial_number_cells=50
         final_time=implantation_time + resting_time + tds_time,
         transient=True,
         maximum_iterations=50,
-        linear_solver="mumps",
+        # linear_solver="mumps",
     )
 
     my_model.initialise()
@@ -213,9 +229,52 @@ def festim_sim(E_p1=1, n1=1, E_p2=1, n2=1, E_p3=1, n3=1, initial_number_cells=50
 
 
 if __name__ == "__main__":
-    # 0 dpa values
-    # E_p1=0.9134, n1=3.9927e22
-    #
-    # festim_sim(n1=1.1e24, E_p1=1, n2=2e23, E_p2=1.45)
-    festim_sim(n1=2.5e25, E_p1=1.15, n2=2e25, E_p2=1.8)
-    # festim_sim(n1=1e25, E_p1=1.2, n2=1e25, E_p2=1.5, n3=1e25, E_p3=1.95)
+    # 0.001 dpa values
+    # festim_sim(
+    #     n1=3.5e24,
+    #     n2=1e24,
+    #     n3=1e24,
+    #     n4=1e24,
+    # )
+    # 0.005 dpa values
+    # festim_sim(
+    #     n1=5.2e24,
+    #     n2=2.5e24,
+    #     n3=1.5e24,
+    #     n4=2.5e24,
+    # )
+    # 0.023 dpa values
+    festim_sim(
+        n1=1.75e25,
+        n2=1e25,
+        n3=6e24,
+        n4=2e25,
+    )
+    # 0.1 dpa values
+    # festim_sim(
+    #     n1=3.7e25,
+    #     n2=2.5e25,
+    #     n3=1.7e25,
+    #     n4=4.3e25,
+    # )
+    # 0.23 dpa values
+    # festim_sim(
+    #     n1=4.1e25,
+    #     n2=2.8e25,
+    #     n3=2.1e25,
+    #     n4=5e25,
+    # )
+    # 0.5 dpa values
+    # festim_sim(
+    #     n1=4.2e25,
+    #     n2=2.9e25,
+    #     n3=2.4e25,
+    #     n4=5.7e25,
+    # )
+    # 2.5 dpa values
+    # festim_sim(
+    #     n1=4.8e25,
+    #     n2=3.3e25,
+    #     n3=2.5e25,
+    #     n4=6.1e25,
+    # )
