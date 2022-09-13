@@ -3,6 +3,15 @@ from matplotlib import rc
 import numpy as np
 import csv
 
+plt.rc("text", usetex=True)
+plt.rc("font", family="serif", size=12)
+
+green_ryb = (117 / 255, 184 / 255, 42 / 255)
+firebrick = (181 / 255, 24 / 255, 32 / 255)
+pewter_blue = (113 / 255, 162 / 255, 182 / 255)
+blue_jeans = (96 / 255, 178 / 255, 229 / 255)
+electric_blue = (83 / 255, 244 / 255, 255 / 255)
+
 implantation_time = 72 * 3600
 resting_time = 0.5 * 24 * 3600
 
@@ -49,24 +58,11 @@ flux_2_5 = data_2_5[:, 1] / area
 # plt.scatter(T_0, flux_0, label="0 dpa")
 # plt.scatter(T_0_001, flux_0_001, label="0.001 dpa")
 # plt.scatter(T_0_005, flux_0_005, label="0.005 dpa")
-plt.scatter(T_0_023, flux_0_023, label="0.023 dpa")
+plt.scatter(T_0_023, flux_0_023, label="Exp. 0.023 dpa", color="black")
 # plt.scatter(T_0_1, flux_0_1, label="0.1 dpa")
-# plt.scatter(T_0_23, flux_0_23, label="0.23 dpa", color="black")
-# plt.scatter(T_0_5, flux_0_5, label="0.5 dpa", color="black")
-# plt.scatter(T_2_5, flux_2_5, label="2.5 dpa", color="black")
-
-# plt.axvspan(
-#     460,
-#     530,
-#     color="tab:blue",
-#     alpha=0.5,
-# )
-# plt.axvspan(
-#     750,
-#     800,
-#     color="tab:blue",
-#     alpha=0.5,
-# )
+# plt.scatter(T_0_23, flux_0_23, label="0.23 dpa")
+# plt.scatter(T_0_5, flux_0_5, label="0.5 dpa")
+# plt.scatter(T_2_5, flux_2_5, label="2.5 dpa")
 
 T_sim = []
 flux1, flux2 = [], []
@@ -78,6 +74,7 @@ trap1 = []
 trap2 = []
 trap3 = []
 trap4 = []
+trap5 = []
 
 
 with open("Results/last.csv", "r") as csvfile:
@@ -94,48 +91,76 @@ with open("Results/last.csv", "r") as csvfile:
                 trap1.append(float(row[6]))
                 trap2.append(float(row[7]))
                 trap3.append(float(row[8]))
-                # trap4.append(float(row[9]))
+                trap4.append(float(row[9]))
+                trap5.append(float(row[10]))
 
 
-fields = [ret, solute, trap1, trap2, trap3]
-# fields = [ret, solute, trap1]
-derivatives = [[] for i in range(len(fields))]
+trap_1_contrib = (np.diff(trap1) / np.diff(t)) * -1
+trap_2_contrib = (np.diff(trap2) / np.diff(t)) * -1
+trap_3_contrib = (np.diff(trap3) / np.diff(t)) * -1
+trap_4_contrib = (np.diff(trap4) / np.diff(t)) * -1
+trap_5_contrib = (np.diff(trap5) / np.diff(t)) * -1
 
-legends = ["Total", "Solute", "Trap 1", "Trap 2", "Trap 3", "Trap 4"]
-for i in range(len(ret) - 1):
-    for j in range(0, len(derivatives)):
-        derivatives[j].append(-(fields[j][i + 1] - fields[j][i]) / (t[i + 1] - t[i]))
+solute_contrib = (np.diff(solute) / np.diff(t)) * -1
 
-plt.plot(T_sim, -np.asarray(flux1) - np.asarray(flux2))
-# plt.plot(T_sim, -np.asarray(flux2), label="flux2")
-T_sim.pop(0)
-for i in range(0, len(derivatives)):
-    if i != 0:
-        style = "dashed"
-        width = 0.8
-        plt.fill_between(T_sim, 0, derivatives[i], facecolor="grey", alpha=0.1)
-    else:
-        style = "-"
-        width = 1.7
-    if i != 1:
-        plt.plot(
-            T_sim,
-            derivatives[i],
-            linewidth=width,
-            linestyle=style,
-            label=legends[i],
-            alpha=1,
-        )
+plt.plot(
+    T_sim[1:],
+    trap_1_contrib,
+    linestyle="dashed",
+    color=green_ryb,
+    label=r"Trap 1 ($E_{t} = 1.00 eV$)",
+)
+plt.plot(
+    T_sim[1:],
+    trap_2_contrib,
+    linestyle="dashed",
+    color=firebrick,
+    label=r"Trap 2 ($E_{t} = 1.15 eV$)",
+)
+plt.plot(
+    T_sim[1:],
+    trap_3_contrib,
+    linestyle="dashed",
+    color=pewter_blue,
+    label=r"Trap 3 ($E_{t} = 1.30 eV$)",
+)
+plt.plot(
+    T_sim[1:],
+    trap_4_contrib,
+    linestyle="dashed",
+    color=blue_jeans,
+    label=r"Trap 4 ($E_{t} = 1.50 eV$)",
+)
+plt.plot(
+    T_sim[1:],
+    trap_5_contrib,
+    linestyle="dashed",
+    color=electric_blue,
+    label=r"Trap 5 ($E_{t} = 1.85 eV$)",
+)
+plt.fill_between(T_sim[1:], 0, trap_1_contrib, color="grey", alpha=0.1)
+plt.fill_between(T_sim[1:], 0, trap_2_contrib, color="grey", alpha=0.1)
+plt.fill_between(T_sim[1:], 0, trap_3_contrib, color="grey", alpha=0.1)
+plt.fill_between(T_sim[1:], 0, trap_4_contrib, color="grey", alpha=0.1)
+plt.fill_between(T_sim[1:], 0, trap_5_contrib, color="grey", alpha=0.1)
 
-# plt.xlim(300, 1000)
-# plt.ylim(0, 1e16)
-plt.ylim(bottom=0)
-# plt.vlines(490, 0, 2e16, color="grey", linestyle="dashed")
-# plt.vlines(540, 0, 2e16, color="grey", linestyle="dashed")
-# plt.ylim(1e13, 1e18)
-# plt.yscale("log")
-plt.xlabel("T(K)")
-plt.ylabel(r"Desorption flux (D/m$ ^{2}$/s)")
-plt.title("TDS")
+plt.plot(
+    T_sim,
+    -np.asarray(flux1) - np.asarray(flux2),
+    label="Simulation",
+    color="orange",
+    linewidth=2,
+)
+
+plt.xlim(300, 1000)
+plt.ylim(0, 5e16)
+plt.xlabel("Temperature (K)")
+plt.ylabel(r"Desorption flux (D m$ ^{-2}$ s$ ^{-1}$)")
+# plt.title("TDS")
+ax = plt.gca()
+ax.spines["top"].set_visible(False)
+ax.spines["right"].set_visible(False)
 plt.legend()
+plt.tight_layout()
+
 plt.show()
