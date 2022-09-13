@@ -19,6 +19,15 @@ trap_1 = [0.09, 0.08, 0.06, 0.00, 0.00]
 trap_2 = [0.28, 0.23, 0.19, 0.15, 0.05]
 trap_3 = [0.08, 0.06, 0.05, 0.02, 0.04]
 
+# ##### T selinger data ##### #
+dpa_values = [0, 0.001, 0.005, 0.023, 0.1, 0.23, 0.5, 2.5]
+dpa_list = np.linspace(0, 3, 50)
+trap1 = [0, 3.5e24, 5e24, 1.75e25, 3.7e25, 4.1e25, 4.2e25, 4.8e25]
+trap2 = [0, 1e24, 2.4e24, 1e25, 2.5e25, 2.8e25, 2.9e25, 3.3e25]
+trap3 = [0, 1e24, 1.5e24, 6.0e24, 1.7e25, 2.1e25, 2.4e25, 2.5e25]
+trap4 = [0, 1e24, 2.5e24, 2e25, 4.3e25, 5.0e25, 5.7e25, 6.1e25]
+
+
 # ##### optimised values ##### #
 A_0_optimised = 6.1838e-03
 E_A_optimised = 0.2792
@@ -227,18 +236,20 @@ def damaging_sim(K, n_max):
         (list): A list of trap densities at various annealing tempertures
     """
     damaged_trap_densities = []
-    t_damage = 518400
-    phi = 9.64e-7
-    A_0 = 6.1838e-03  # optimised value
-    E_A = 0.2792  # optimised value
-    T = 298
+    t_damage = 3600 * 24
+    A_0 = A_0_optimised  # optimised value
+    E_A = E_A_optimised  # optimised value
+    T = 370
     n_0 = 0
-    t = np.linspace(0, t_total, t_total)
+    t = np.linspace(0, t_damage, t_damage)
 
-    for T_annealing in T_list_2:
-        extra_args = (t_damage, phi, K, n_max, A_0, E_A, T, T_annealing)
-        n_traps_damaging = odeint(damage_then_annealing, n_0, t, args=extra_args)
-        end_value = float(n_traps_damaging[-1])
+    for dpa in dpa_list:
+        phi = dpa  # needs to be a distribution
+        extra_args = (phi, K, n_max, A_0, E_A, T)
+        n_traps_annleaing = odeint(
+            neutron_trap_creation_numerical, n_0, t, args=extra_args
+        )
+        end_value = float(n_traps_annleaing[-1])
         damaged_trap_densities.append(end_value)
 
     return damaged_trap_densities
