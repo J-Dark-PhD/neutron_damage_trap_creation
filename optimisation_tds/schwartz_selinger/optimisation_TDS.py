@@ -1,4 +1,3 @@
-import csv
 from scipy.interpolate import interp1d
 from scipy.optimize import minimize
 import numpy as np
@@ -86,7 +85,7 @@ def error(p, norms=None, restart_data=None):
 
     print("Real parameters are:")
     print(
-        "[{:.4f}, {:.4e}, {:.4f}, {:.4e}]".format(
+        "[{:.4e}, {:.4e}, {:.4e}, {:.4e}]".format(
             p_real[0], p_real[1], p_real[2], p_real[3]
         )
     )
@@ -172,7 +171,7 @@ def error(p, norms=None, restart_data=None):
 
 # READ REFERENCE DATA
 
-data_ref = np.genfromtxt("tds_data/0.023_dpa.csv", delimiter=",")
+data_ref = np.genfromtxt("tds_data/0.1_dpa.csv", delimiter=",")
 T_ref = data_ref[:, 0]
 # data in D/s, needs to convert to D/(m2 s)
 desorption_ref = data_ref[:, 1] / (12e-03 * 15e-03)
@@ -186,14 +185,14 @@ if __name__ == "__main__":
     j = 0
 
     # build initial guess
-    E_p1 = 0.9134
-    n1 = np.log10(1.5e24)
-    E_p2 = 1.45
-    n2 = np.log10(1.7e23)
+    n1 = 4.5e25
+    n2 = 3e25
+    n3 = 4.5e25
+    n4 = 4.5e25
 
-    initial_guess = np.array([E_p1, n1, E_p2, n2])
+    initial_guess = np.array([n1, n2, n3, n4])
 
-    norms = ["linear", "log", "linear", "log"]
+    norms = ["linear", "linear", "linear", "linear"]
 
     # tolerances
     fatol = 1e-03
