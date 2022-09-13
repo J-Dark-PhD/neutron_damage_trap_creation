@@ -2,8 +2,14 @@ from scipy.interpolate import interp1d
 from scipy.optimize import minimize
 import numpy as np
 
-from neutron_trap_creation_models import annealing_sim, annealing_sim_beta
-from annealing_effects import temperatures, trap_2, T_list, atom_density_W
+from neutron_trap_creation_models import (
+    annealing_sim,
+    annealing_sim_beta,
+    temperatures,
+    trap_2,
+    T_list,
+    atom_density_W,
+)
 
 
 def mean_absolute_error(y1, y2, x=None, bounds=None, weight=None):
@@ -55,16 +61,16 @@ def mean_absolute_error(y1, y2, x=None, bounds=None, weight=None):
 
 
 def error(p, norms=None):
-    '''
+    """
     Compute average absolute error between numerical model results and
     reference
-    '''
-    print('-' * 40)
+    """
+    print("-" * 40)
     global j
     j += 1
-    print('i = ' + str(j))
-    print('New simulation.')
-    print('Point is:')
+    print("i = " + str(j))
+    print("New simulation.")
+    print("Point is:")
     print(p)
 
     # RUN NUMERICAL MODEL
@@ -81,7 +87,7 @@ def error(p, norms=None):
     # if any parameter is negative, return a very high error
     # this is a way to artificially constrain Nelder-Mead
 
-    print('Real parameters are:')
+    print("Real parameters are:")
     print(p_real)
 
     for e in p:
@@ -89,8 +95,8 @@ def error(p, norms=None):
             return 1e30
 
     # run numerical model
-    # annealed_trap_densities = annealing_sim(*p_real)
-    annealed_trap_densities = annealing_sim_beta(*p_real)
+    annealed_trap_densities = annealing_sim(*p_real)
+    # annealed_trap_densities = annealing_sim_beta(*p_real)
 
     # COMPUTE DIFFERENCE WITH REFERENCE
 
@@ -98,23 +104,27 @@ def error(p, norms=None):
     T = T_list
 
     # normalised trap densities
-    annealed_trap_densities = np.array(annealed_trap_densities)/atom_density_W
+    annealed_trap_densities = np.array(annealed_trap_densities) / atom_density_W
     annealed_trap_densities = annealed_trap_densities.tolist()
 
     # interpolate simulated tds
-    interp_model = interp1d(T, annealed_trap_densities, fill_value='extrapolate')
+    interp_model = interp1d(T, annealed_trap_densities, fill_value="extrapolate")
     # match to reference data
     trap_densities_modelled = interp_model(T_ref)
 
     # compute error
     err = mean_absolute_error(
-        trap_densities_ref, trap_densities_modelled, T_ref,
-        bounds=[[590, 610]], weight=[5])
+        trap_densities_ref,
+        trap_densities_modelled,
+        T_ref,
+        bounds=[[590, 610]],
+        weight=[5],
+    )
 
     # print error
-    print('Error: {:.2e}'.format(err))
-    print('Absolute tolerance: {:.2e}'.format(fatol))
-    print('Absolute tolerance: {:.2e}'.format(xatol))
+    print("Error: {:.2e}".format(err))
+    print("Absolute tolerance: {:.2e}".format(fatol))
+    print("Absolute tolerance: {:.2e}".format(xatol))
 
     # add parameters and error to csv file
     # with open('simulations_results_scaled.csv', 'a') as f:
@@ -144,9 +154,9 @@ if __name__ == "__main__":
     beta = 1
     E_A = 0.2792
 
-    initial_guess = np.array([A_0, beta, E_A])
+    initial_guess = np.array([A_0, E_A])
 
-    norms = ["linear", "linear", "linear"]
+    norms = ["linear", "linear"]
 
     # tolerances
     fatol = 1e-05
@@ -159,10 +169,13 @@ if __name__ == "__main__":
         fatol = ftol
         xatol = xtol
         res = minimize(
-            error, initial_guess, args=(norms),
-            method='Nelder-Mead',
-            options={'disp': True, 'fatol': ftol, 'xatol': xtol})
-        print('Solution is: ' + str(res.x))
+            error,
+            initial_guess,
+            args=(norms),
+            method="Nelder-Mead",
+            options={"disp": True, "fatol": ftol, "xatol": xtol},
+        )
+        print("Solution is: " + str(res.x))
 
     # start optimising!
     minimise_with_neldermead(fatol, xatol, initial_guess)
