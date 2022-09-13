@@ -62,23 +62,33 @@ data_dpa = [
     (0.8049290096319799, 0.08102209877645952),
 ]
 
+green_ryb = (117 / 255, 184 / 255, 42 / 255)
+
+plt.rc("text", usetex=True)
+plt.rc("font", family="serif", size=12)
+
 x = np.linspace(0.00, 0.80)
 
 data_dpa = np.array(data_dpa)
-year = 365.25*24*3600
-plt.scatter(data_dpa[:, 0], data_dpa[:, 1]/year, color="tab:green")
+year = 365.25 * 24 * 3600
+plt.scatter(data_dpa[:, 0], data_dpa[:, 1], color=green_ryb)
 
-res = linregress(data_dpa[:, 0], np.log(data_dpa[:, 1]/year))
-damage = np.exp(res.intercept)*np.exp(x*res.slope)
-plt.plot(x, damage, color="black",
-         label="Damage : {:.2e} exp ({:.3}*x)".format(np.exp(res.intercept),
-                                                      res.slope))
-print(res.rvalue**2)
+# res = linregress(data_dpa[:, 0], np.log(data_dpa[:, 1]))
+# damage = np.exp(res.intercept) * np.exp(x * res.slope)
+# plt.plot(x, damage, color="black",
+#          label="Damage : {:.2e} exp ({:.3}*x)".format(np.exp(res.intercept),
+#                                                       res.slope))
+# print(res.rvalue**2)
+plt.rc("text", usetex=True)
+plt.rc("font", family="serif", size=12)
 
 plt.yscale("log")
-plt.xlabel("x (m)")
+plt.xlabel(r"Distance from the FW (m)")
 plt.xlim(0, 0.8)
-plt.ylim(1e-09, 1e-6)
-plt.ylabel("Damage (dpa/s)")
-plt.legend()
+# plt.ylim(1e-09, 1e-6)
+plt.ylabel(r"Damage (dpa/fpy)")
+ax = plt.gca()
+ax.spines["top"].set_visible(False)
+ax.spines["right"].set_visible(False)
+# plt.legend()
 plt.show()
