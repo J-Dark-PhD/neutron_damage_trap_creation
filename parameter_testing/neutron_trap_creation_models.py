@@ -244,7 +244,7 @@ def damaging_sim(K, n_max):
     t = np.linspace(0, t_damage, t_damage)
 
     for dpa in dpa_list:
-        phi = dpa  # needs to be a distribution
+        phi = dpa / t_damage
         extra_args = (phi, K, n_max, A_0, E_A, T)
         n_traps_annleaing = odeint(
             neutron_trap_creation_numerical, n_0, t, args=extra_args
