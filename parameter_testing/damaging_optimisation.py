@@ -143,7 +143,7 @@ def error(p, norms=None):
 # READ REFERENCE DATA
 
 dpa_ref = np.array(dpa_values)
-trap_densities_ref = np.array(trap4)
+trap_densities_ref = np.array(trap1)
 
 if __name__ == "__main__":
     # initialise counter j
@@ -151,8 +151,8 @@ if __name__ == "__main__":
 
     # build initial guess
     # A_0 = np.log10(2.5858e-03)
-    K = np.log10(1e21)
-    n_max = np.log10(3e25)
+    K = np.log10(1e26)
+    n_max = np.log10(1e25)
 
     initial_guess = np.array([K, n_max])
 
