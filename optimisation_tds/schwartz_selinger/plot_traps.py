@@ -33,8 +33,10 @@ plt.plot(dpa_values, trap4, label=r"Trap 5 ($E_{t} = 1.85 eV$)")
 
 
 plt.ylabel(r"Trap density, n$_{\mathrm{t}}$ (at. \%)")
-plt.xlabel(r"Damage (DPA)")
+plt.xlabel(r"Damage (dpa)")
 plt.legend()
+plt.xlim(left=0)
+plt.ylim(bottom=0)
 ax = plt.gca()
 ax.spines["top"].set_visible(False)
 ax.spines["right"].set_visible(False)
