@@ -351,9 +351,9 @@ if __name__ == "__main__":
 
     for temperature in temperature_values:
 
-        print("Current step is temp = {:.0f} and dpa = 0".format(temperature))
+        print("Current step is temp = {:.1f} and dpa = 0".format(temperature))
 
-        results_folder_name = "Results/damaged_traps_testing/{:.0f}K/0_dpa/".format(
+        results_folder_name = "Results/damaged_traps_testing/{:.1f}K/0.0_dpa/".format(
             temperature
         )
         festim_sim_no_damage(T=temperature, results_folder_name=results_folder_name)
@@ -362,13 +362,13 @@ if __name__ == "__main__":
         for dpa in dpa_values:
 
             print(
-                "Current step is temp = {:.0f} and dpa = {:.0f}".format(
+                "Current step is temp = {:.1f} and dpa = {:.1f}".format(
                     temperature, dpa
                 )
             )
 
             results_folder_name = (
-                "Results/damaged_traps_testing/{:.0f}K/{:.0f}_dpa/".format(
+                "Results/damaged_traps_testing/{:.1f}K/{:.1f}_dpa/".format(
                     temperature, dpa
                 )
             )
