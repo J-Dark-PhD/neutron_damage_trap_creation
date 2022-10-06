@@ -1,4 +1,3 @@
-from unittest import result
 import FESTIM as F
 import fenics as f
 import numpy as np
@@ -348,7 +347,10 @@ if __name__ == "__main__":
     temperature_values = np.linspace(400, 1300, 73)
     dpa_values = np.linspace(0, 20, 41)
     dpa_values = np.delete(dpa_values, [0])
+    # temperature_values = [761]
+    standard_temp = [761]
 
+    # standard testing no damage
     for temperature in temperature_values:
 
         print("Current step is temp = {:.1f} and dpa = 0".format(temperature))
@@ -358,6 +360,17 @@ if __name__ == "__main__":
         )
         festim_sim_no_damage(T=temperature, results_folder_name=results_folder_name)
 
+    # standard temp testing
+    for dpa in dpa_values:
+
+        print("Current step is temp = 761 and dpa = {:.1f}".format(dpa))
+
+        results_folder_name = "Results/damaged_traps_testing/761.0K/{:.1f}_dpa/".format(
+            dpa
+        )
+        festim_sim_damage(dpa=dpa, T=761, results_folder_name=results_folder_name)
+
+    # test damage and temp
     for temperature in temperature_values:
         for dpa in dpa_values:
 
