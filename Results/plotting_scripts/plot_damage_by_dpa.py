@@ -1,0 +1,36 @@
+import matplotlib.pyplot as plt
+from damaged_traps_results import temperature_values, inventories_by_dpa
+
+plt.rc("text", usetex=True)
+plt.rc("font", family="serif", size=12)
+
+plt.figure()
+plt.plot(temperature_values, inventories_by_dpa[0], label="0 dpa/fpy")
+plt.plot(temperature_values, inventories_by_dpa[-1], label="20 dpa/fpy")
+plt.legend()
+plt.ylabel(r"Hydrogen inventory (m$^{-2}$)")
+plt.xlabel(r"Temperature (K)")
+plt.yscale("log")
+plt.xlim(400, 1300)
+ax = plt.gca()
+ax.spines["top"].set_visible(False)
+ax.spines["right"].set_visible(False)
+plt.tight_layout()
+
+plt.figure()
+plt.plot(temperature_values, inventories_by_dpa[0], label="0 dpa/fpy")
+plt.plot(temperature_values, inventories_by_dpa[2], label="1 dpa/fpy")
+plt.plot(temperature_values, inventories_by_dpa[10], label="5 dpa/fpy")
+plt.plot(temperature_values, inventories_by_dpa[20], label="10 dpa/fpy")
+plt.plot(temperature_values, inventories_by_dpa[40], label="20 dpa/fpy")
+plt.legend()
+plt.ylabel(r"Hydrogen inventory (m$^{-2}$)")
+plt.xlabel(r"Temperature (K)")
+plt.xlim(400, 1300)
+plt.yscale("log")
+ax = plt.gca()
+ax.spines["top"].set_visible(False)
+ax.spines["right"].set_visible(False)
+plt.tight_layout()
+
+plt.show()
