@@ -33,8 +33,8 @@ plot_5 = plt.plot(
 plot_6 = plt.plot(
     temperature_values, inventories_by_dpa_normalised[18], label="9 dpa/fpy"
 )
-plt.vlines(761, 1, 3, color="grey", linestyles="dashed")
-plt.annotate("761K", (675, 2), color="grey")
+# plt.vlines(761, 1, 3, color="grey", linestyles="dashed")
+# plt.annotate("761K", (675, 2), color="grey")
 
 h, l = plt.gca().get_legend_handles_labels()
 plt.legend(
