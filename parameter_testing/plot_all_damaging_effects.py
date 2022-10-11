@@ -301,42 +301,42 @@ plot_1 = plt.plot(
     dpa_list,
     damaged_trap1_densities,
     color=firebrick,
-    label=r"Trap 2 fitting ($K = 8.0 \cdot 10^{21}$ s$^{-1}$, $n_{max, \phi} =  4.5\cdot 10^{25}$ m$^{-3}$)",
+    label=r"Trap 2 fitting ($K = 8.0 \cdot 10^{26}$ s$^{-1}$, $n_{max, \phi} =  4.5\cdot 10^{25}$ m$^{-3}$)",
 )
 
 # trap 2
-# plt.errorbar(
-#     dpa_values,
-#     trap2,
-#     yerr=trap2_err,
-#     fmt=".",
-#     color=electric_blue,
-#     capsize=5,
-#     label=r"Trap 3 ($E_{t} = 1.30$ eV)",
-# )
-# plt.plot(
-#     dpa_list,
-#     damaged_trap2_densities,
-#     color=electric_blue,
-#     label=r"Trap 3 fitting ($K = 5 \cdot 10^{21}$ s$^{-1}$, $n_{max, \phi} =  3.1\cdot 10^{25}$ m$^{-3}$)",
-# )
+plt.errorbar(
+    dpa_values,
+    trap2,
+    yerr=trap2_err,
+    fmt=".",
+    color=electric_blue,
+    capsize=5,
+    label=r"Trap 3 ($E_{t} = 1.30$ eV)",
+)
+plt.plot(
+    dpa_list,
+    damaged_trap2_densities,
+    color=electric_blue,
+    label=r"Trap 3 fitting ($K = 5 \cdot 10^{26}$ s$^{-1}$, $n_{max, \phi} =  3.1\cdot 10^{25}$ m$^{-3}$)",
+)
 
 # trap 3
-# plt.errorbar(
-#     dpa_values,
-#     trap3,
-#     yerr=trap3_err,
-#     fmt=".",
-#     capsize=5,
-#     color=pewter_blue,
-#     label=r"Trap 4 ($E_{t} = 1.50$ eV)",
-# )
-# plt.plot(
-#     dpa_list,
-#     damaged_trap3_densities,
-#     color=pewter_blue,
-#     label=r"Trap 4 fitting ($K = 3.7\cdot 10^{21}$ s$^{-1}$, $n_{max, \phi} =  2.5\cdot 10^{25}$ m$^{-3}$)",
-# )
+plt.errorbar(
+    dpa_values,
+    trap3,
+    yerr=trap3_err,
+    fmt=".",
+    capsize=5,
+    color=pewter_blue,
+    label=r"Trap 4 ($E_{t} = 1.50$ eV)",
+)
+plt.plot(
+    dpa_list,
+    damaged_trap3_densities,
+    color=pewter_blue,
+    label=r"Trap 4 fitting ($K = 3.7\cdot 10^{26}$ s$^{-1}$, $n_{max, \phi} =  2.5\cdot 10^{25}$ m$^{-3}$)",
+)
 
 # trap 4
 err_bar_2 = plt.errorbar(
@@ -352,7 +352,7 @@ plot_2 = plt.plot(
     dpa_list,
     damaged_trap4_densities,
     color=green_ryb,
-    label=r"Trap 5 fitting ($K = 7\cdot 10^{21}$ s$^{-1}$, $n_{max, \phi} =  6\cdot 10^{25}$ m$^{-3}$) ",
+    label=r"Trap 5 fitting ($K = 7\cdot 10^{26}$ s$^{-1}$, $n_{max, \phi} =  6\cdot 10^{25}$ m$^{-3}$) ",
 )
 
 # plt.xscale("log")
