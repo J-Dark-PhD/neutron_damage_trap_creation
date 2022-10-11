@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 from matplotlib import rc
 import numpy as np
 import csv
+import io
 
 plt.rc("text", usetex=True)
 plt.rc("font", family="serif", size=12)
@@ -16,11 +17,50 @@ implantation_time = 72 * 3600
 resting_time = 0.5 * 24 * 3600
 area = 12e-03 * 15e-03
 
-tds_data_folder = "../../data/tds_data/"
+tds_dpa_0 = "tds_data/0_dpa.csv"
+tds_dpa_0_001 = "tds_data/0.001_dpa.csv"
+tds_dpa_0_005 = "tds_data/0.005_dpa.csv"
+tds_dpa_0_023 = "tds_data/0.023_dpa.csv"
+tds_dpa_0_1 = "tds_data/0.1_dpa.csv"
+tds_dpa_0_23 = "tds_data/0.23_dpa.csv"
+tds_dpa_0_5 = "tds_data/0.5_dpa.csv"
+tds_dpa_2_5 = "tds_data/2.5_dpa.csv"
+
+data_0 = np.genfromtxt(tds_dpa_0, delimiter=",")
+T_0 = data_0[:, 0]
+flux_0 = data_0[:, 1] / area
+
+data_0_001 = np.genfromtxt(tds_dpa_0_001, delimiter=",")
+T_0_001 = data_0_001[:, 0]
+flux_0_001 = data_0_001[:, 1] / area
+
+data_0_005 = np.genfromtxt(tds_dpa_0_005, delimiter=",")
+T_0_005 = data_0_005[:, 0]
+flux_0_005 = data_0_005[:, 1] / area
+
+data_0_023 = np.genfromtxt(tds_dpa_0_023, delimiter=",")
+T_0_023 = data_0_023[:, 0]
+flux_0_023 = data_0_023[:, 1] / area
+
+data_0_1 = np.genfromtxt(tds_dpa_0_1, delimiter=",")
+T_0_1 = data_0_1[:, 0]
+flux_0_1 = data_0_1[:, 1] / area
+
+data_0_23 = np.genfromtxt(tds_dpa_0_23, delimiter=",")
+T_0_23 = data_0_23[:, 0]
+flux_0_23 = data_0_23[:, 1] / area
+
+data_0_5 = np.genfromtxt(tds_dpa_0_5, delimiter=",")
+T_0_5 = data_0_5[:, 0]
+flux_0_5 = data_0_5[:, 1] / area
+
+
+data_2_5 = np.genfromtxt(tds_dpa_2_5, delimiter=",")
+T_2_5 = data_2_5[:, 0]
+flux_2_5 = data_2_5[:, 1] / area
 
 
 def plot_dpa_0():
-    tds_dpa_0 = "tds_data/0_dpa.csv"
     data_0 = np.genfromtxt(tds_dpa_0, delimiter=",")
     T_0 = data_0[:, 0]
     flux_0 = data_0[:, 1] / area
@@ -48,8 +88,10 @@ def plot_dpa_0():
     trap_1_contrib = (np.diff(trap1) / np.diff(t)) * -1
     solute_contrib = (np.diff(solute) / np.diff(t)) * -1
 
-    plt.figure()
-    plt.scatter(T_0, flux_0, label="0 dpa")
+    plt.figure(figsize=(6.4, 5.5))
+
+    # plt.scatter(T_0, flux_0, label="0 dpa")
+    plt.scatter(T_0, flux_0, label=r"Exp", color="black")
     plt.plot(
         T_sim,
         -np.asarray(flux1) - np.asarray(flux2),
@@ -61,20 +103,20 @@ def plot_dpa_0():
         T_sim[1:],
         trap_1_contrib,
         linestyle="dashed",
-        color=green_ryb,
-        label=r"Trap 1 ($E_{t} = 1.00 eV$)",
-    )
-    plt.plot(
-        T_sim[1:],
-        solute_contrib,
-        linestyle="dashed",
         color="black",
-        label=r"Solute",
+        label=r"Trap 1",
     )
+    # plt.plot(
+    #     T_sim[1:],
+    #     solute_contrib,
+    #     linestyle="dashed",
+    #     color="black",
+    #     label=r"Solute",
+    # )
     plt.fill_between(T_sim[1:], 0, trap_1_contrib, color="grey", alpha=0.1)
 
     plt.xlim(300, 1000)
-    # plt.ylim(0, 5e16)
+    plt.ylim(0, 1.2e17)
     plt.xlabel("Temperature (K)")
     plt.ylabel(r"Desorption flux (D m$ ^{-2}$ s$ ^{-1}$)")
     plt.title("0 dpa")
@@ -83,10 +125,10 @@ def plot_dpa_0():
     ax.spines["right"].set_visible(False)
     plt.legend()
     plt.tight_layout()
+    plt.savefig("tds_fitting_0_dpa.svg")
 
 
 def plot_dpa_0_001():
-    tds_dpa_0_001 = "tds_data/0.001_dpa.csv"
     data_0_001 = np.genfromtxt(tds_dpa_0_001, delimiter=",")
     T_0_001 = data_0_001[:, 0]
     flux_0_001 = data_0_001[:, 1] / area
@@ -126,8 +168,13 @@ def plot_dpa_0_001():
     trap_5_contrib = (np.diff(trap5) / np.diff(t)) * -1
     solute_contrib = (np.diff(solute) / np.diff(t)) * -1
 
-    plt.figure()
-    plt.scatter(T_0_001, flux_0_001, label=r"0.001 dpa")
+    plt.figure(figsize=(6.4, 5.5))
+
+    # plt.scatter(T_0_001, flux_0_001, label=r"0.001 dpa")
+    plt.scatter(T_0_001, flux_0_001, color="black", label=r"Exp")
+    alpha = 0.05
+    plt.scatter(T_0, flux_0, color="black", alpha=alpha)
+
     plt.plot(
         T_sim,
         -np.asarray(flux1) - np.asarray(flux2),
@@ -139,36 +186,36 @@ def plot_dpa_0_001():
         T_sim[1:],
         trap_1_contrib,
         linestyle="dashed",
-        color=green_ryb,
-        label=r"Trap 1 ($E_{t} = 1.00$ eV)",
+        color="black",
+        label=r"Trap 1",
     )
     plt.plot(
         T_sim[1:],
         trap_2_contrib,
         linestyle="dashed",
         color=firebrick,
-        label=r"Trap 2 ($E_{t} = 1.15$ eV)",
+        label=r"Trap 2",
     )
     plt.plot(
         T_sim[1:],
         trap_3_contrib,
         linestyle="dashed",
         color=pewter_blue,
-        label=r"Trap 3 ($E_{t} = 1.30$ eV)",
+        label=r"Trap 3",
     )
     plt.plot(
         T_sim[1:],
         trap_4_contrib,
         linestyle="dashed",
-        color=blue_jeans,
-        label=r"Trap 4 ($E_{t} = 1.50$ eV)",
+        color=electric_blue,
+        label=r"Trap 4",
     )
     plt.plot(
         T_sim[1:],
         trap_5_contrib,
         linestyle="dashed",
-        color=electric_blue,
-        label=r"Trap 5 ($E_{t} = 1.85$ eV)",
+        color=green_ryb,
+        label=r"Trap 5",
     )
     plt.fill_between(T_sim[1:], 0, trap_1_contrib, color="grey", alpha=0.1)
     plt.fill_between(T_sim[1:], 0, trap_2_contrib, color="grey", alpha=0.1)
@@ -177,7 +224,7 @@ def plot_dpa_0_001():
     plt.fill_between(T_sim[1:], 0, trap_5_contrib, color="grey", alpha=0.1)
 
     plt.xlim(300, 1000)
-    # plt.ylim(0, 5e16)
+    plt.ylim(0, 1.2e17)
     plt.xlabel("Temperature (K)")
     plt.ylabel(r"Desorption flux (D m$ ^{-2}$ s$ ^{-1}$)")
     plt.title("0.001 dpa")
@@ -186,10 +233,10 @@ def plot_dpa_0_001():
     ax.spines["right"].set_visible(False)
     plt.legend()
     plt.tight_layout()
+    plt.savefig("tds_fitting_0.001_dpa.svg")
 
 
 def plot_dpa_0_005():
-    tds_dpa_0_005 = "tds_data/0.005_dpa.csv"
     data_0_005 = np.genfromtxt(tds_dpa_0_005, delimiter=",")
     T_0_005 = data_0_005[:, 0]
     flux_0_005 = data_0_005[:, 1] / area
@@ -229,8 +276,13 @@ def plot_dpa_0_005():
     trap_5_contrib = (np.diff(trap5) / np.diff(t)) * -1
     solute_contrib = (np.diff(solute) / np.diff(t)) * -1
 
-    plt.figure()
-    plt.scatter(T_0_005, flux_0_005, label=r"0.005 dpa")
+    plt.figure(figsize=(6.4, 5.5))
+
+    # plt.scatter(T_0_005, flux_0_005, label=r"0.005 dpa")
+    plt.scatter(T_0_005, flux_0_005, color="black", label=r"Exp")
+    alpha = 0.05
+    plt.scatter(T_0_001, flux_0_001, color="black", alpha=alpha)
+    plt.scatter(T_0, flux_0, color="black", alpha=alpha)
     plt.plot(
         T_sim,
         -np.asarray(flux1) - np.asarray(flux2),
@@ -242,36 +294,36 @@ def plot_dpa_0_005():
         T_sim[1:],
         trap_1_contrib,
         linestyle="dashed",
-        color=green_ryb,
-        label=r"Trap 1 ($E_{t} = 1.00$ eV)",
+        color="black",
+        label=r"Trap 1",
     )
     plt.plot(
         T_sim[1:],
         trap_2_contrib,
         linestyle="dashed",
         color=firebrick,
-        label=r"Trap 2 ($E_{t} = 1.15$ eV)",
+        label=r"Trap 2",
     )
     plt.plot(
         T_sim[1:],
         trap_3_contrib,
         linestyle="dashed",
         color=pewter_blue,
-        label=r"Trap 3 ($E_{t} = 1.30$ eV)",
+        label=r"Trap 3",
     )
     plt.plot(
         T_sim[1:],
         trap_4_contrib,
         linestyle="dashed",
-        color=blue_jeans,
-        label=r"Trap 4 ($E_{t} = 1.50$ eV)",
+        color=electric_blue,
+        label=r"Trap 4",
     )
     plt.plot(
         T_sim[1:],
         trap_5_contrib,
         linestyle="dashed",
-        color=electric_blue,
-        label=r"Trap 5 ($E_{t} = 1.85$ eV)",
+        color=green_ryb,
+        label=r"Trap 5",
     )
     plt.fill_between(T_sim[1:], 0, trap_1_contrib, color="grey", alpha=0.1)
     plt.fill_between(T_sim[1:], 0, trap_2_contrib, color="grey", alpha=0.1)
@@ -280,7 +332,7 @@ def plot_dpa_0_005():
     plt.fill_between(T_sim[1:], 0, trap_5_contrib, color="grey", alpha=0.1)
 
     plt.xlim(300, 1000)
-    # plt.ylim(0, 5e16)
+    plt.ylim(0, 1.2e17)
     plt.xlabel("Temperature (K)")
     plt.ylabel(r"Desorption flux (D m$ ^{-2}$ s$ ^{-1}$)")
     plt.title("0.005 dpa")
@@ -289,10 +341,10 @@ def plot_dpa_0_005():
     ax.spines["right"].set_visible(False)
     plt.legend()
     plt.tight_layout()
+    plt.savefig("tds_fitting_0.005_dpa.svg")
 
 
 def plot_dpa_0_023():
-    tds_dpa_0_023 = "tds_data/0.023_dpa.csv"
     data_0_023 = np.genfromtxt(tds_dpa_0_023, delimiter=",")
     T_0_023 = data_0_023[:, 0]
     flux_0_023 = data_0_023[:, 1] / area
@@ -332,8 +384,13 @@ def plot_dpa_0_023():
     trap_5_contrib = (np.diff(trap5) / np.diff(t)) * -1
     solute_contrib = (np.diff(solute) / np.diff(t)) * -1
 
-    plt.figure()
-    plt.scatter(T_0_023, flux_0_023, label=r"0.023 dpa")
+    plt.figure(figsize=(6.4, 5.5))
+    # plt.scatter(T_0_023, flux_0_023, label=r"0.023 dpa")
+    plt.scatter(T_0_023, flux_0_023, label=r"Exp", color="black")
+    alpha = 0.05
+    plt.scatter(T_0_005, flux_0_005, color="black", alpha=alpha)
+    plt.scatter(T_0_001, flux_0_001, color="black", alpha=alpha)
+    plt.scatter(T_0, flux_0, color="black", alpha=alpha)
     plt.plot(
         T_sim,
         -np.asarray(flux1) - np.asarray(flux2),
@@ -345,36 +402,36 @@ def plot_dpa_0_023():
         T_sim[1:],
         trap_1_contrib,
         linestyle="dashed",
-        color=green_ryb,
-        label=r"Trap 1 ($E_{t} = 1.00$ eV)",
+        color="black",
+        label=r"Trap 1",
     )
     plt.plot(
         T_sim[1:],
         trap_2_contrib,
         linestyle="dashed",
         color=firebrick,
-        label=r"Trap 2 ($E_{t} = 1.15$ eV)",
+        label=r"Trap 2",
     )
     plt.plot(
         T_sim[1:],
         trap_3_contrib,
         linestyle="dashed",
         color=pewter_blue,
-        label=r"Trap 3 ($E_{t} = 1.30$ eV)",
+        label=r"Trap 3",
     )
     plt.plot(
         T_sim[1:],
         trap_4_contrib,
         linestyle="dashed",
-        color=blue_jeans,
-        label=r"Trap 4 ($E_{t} = 1.50$ eV)",
+        color=electric_blue,
+        label=r"Trap 4",
     )
     plt.plot(
         T_sim[1:],
         trap_5_contrib,
         linestyle="dashed",
-        color=electric_blue,
-        label=r"Trap 5 ($E_{t} = 1.85$ eV)",
+        color=green_ryb,
+        label=r"Trap 5",
     )
     plt.fill_between(T_sim[1:], 0, trap_1_contrib, color="grey", alpha=0.1)
     plt.fill_between(T_sim[1:], 0, trap_2_contrib, color="grey", alpha=0.1)
@@ -383,7 +440,7 @@ def plot_dpa_0_023():
     plt.fill_between(T_sim[1:], 0, trap_5_contrib, color="grey", alpha=0.1)
 
     plt.xlim(300, 1000)
-    # plt.ylim(0, 5e16)
+    plt.ylim(0, 1.2e17)
     plt.xlabel("Temperature (K)")
     plt.ylabel(r"Desorption flux (D m$ ^{-2}$ s$ ^{-1}$)")
     plt.title("0.023 dpa")
@@ -392,10 +449,10 @@ def plot_dpa_0_023():
     ax.spines["right"].set_visible(False)
     plt.legend()
     plt.tight_layout()
+    plt.savefig("tds_fitting_0.023_dpa.svg")
 
 
 def plot_dpa_0_1():
-    tds_dpa_0_1 = "tds_data/0.1_dpa.csv"
     data_0_1 = np.genfromtxt(tds_dpa_0_1, delimiter=",")
     T_0_1 = data_0_1[:, 0]
     flux_0_1 = data_0_1[:, 1] / area
@@ -435,8 +492,15 @@ def plot_dpa_0_1():
     trap_5_contrib = (np.diff(trap5) / np.diff(t)) * -1
     solute_contrib = (np.diff(solute) / np.diff(t)) * -1
 
-    plt.figure()
-    plt.scatter(T_0_1, flux_0_1, label=r"0.1 dpa")
+    plt.figure(figsize=(6.4, 5.5))
+
+    # plt.scatter(T_0_1, flux_0_1, label=r"0.1 dpa")
+    plt.scatter(T_0_1, flux_0_1, label=r"Exp", color="black")
+    alpha = 0.05
+    plt.scatter(T_0_023, flux_0_023, color="black", alpha=alpha)
+    plt.scatter(T_0_005, flux_0_005, color="black", alpha=alpha)
+    plt.scatter(T_0_001, flux_0_001, color="black", alpha=alpha)
+    plt.scatter(T_0, flux_0, color="black", alpha=alpha)
     plt.plot(
         T_sim,
         -np.asarray(flux1) - np.asarray(flux2),
@@ -448,36 +512,36 @@ def plot_dpa_0_1():
         T_sim[1:],
         trap_1_contrib,
         linestyle="dashed",
-        color=green_ryb,
-        label=r"Trap 1 ($E_{t} = 1.00$ eV)",
+        color="black",
+        label=r"Trap 1",
     )
     plt.plot(
         T_sim[1:],
         trap_2_contrib,
         linestyle="dashed",
         color=firebrick,
-        label=r"Trap 2 ($E_{t} = 1.15$ eV)",
+        label=r"Trap 2",
     )
     plt.plot(
         T_sim[1:],
         trap_3_contrib,
         linestyle="dashed",
         color=pewter_blue,
-        label=r"Trap 3 ($E_{t} = 1.30$ eV)",
+        label=r"Trap 3",
     )
     plt.plot(
         T_sim[1:],
         trap_4_contrib,
         linestyle="dashed",
-        color=blue_jeans,
-        label=r"Trap 4 ($E_{t} = 1.50$ eV)",
+        color=electric_blue,
+        label=r"Trap 4",
     )
     plt.plot(
         T_sim[1:],
         trap_5_contrib,
         linestyle="dashed",
-        color=electric_blue,
-        label=r"Trap 5 ($E_{t} = 1.85$ eV)",
+        color=green_ryb,
+        label=r"Trap 5",
     )
     plt.fill_between(T_sim[1:], 0, trap_1_contrib, color="grey", alpha=0.1)
     plt.fill_between(T_sim[1:], 0, trap_2_contrib, color="grey", alpha=0.1)
@@ -486,7 +550,7 @@ def plot_dpa_0_1():
     plt.fill_between(T_sim[1:], 0, trap_5_contrib, color="grey", alpha=0.1)
 
     plt.xlim(300, 1000)
-    # plt.ylim(0, 5e16)
+    plt.ylim(0, 1.2e17)
     plt.xlabel("Temperature (K)")
     plt.ylabel(r"Desorption flux (D m$ ^{-2}$ s$ ^{-1}$)")
     plt.title("0.1 dpa")
@@ -495,10 +559,10 @@ def plot_dpa_0_1():
     ax.spines["right"].set_visible(False)
     plt.legend()
     plt.tight_layout()
+    plt.savefig("tds_fitting_0.1_dpa.svg")
 
 
 def plot_dpa_0_23():
-    tds_dpa_0_23 = "tds_data/0.23_dpa.csv"
     data_0_23 = np.genfromtxt(tds_dpa_0_23, delimiter=",")
     T_0_23 = data_0_23[:, 0]
     flux_0_23 = data_0_23[:, 1] / area
@@ -538,8 +602,16 @@ def plot_dpa_0_23():
     trap_5_contrib = (np.diff(trap5) / np.diff(t)) * -1
     solute_contrib = (np.diff(solute) / np.diff(t)) * -1
 
-    plt.figure()
-    plt.scatter(T_0_23, flux_0_23, label=r"0.23 dpa")
+    plt.figure(figsize=(6.4, 5.5))
+
+    # plt.scatter(T_0_23, flux_0_23, label=r"0.23 dpa")
+    plt.scatter(T_0_23, flux_0_23, label=r"Exp", color="black")
+    alpha = 0.05
+    plt.scatter(T_0_1, flux_0_1, color="black", alpha=alpha)
+    plt.scatter(T_0_023, flux_0_023, color="black", alpha=alpha)
+    plt.scatter(T_0_005, flux_0_005, color="black", alpha=alpha)
+    plt.scatter(T_0_001, flux_0_001, color="black", alpha=alpha)
+    plt.scatter(T_0, flux_0, color="black", alpha=alpha)
     plt.plot(
         T_sim,
         -np.asarray(flux1) - np.asarray(flux2),
@@ -551,36 +623,36 @@ def plot_dpa_0_23():
         T_sim[1:],
         trap_1_contrib,
         linestyle="dashed",
-        color=green_ryb,
-        label=r"Trap 1 ($E_{t} = 1.00$ eV)",
+        color="black",
+        label=r"Trap 1",
     )
     plt.plot(
         T_sim[1:],
         trap_2_contrib,
         linestyle="dashed",
         color=firebrick,
-        label=r"Trap 2 ($E_{t} = 1.15$ eV)",
+        label=r"Trap 2",
     )
     plt.plot(
         T_sim[1:],
         trap_3_contrib,
         linestyle="dashed",
         color=pewter_blue,
-        label=r"Trap 3 ($E_{t} = 1.30$ eV)",
+        label=r"Trap 3",
     )
     plt.plot(
         T_sim[1:],
         trap_4_contrib,
         linestyle="dashed",
-        color=blue_jeans,
-        label=r"Trap 4 ($E_{t} = 1.50$ eV)",
+        color=electric_blue,
+        label=r"Trap 4",
     )
     plt.plot(
         T_sim[1:],
         trap_5_contrib,
         linestyle="dashed",
-        color=electric_blue,
-        label=r"Trap 5 ($E_{t} = 1.85$ eV)",
+        color=green_ryb,
+        label=r"Trap 5",
     )
     plt.fill_between(T_sim[1:], 0, trap_1_contrib, color="grey", alpha=0.1)
     plt.fill_between(T_sim[1:], 0, trap_2_contrib, color="grey", alpha=0.1)
@@ -589,7 +661,7 @@ def plot_dpa_0_23():
     plt.fill_between(T_sim[1:], 0, trap_5_contrib, color="grey", alpha=0.1)
 
     plt.xlim(300, 1000)
-    # plt.ylim(0, 5e16)
+    plt.ylim(0, 1.2e17)
     plt.xlabel("Temperature (K)")
     plt.ylabel(r"Desorption flux (D m$ ^{-2}$ s$ ^{-1}$)")
     plt.title("0.23 dpa")
@@ -598,10 +670,10 @@ def plot_dpa_0_23():
     ax.spines["right"].set_visible(False)
     plt.legend()
     plt.tight_layout()
+    plt.savefig("tds_fitting_0.23_dpa.svg")
 
 
 def plot_dpa_0_5():
-    tds_dpa_0_5 = "tds_data/0.5_dpa.csv"
     data_0_5 = np.genfromtxt(tds_dpa_0_5, delimiter=",")
     T_0_5 = data_0_5[:, 0]
     flux_0_5 = data_0_5[:, 1] / area
@@ -641,8 +713,17 @@ def plot_dpa_0_5():
     trap_5_contrib = (np.diff(trap5) / np.diff(t)) * -1
     solute_contrib = (np.diff(solute) / np.diff(t)) * -1
 
-    plt.figure()
-    plt.scatter(T_0_5, flux_0_5, label=r"0.5 dpa")
+    plt.figure(figsize=(6.4, 5.5))
+
+    # plt.scatter(T_0_5, flux_0_5, label=r"0.5 dpa")
+    plt.scatter(T_0_5, flux_0_5, label=r"Exp", color="black")
+    alpha = 0.05
+    plt.scatter(T_0_23, flux_0_23, color="black", alpha=alpha)
+    plt.scatter(T_0_1, flux_0_1, color="black", alpha=alpha)
+    plt.scatter(T_0_023, flux_0_023, color="black", alpha=alpha)
+    plt.scatter(T_0_005, flux_0_005, color="black", alpha=alpha)
+    plt.scatter(T_0_001, flux_0_001, color="black", alpha=alpha)
+    plt.scatter(T_0, flux_0, color="black", alpha=alpha)
     plt.plot(
         T_sim,
         -np.asarray(flux1) - np.asarray(flux2),
@@ -654,36 +735,36 @@ def plot_dpa_0_5():
         T_sim[1:],
         trap_1_contrib,
         linestyle="dashed",
-        color=green_ryb,
-        label=r"Trap 1 ($E_{t} = 1.00$ eV)",
+        color="black",
+        label=r"Trap 1",
     )
     plt.plot(
         T_sim[1:],
         trap_2_contrib,
         linestyle="dashed",
         color=firebrick,
-        label=r"Trap 2 ($E_{t} = 1.15$ eV)",
+        label=r"Trap 2",
     )
     plt.plot(
         T_sim[1:],
         trap_3_contrib,
         linestyle="dashed",
         color=pewter_blue,
-        label=r"Trap 3 ($E_{t} = 1.30$ eV)",
+        label=r"Trap 3",
     )
     plt.plot(
         T_sim[1:],
         trap_4_contrib,
         linestyle="dashed",
-        color=blue_jeans,
-        label=r"Trap 4 ($E_{t} = 1.50$ eV)",
+        color=electric_blue,
+        label=r"Trap 4",
     )
     plt.plot(
         T_sim[1:],
         trap_5_contrib,
         linestyle="dashed",
-        color=electric_blue,
-        label=r"Trap 5 ($E_{t} = 1.85$ eV)",
+        color=green_ryb,
+        label=r"Trap 5",
     )
     plt.fill_between(T_sim[1:], 0, trap_1_contrib, color="grey", alpha=0.1)
     plt.fill_between(T_sim[1:], 0, trap_2_contrib, color="grey", alpha=0.1)
@@ -692,7 +773,7 @@ def plot_dpa_0_5():
     plt.fill_between(T_sim[1:], 0, trap_5_contrib, color="grey", alpha=0.1)
 
     plt.xlim(300, 1000)
-    # plt.ylim(0, 5e16)
+    plt.ylim(0, 1.2e17)
     plt.xlabel("Temperature (K)")
     plt.ylabel(r"Desorption flux (D m$ ^{-2}$ s$ ^{-1}$)")
     plt.title("0.5 dpa")
@@ -701,10 +782,10 @@ def plot_dpa_0_5():
     ax.spines["right"].set_visible(False)
     plt.legend()
     plt.tight_layout()
+    plt.savefig("tds_fitting_0.5_dpa.svg")
 
 
 def plot_dpa_2_5():
-    tds_dpa_2_5 = "tds_data/2.5_dpa.csv"
     data_2_5 = np.genfromtxt(tds_dpa_2_5, delimiter=",")
     T_2_5 = data_2_5[:, 0]
     flux_2_5 = data_2_5[:, 1] / area
@@ -744,8 +825,17 @@ def plot_dpa_2_5():
     trap_5_contrib = (np.diff(trap5) / np.diff(t)) * -1
     solute_contrib = (np.diff(solute) / np.diff(t)) * -1
 
-    plt.figure()
-    plt.scatter(T_2_5, flux_2_5, label=r"2.5 dpa")
+    plt.figure(figsize=(6.4, 5.5))
+    # plt.scatter(T_2_5, flux_2_5, label=r"2.5 dpa")
+    plt.scatter(T_2_5, flux_2_5, color="black", label=r"Exp")
+    alpha = 0.05
+    plt.scatter(T_0_5, flux_0_5, color="black", alpha=alpha)
+    plt.scatter(T_0_23, flux_0_23, color="black", alpha=alpha)
+    plt.scatter(T_0_1, flux_0_1, color="black", alpha=alpha)
+    plt.scatter(T_0_023, flux_0_023, color="black", alpha=alpha)
+    plt.scatter(T_0_005, flux_0_005, color="black", alpha=alpha)
+    plt.scatter(T_0_001, flux_0_001, color="black", alpha=alpha)
+    plt.scatter(T_0, flux_0, color="black", alpha=alpha)
     plt.plot(
         T_sim,
         -np.asarray(flux1) - np.asarray(flux2),
@@ -757,36 +847,36 @@ def plot_dpa_2_5():
         T_sim[1:],
         trap_1_contrib,
         linestyle="dashed",
-        color=green_ryb,
-        label=r"Trap 1 ($E_{t} = 1.00$ eV)",
+        color="black",
+        label=r"Trap 1",
     )
     plt.plot(
         T_sim[1:],
         trap_2_contrib,
         linestyle="dashed",
         color=firebrick,
-        label=r"Trap 2 ($E_{t} = 1.15$ eV)",
+        label=r"Trap 2",
     )
     plt.plot(
         T_sim[1:],
         trap_3_contrib,
         linestyle="dashed",
         color=pewter_blue,
-        label=r"Trap 3 ($E_{t} = 1.30$ eV)",
+        label=r"Trap 3",
     )
     plt.plot(
         T_sim[1:],
         trap_4_contrib,
         linestyle="dashed",
-        color=blue_jeans,
-        label=r"Trap 4 ($E_{t} = 1.50$ eV)",
+        color=electric_blue,
+        label=r"Trap 4",
     )
     plt.plot(
         T_sim[1:],
         trap_5_contrib,
         linestyle="dashed",
-        color=electric_blue,
-        label=r"Trap 5 ($E_{t} = 1.85$ eV)",
+        color=green_ryb,
+        label=r"Trap 5",
     )
     plt.fill_between(T_sim[1:], 0, trap_1_contrib, color="grey", alpha=0.1)
     plt.fill_between(T_sim[1:], 0, trap_2_contrib, color="grey", alpha=0.1)
@@ -795,7 +885,7 @@ def plot_dpa_2_5():
     plt.fill_between(T_sim[1:], 0, trap_5_contrib, color="grey", alpha=0.1)
 
     plt.xlim(300, 1000)
-    # plt.ylim(0, 5e16)
+    plt.ylim(0, 1.2e17)
     plt.xlabel("Temperature (K)")
     plt.ylabel(r"Desorption flux (D m$ ^{-2}$ s$ ^{-1}$)")
     plt.title("2.5 dpa")
@@ -804,15 +894,16 @@ def plot_dpa_2_5():
     ax.spines["right"].set_visible(False)
     plt.legend()
     plt.tight_layout()
+    plt.savefig("tds_fitting_2.5_dpa.svg")
 
 
 plot_dpa_0()
-# plot_dpa_0_001()
-# plot_dpa_0_005()
-# plot_dpa_0_023()
-# plot_dpa_0_1()
-# plot_dpa_0_23()
-# plot_dpa_0_5()
-# plot_dpa_2_5()
+plot_dpa_0_001()
+plot_dpa_0_005()
+plot_dpa_0_023()
+plot_dpa_0_1()
+plot_dpa_0_23()
+plot_dpa_0_5()
+plot_dpa_2_5()
 
-plt.show()
+# plt.show()
