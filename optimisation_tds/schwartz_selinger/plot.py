@@ -55,13 +55,13 @@ flux_0_23 = data_0_23[:, 1] / area
 flux_0_5 = data_0_5[:, 1] / area
 flux_2_5 = data_2_5[:, 1] / area
 
-# plt.scatter(T_0, flux_0, label="0 dpa")
+# plt.scatter(T_0, flux_0, label="0 dpa", color="black")
 # plt.scatter(T_0_001, flux_0_001, label="0.001 dpa")
 # plt.scatter(T_0_005, flux_0_005, label="0.005 dpa")
-plt.scatter(T_0_023, flux_0_023, label="Exp. 0.023 dpa", color="black")
+# plt.scatter(T_0_023, flux_0_023, label="Exp. 0.023 dpa", color="black")
 # plt.scatter(T_0_1, flux_0_1, label="0.1 dpa")
 # plt.scatter(T_0_23, flux_0_23, label="0.23 dpa")
-# plt.scatter(T_0_5, flux_0_5, label="0.5 dpa")
+plt.scatter(T_0_5, flux_0_5, label="0.5 dpa")
 # plt.scatter(T_2_5, flux_2_5, label="2.5 dpa")
 
 T_sim = []
@@ -75,6 +75,20 @@ trap2 = []
 trap3 = []
 trap4 = []
 trap5 = []
+
+# t_standard = []
+# T_sim_standard = []
+# flux1_standard, flux2_standard = [], []
+
+# with open("Results/dpa_0.023/last.csv", "r") as csvfile:
+#     plots = csv.reader(csvfile, delimiter=",")
+#     for row in plots:
+#         if "t(s)" not in row:
+#             if float(row[0]) >= implantation_time + resting_time * 0.75:
+#                 t_standard.append(float(row[0]))
+#                 T_sim_standard.append(float(row[1]))
+#                 flux1_standard.append(float(row[2]))
+#                 flux2_standard.append(float(row[3]))
 
 
 with open("Results/last.csv", "r") as csvfile:
@@ -117,19 +131,40 @@ plt.plot(
     color=firebrick,
     label=r"Trap 2 ($E_{t} = 1.15 eV$)",
 )
+# plt.plot(
+#     T_sim[1:],
+#     trap_3_contrib,
+#     linestyle="dashed",
+#     color=pewter_blue,
+#     label=r"Trap 3 ($E_{t} = 1.30 eV$)",
+# )
+# plt.plot(
+#     T_sim[1:],
+#     trap_4_contrib,
+#     linestyle="dashed",
+#     color=blue_jeans,
+#     label=r"Trap 4 ($E_{t} = 1.50 eV$)",
+# )
+# plt.plot(
+#     T_sim[1:],
+#     trap_5_contrib,
+#     linestyle="dashed",
+#     color=electric_blue,
+#     label=r"Trap 5 ($E_{t} = 1.85 eV$)",
+# )
 plt.plot(
     T_sim[1:],
     trap_3_contrib,
     linestyle="dashed",
-    color=pewter_blue,
-    label=r"Trap 3 ($E_{t} = 1.30 eV$)",
+    color=blue_jeans,
+    label=r"Trap 3 ($E_{t} = 1.40 eV$)",
 )
 plt.plot(
     T_sim[1:],
     trap_4_contrib,
     linestyle="dashed",
-    color=blue_jeans,
-    label=r"Trap 4 ($E_{t} = 1.50 eV$)",
+    color=electric_blue,
+    label=r"Trap 4 ($E_{t} = 1.65 eV$)",
 )
 plt.plot(
     T_sim[1:],
@@ -152,8 +187,17 @@ plt.plot(
     linewidth=2,
 )
 
+# plt.plot(
+#     T_sim_standard,
+#     -np.asarray(flux1_standard) - np.asarray(flux2_standard),
+#     label="Simulation standard",
+#     color=pewter_blue,
+#     linewidth=2,
+# )
+
 plt.xlim(300, 1000)
-plt.ylim(0, 5e16)
+# plt.ylim(0, 5e16)
+plt.ylim(bottom=0)
 plt.xlabel("Temperature (K)")
 plt.ylabel(r"Desorption flux (D m$ ^{-2}$ s$ ^{-1}$)")
 # plt.title("TDS")

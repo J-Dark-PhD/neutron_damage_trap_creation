@@ -171,7 +171,7 @@ def error(p, norms=None, restart_data=None):
 
 # READ REFERENCE DATA
 
-data_ref = np.genfromtxt("tds_data/0.1_dpa.csv", delimiter=",")
+data_ref = np.genfromtxt("tds_data/0.5_dpa.csv", delimiter=",")
 T_ref = data_ref[:, 0]
 # data in D/s, needs to convert to D/(m2 s)
 desorption_ref = data_ref[:, 1] / (12e-03 * 15e-03)
@@ -185,10 +185,10 @@ if __name__ == "__main__":
     j = 0
 
     # build initial guess
-    n1 = 4.5e25
-    n2 = 3e25
-    n3 = 4.5e25
-    n4 = 4.5e25
+    n1 = 4.9e25
+    n2 = 3.6e25
+    n3 = 2.8e25
+    n4 = 4e25
 
     initial_guess = np.array([n1, n2, n3, n4])
 

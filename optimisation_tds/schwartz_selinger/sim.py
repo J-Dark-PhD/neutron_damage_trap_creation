@@ -50,21 +50,37 @@ def festim_sim(n1=1, n2=1, n3=1, n4=1, initial_number_cells=500):
     my_model.traps = F.Traps(
         [
             F.Trap(
-                k_0=2.4e-7 / (1.1e-10**2 * 6 * atom_density_W),
+                k_0=4.1e-7 / (1.1e-10**2 * 6 * atom_density_W),
                 E_k=0.39,
                 p_0=1e13,
                 E_p=1.0,
                 density=2e22,
                 materials=tungsten,
             ),
-            # F.Trap(
-            #     k_0=2.4e-7 / (1.1e-10**2 * 6 * atom_density_W),
-            #     E_k=0.39,
-            #     p_0=1e13,
-            #     E_p=1.15,
-            #     density=n1 / (1 + sp.exp((F.x - 3e-06) / 5e-07)),
-            #     materials=tungsten,
-            # ),
+            F.Trap(
+                k_0=4.1e-7 / (1.1e-10**2 * 6 * atom_density_W),
+                E_k=0.39,
+                p_0=1e13,
+                E_p=1.15,
+                density=n1 / (1 + sp.exp((F.x - 3e-06) / 5e-07)),
+                materials=tungsten,
+            ),
+            F.Trap(
+                k_0=4.1e-7 / (1.1e-10**2 * 6 * atom_density_W),
+                E_k=0.39,
+                p_0=1e13,
+                E_p=1.35,
+                density=n2 / (1 + sp.exp((F.x - 3e-06) / 5e-07)),
+                materials=tungsten,
+            ),
+            F.Trap(
+                k_0=4.1e-7 / (1.1e-10**2 * 6 * atom_density_W),
+                E_k=0.39,
+                p_0=1e13,
+                E_p=1.65,
+                density=n3 / (1 + sp.exp((F.x - 3e-06) / 5e-07)),
+                materials=tungsten,
+            ),
             # F.Trap(
             #     k_0=2.4e-7 / (1.1e-10**2 * 6 * atom_density_W),
             #     E_k=0.39,
@@ -81,14 +97,14 @@ def festim_sim(n1=1, n2=1, n3=1, n4=1, initial_number_cells=500):
             #     density=n3 / (1 + sp.exp((F.x - 3e-06) / 5e-07)),
             #     materials=tungsten,
             # ),
-            # F.Trap(
-            #     k_0=2.4e-7 / (1.1e-10**2 * 6 * atom_density_W),
-            #     E_k=0.39,
-            #     p_0=1e13,
-            #     E_p=1.85,
-            #     density=n4 / (1 + sp.exp((F.x - 3e-06) / 5e-07)),
-            #     materials=tungsten,
-            # ),
+            F.Trap(
+                k_0=2.4e-7 / (1.1e-10**2 * 6 * atom_density_W),
+                E_k=0.39,
+                p_0=1e13,
+                E_p=1.85,
+                density=n4 / (1 + sp.exp((F.x - 3e-06) / 5e-07)),
+                materials=tungsten,
+            ),
         ]
     )
 
@@ -139,10 +155,10 @@ def festim_sim(n1=1, n2=1, n3=1, n4=1, initial_number_cells=500):
     solute = F.TotalVolume("solute", volume=1)
     retention = F.TotalVolume("retention", volume=1)
     trap_1 = F.TotalVolume("1", volume=1)
-    # trap_2 = F.TotalVolume("2", volume=1)
-    # trap_3 = F.TotalVolume("3", volume=1)
-    # trap_4 = F.TotalVolume("4", volume=1)
-    # trap_5 = F.TotalVolume("5", volume=1)
+    trap_2 = F.TotalVolume("2", volume=1)
+    trap_3 = F.TotalVolume("3", volume=1)
+    trap_4 = F.TotalVolume("4", volume=1)
+    trap_5 = F.TotalVolume("5", volume=1)
     my_derived_quantities.derived_quantities = [
         average_T,
         H_flux_left,
@@ -150,10 +166,10 @@ def festim_sim(n1=1, n2=1, n3=1, n4=1, initial_number_cells=500):
         solute,
         retention,
         trap_1,
-        # trap_2,
-        # trap_3,
-        # trap_4,
-        # trap_5,
+        trap_2,
+        trap_3,
+        trap_4,
+        trap_5,
     ]
 
     my_exports = F.Exports(
@@ -272,9 +288,24 @@ if __name__ == "__main__":
     #     n4=5.7e25,
     # )
     # 2.5 dpa values
+    # festim_sim(
+    #     n1=4.8e25,
+    #     n2=3.3e25,
+    #     n3=2.5e25,
+    #     n4=6.1e25,
+    # )
+    # ##### new trapping energies ##### #
+    # 0.23 dpa values
+    # festim_sim(
+    #     n1=4.7e25,
+    #     n2=3.4e25,
+    #     n3=2.5e25,
+    #     n4=3.7e25,
+    # )
+    # 0.5 dpa values
     festim_sim(
-        n1=4.8e25,
-        n2=3.3e25,
-        n3=2.5e25,
-        n4=6.1e25,
+        n1=4.9e25,
+        n2=3.6e25,
+        n3=2.8e25,
+        n4=4e25,
     )
