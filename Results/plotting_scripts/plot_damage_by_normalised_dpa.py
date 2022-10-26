@@ -46,7 +46,7 @@ plt.legend(
 plt.ylabel(r"Normalised hydrogen inventory")
 plt.xlabel(r"Temperature (K)")
 plt.xlim(400, 1300)
-plt.ylim(0.9, 3)
+# plt.ylim(0.9, 3)
 ax = plt.gca()
 ax.spines["top"].set_visible(False)
 ax.spines["right"].set_visible(False)
