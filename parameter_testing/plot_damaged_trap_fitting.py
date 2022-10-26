@@ -40,7 +40,7 @@ t_damage = 86400
 t = np.linspace(0, t_damage, t_damage)
 A_0 = A_0_optimised
 E_A = E_A_optimised
-T = 370
+T = 800
 n_0 = 0
 
 trap1_K = 6.0e26
@@ -51,6 +51,18 @@ trap3_K = 2.9e26
 trap3_n_max = 2.4e25
 trap4_K = 8.0e26
 trap4_n_max = 5.8e25
+
+trap1_K = 1e28
+trap1_n_max = 4.8e25
+
+trap2_K = 9e27
+trap2_n_max = 3.2e25
+
+trap3_K = 5.5e27
+trap3_n_max = 2.6e25
+
+trap4_K = 1.0e28
+trap4_n_max = 6.3e25
 
 phi = 2.5 / t_damage
 K = 5e21
@@ -95,8 +107,8 @@ trap3_err = np.array(trap3) * 0.1
 trap4_err = np.array(trap4) * 0.1
 
 
-def plot_all_in_one():
-    plt.figure(figsize=(8, 8))
+def plot_trap_1():
+    plt.figure()
 
     # trap 1
     err_bar_1 = plt.errorbar(
@@ -115,7 +127,20 @@ def plot_all_in_one():
         label=r"Trap 2 fitting ($K = 6.0 \cdot 10^{26}$ s$^{-1}$, $n_{max, \phi} =  4.5\cdot 10^{25}$ m$^{-3}$)",
     )
 
-    # trap 2
+    plt.ylim(bottom=0)
+    plt.xlim(0, 3)
+    plt.ylabel(r"Trap density, n$_{\mathrm{t}}$ (m$^{-3}$)")
+    plt.xlabel(r"Damage (dpa)")
+
+    # plt.legend(loc="lower right")
+    ax = plt.gca()
+    ax.spines["right"].set_visible(False)
+    ax.spines["top"].set_visible(False)
+    plt.tight_layout()
+
+
+def plot_trap_2():
+    plt.figure()
     err_bar_2 = plt.errorbar(
         dpa_values,
         trap2,
@@ -132,7 +157,21 @@ def plot_all_in_one():
         label=r"Trap 3 fitting ($K = 3.5 \cdot 10^{26}$ s$^{-1}$, $n_{max, \phi} =  3.5\cdot 10^{25}$ m$^{-3}$)",
     )
 
-    # trap 3
+    plt.ylim(bottom=0)
+    plt.xlim(0, 3)
+    plt.ylabel(r"Trap density, n$_{\mathrm{t}}$ (m$^{-3}$)")
+    plt.xlabel(r"Damage (dpa)")
+
+    # plt.legend(loc="lower right")
+    ax = plt.gca()
+    ax.spines["right"].set_visible(False)
+    ax.spines["top"].set_visible(False)
+    plt.tight_layout()
+
+
+def plot_trap_3():
+
+    plt.figure()
     err_bar_3 = plt.errorbar(
         dpa_values,
         trap3,
@@ -147,6 +186,103 @@ def plot_all_in_one():
         damaged_trap3_densities,
         color=pewter_blue,
         label=r"Trap 4 fitting ($K = 2.9\cdot 10^{26}$ s$^{-1}$, $n_{max, \phi} =  2.4\cdot 10^{25}$ m$^{-3}$)",
+    )
+
+    plt.ylim(bottom=0)
+    plt.xlim(0, 3)
+    plt.ylabel(r"Trap density, n$_{\mathrm{t}}$ (m$^{-3}$)")
+    plt.xlabel(r"Damage (dpa)")
+
+    # plt.legend(loc="lower right")
+    ax = plt.gca()
+    ax.spines["right"].set_visible(False)
+    ax.spines["top"].set_visible(False)
+    plt.tight_layout()
+
+
+def plot_trap_4():
+
+    plt.figure()
+    err_bar_4 = plt.errorbar(
+        dpa_values,
+        trap4,
+        yerr=trap4_err,
+        fmt=".",
+        capsize=5,
+        color=green_ryb,
+        label=r"Trap 5 ($E_{t} = 1.85$ eV)",
+    )
+    plot_4 = plt.plot(
+        dpa_list,
+        damaged_trap4_densities,
+        color=green_ryb,
+        label=r"Trap 5 fitting ($K = 8.0\cdot 10^{21}$ s$^{-1}$, $n_{max, \phi} =  5.8\cdot 10^{25}$ m$^{-3}$) ",
+    )
+
+    plt.ylim(bottom=0)
+    plt.xlim(0, 3)
+    plt.ylabel(r"Trap density, n$_{\mathrm{t}}$ (m$^{-3}$)")
+    plt.xlabel(r"Damage (dpa)")
+
+    # plt.legend(loc="lower right")
+    ax = plt.gca()
+    ax.spines["right"].set_visible(False)
+    ax.spines["top"].set_visible(False)
+    plt.tight_layout()
+
+
+def plot_all_in_one():
+    plt.figure(figsize=(8, 8))
+
+    # trap 1
+    err_bar_1 = plt.errorbar(
+        dpa_values,
+        trap1,
+        yerr=trap1_err,
+        fmt=".",
+        capsize=5,
+        color=firebrick,
+        label=r"Trap 2 ($E_{t} = 1.15$ eV)",
+    )
+    plot_1 = plt.plot(
+        dpa_list,
+        damaged_trap1_densities,
+        color=firebrick,
+        label=r"Trap 2 fitting ($K = 1.0 \cdot 10^{28}$ s$^{-1}$, $n_{max, \phi} =  4.8\cdot 10^{25}$ m$^{-3}$)",
+    )
+
+    # trap 2
+    err_bar_2 = plt.errorbar(
+        dpa_values,
+        trap2,
+        yerr=trap2_err,
+        fmt=".",
+        color=electric_blue,
+        capsize=5,
+        label=r"Trap 3 ($E_{t} = 1.30$ eV)",
+    )
+    plot_2 = plt.plot(
+        dpa_list,
+        damaged_trap2_densities,
+        color=electric_blue,
+        label=r"Trap 3 fitting ($K = 9.0 \cdot 10^{27}$ s$^{-1}$, $n_{max, \phi} =  3.2\cdot 10^{25}$ m$^{-3}$)",
+    )
+
+    # trap 3
+    err_bar_3 = plt.errorbar(
+        dpa_values,
+        trap3,
+        yerr=trap3_err,
+        fmt=".",
+        capsize=5,
+        color=pewter_blue,
+        label=r"Trap 4 ($E_{t} = 1.50$ eV)",
+    )
+    plot_3 = plt.plot(
+        dpa_list,
+        damaged_trap3_densities,
+        color=pewter_blue,
+        label=r"Trap 4 fitting ($K = 5.5\cdot 10^{27}$ s$^{-1}$, $n_{max, \phi} =  2.4\cdot 10^{25}$ m$^{-3}$)",
     )
 
     # trap 4
@@ -560,8 +696,12 @@ values = [8, 7, 6, 5, 4, 3, 2, 1]
 # plot_all(i)
 # plot_all_presentation(i)
 
-plot_all_in_one()
-# plot_all_with_fitting()
+# plot_trap_1()
+# plot_trap_2()
+# plot_trap_3()
+# plot_trap_4()
+# plot_all_in_one()
+plot_all_with_fitting()
 # plot_all_with_fitting_presentation()
 
 plt.show()
