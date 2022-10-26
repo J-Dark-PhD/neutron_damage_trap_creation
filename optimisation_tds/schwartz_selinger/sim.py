@@ -295,17 +295,38 @@ if __name__ == "__main__":
     #     n4=6.1e25,
     # )
     # ##### new trapping energies ##### #
-    # 0.23 dpa values
+    # 0.023 dpa values
     # festim_sim(
-    #     n1=4.7e25,
-    #     n2=3.4e25,
-    #     n3=2.5e25,
-    #     n4=3.7e25,
+    #     n1=1.77e25,
+    #     n2=9.71e24,
+    #     n3=1.28e25,
+    #     n4=4.309e25,
     # )
-    # 0.5 dpa values
+    # 0.1 dpa values
+    # festim_sim(
+    #     n1=4.16e25,
+    #     n2=2.63e25,
+    #     n3=1.67e25,
+    #     n4=3.76e25,
+    # )
+    # 0.23 dpa values
     festim_sim(
-        n1=4.9e25,
-        n2=3.6e25,
-        n3=2.8e25,
-        n4=4e25,
+        n1=4.84e25,
+        n2=3.46e25,
+        n3=1.93e25,
+        n4=4.45e25,
     )
+    # 0.5 dpa values
+    # festim_sim(
+    #     n1=5.02e25,
+    #     n2=3.67e25,
+    #     n3=2.43e25,
+    #     n4=4.93e25,
+    # )
+    # 2.5 dpa values
+    # festim_sim(
+    #     n1=4.89e25,
+    #     n2=4.98e25,
+    #     n3=2.60e25,
+    #     n4=6.04e25,
+    # )
