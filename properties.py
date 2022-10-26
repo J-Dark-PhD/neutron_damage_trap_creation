@@ -46,7 +46,7 @@ def thermal_cond_W(T):  # units in W/(m*K)
 
 
 # taken from (Frauenfelder, R. 1969)
-D_0_W = 2.4e-7  # Diffusivity pre-exponential factor (m^(2).s^(-1))
+D_0_W = 4.1e-7  # Diffusivity pre-exponential factor (m^(2).s^(-1))
 E_D_W = 0.39  # Diffusivity activation energy (eV)
 S_0_W = 1.87e24  # Solubility pre-exponential factor (m^(-3).Pa^(-0.5))
 E_S_W = 1.04  # Solutbiility activation energy (eV)
