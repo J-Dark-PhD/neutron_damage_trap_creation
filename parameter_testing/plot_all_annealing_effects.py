@@ -1,7 +1,6 @@
 from matplotlib import pyplot as plt
 import numpy as np
 from scipy.integrate import odeint
-from labellines import labelLines
 
 from neutron_trap_creation_models import (
     neutron_trap_creation_numerical,
@@ -31,153 +30,153 @@ electric_blue = (83 / 255, 244 / 255, 255 / 255)
 # ########## Just annealing stage ########## #
 ##############################################
 
-# t = np.linspace(0, t_annealing, t_annealing)
-# phi = 0
-# K = 1
-# n_max = 1
-# A_0 = A_0_optimised
-# E_A = E_A_optimised
+t = np.linspace(0, t_annealing, t_annealing)
+phi = 0
+K = 1
+n_max = 1
+A_0 = A_0_optimised
+E_A = E_A_optimised
 
-# n_0 = 0.28e-02 * atom_density_W
+n_0 = 0.28e-02 * atom_density_W
 
-# annealed_trap_densities = []
-# for T in T_list:
-#     extra_args = (phi, K, n_max, A_0, E_A, T)
-#     n_traps_annleaing = odeint(neutron_trap_creation_numerical, n_0, t, args=extra_args)
-#     end_value = float(n_traps_annleaing[-1])
-#     annealed_trap_densities.append(end_value)
+annealed_trap_densities = []
+for T in T_list:
+    extra_args = (phi, K, n_max, A_0, E_A, T)
+    n_traps_annleaing = odeint(neutron_trap_creation_numerical, n_0, t, args=extra_args)
+    end_value = float(n_traps_annleaing[-1])
+    annealed_trap_densities.append(end_value)
 
-# plt.figure()
-# at_fr_annealed_trap_densities = (np.array(annealed_trap_densities) / 6.3e28) * 100
-# plt.plot(T_list, at_fr_annealed_trap_densities, color="black")
-# plt.scatter(temperatures, trap_2, color="blue", marker="x")
-# plt.ylabel(r"Trap density, n$_{\mathrm{t}}$ (at. \%)")
-# plt.xlabel(r"Annealing temperature (K)")
-# plt.ylim(0, 0.3)
-# plt.xlim(0, 1400)
-# ax = plt.gca()
-# ax.spines["right"].set_visible(False)
-# ax.spines["top"].set_visible(False)
+plt.figure()
+at_fr_annealed_trap_densities = (np.array(annealed_trap_densities) / 6.3e28) * 100
+plt.plot(T_list, at_fr_annealed_trap_densities, color="black")
+plt.scatter(temperatures, trap_2, color="blue", marker="x")
+plt.ylabel(r"Trap density, n$_{\mathrm{t}}$ (at. \%)")
+plt.xlabel(r"Annealing temperature (K)")
+plt.ylim(0, 0.3)
+plt.xlim(0, 1400)
+ax = plt.gca()
+ax.spines["right"].set_visible(False)
+ax.spines["top"].set_visible(False)
 
 # ##############################################
 # # ############ Variation in E_A ############ #
 # ##############################################
 
-# t = np.linspace(0, t_annealing, t_annealing)
-# phi = 0
-# K = 1
-# n_max = 1
-# A_0 = A_0_optimised
-# n_0 = 0.28e-02 * atom_density_W
+t = np.linspace(0, t_annealing, t_annealing)
+phi = 0
+K = 1
+n_max = 1
+A_0 = A_0_optimised
+n_0 = 0.28e-02 * atom_density_W
 
-# plt.figure()
-# ax = plt.gca()
-# E_A_values = np.linspace(0.2191 * 0.2, 0.2191 * 2, 10)
-# for E_A in E_A_values:
-#     annealed_trap_densities = []
-#     for T in T_list:
-#         extra_args = (phi, K, n_max, A_0, E_A, T)
-#         n_traps_annleaing = odeint(
-#             neutron_trap_creation_numerical, n_0, t, args=extra_args
-#         )
-#         end_value = float(n_traps_annleaing[-1])
-#         annealed_trap_densities.append(end_value)
-#     annealed_trap_densities = (np.array(annealed_trap_densities) / 6.3e28) * 100
-#     plt.plot(T_list, annealed_trap_densities, label="{:.2f}".format(E_A), color="black")
-# plt.scatter(temperatures, trap_2, color="blue", marker="x")
-# plt.ylabel(r"Trap density, n$_{\mathrm{t}}$ (at. \%)")
-# plt.xlabel(r"Annealing Temperature (K)")
-# plt.ylim(0, 0.3)
-# plt.xlim(0, 1400)
-# labelLines(plt.gca().get_lines())
-# ax.spines["right"].set_visible(False)
-# ax.spines["top"].set_visible(False)
+plt.figure()
+ax = plt.gca()
+E_A_values = np.linspace(0.2191 * 0.2, 0.2191 * 2, 10)
+for E_A in E_A_values:
+    annealed_trap_densities = []
+    for T in T_list:
+        extra_args = (phi, K, n_max, A_0, E_A, T)
+        n_traps_annleaing = odeint(
+            neutron_trap_creation_numerical, n_0, t, args=extra_args
+        )
+        end_value = float(n_traps_annleaing[-1])
+        annealed_trap_densities.append(end_value)
+    annealed_trap_densities = (np.array(annealed_trap_densities) / 6.3e28) * 100
+    plt.plot(T_list, annealed_trap_densities, label="{:.2f}".format(E_A), color="black")
+plt.scatter(temperatures, trap_2, color="blue", marker="x")
+plt.ylabel(r"Trap density, n$_{\mathrm{t}}$ (at. \%)")
+plt.xlabel(r"Annealing Temperature (K)")
+plt.ylim(0, 0.3)
+plt.xlim(0, 1400)
+labelLines(plt.gca().get_lines())
+ax.spines["right"].set_visible(False)
+ax.spines["top"].set_visible(False)
 
 # ##############################################
 # # ############ Variation in A_0 ############ #
 # ##############################################
 
-# t = np.linspace(0, t_annealing, t_annealing)
-# phi = 0
-# K = 1
-# n_max = 1
-# E_A = E_A_optimised
-# n_0 = 0.28e-02 * atom_density_W
+t = np.linspace(0, t_annealing, t_annealing)
+phi = 0
+K = 1
+n_max = 1
+E_A = E_A_optimised
+n_0 = 0.28e-02 * atom_density_W
 
-# plt.figure()
-# ax = plt.gca()
-# A_0_values = np.geomspace(2.5858e-03 * 0.1, 2.5858e-03 * 10, 10)
-# for A_0 in A_0_values:
-#     annealed_trap_densities = []
-#     for T in T_list:
-#         extra_args = (phi, K, n_max, A_0, E_A, T)
-#         n_traps_annleaing = odeint(
-#             neutron_trap_creation_numerical, n_0, t, args=extra_args
-#         )
-#         end_value = float(n_traps_annleaing[-1])
-#         annealed_trap_densities.append(end_value)
-#     annealed_trap_densities = (np.array(annealed_trap_densities) / 6.3e28) * 100
-#     plt.plot(
-#         T_list,
-#         annealed_trap_densities,
-#         label="{:.2f}".format(A_0 * 1e03),
-#         color="black",
-#     )
-# plt.scatter(temperatures, trap_2, color="blue", marker="x")
-# plt.ylabel(r"Trap density, n$_{\mathrm{t}}$ (at. \%)")
-# plt.xlabel(r"Annealing Temperature (K)")
-# plt.ylim(0, 0.3)
-# plt.xlim(0, 1400)
-# labelLines(plt.gca().get_lines())
-# ax.spines["right"].set_visible(False)
-# ax.spines["top"].set_visible(False)
+plt.figure()
+ax = plt.gca()
+A_0_values = np.geomspace(2.5858e-03 * 0.1, 2.5858e-03 * 10, 10)
+for A_0 in A_0_values:
+    annealed_trap_densities = []
+    for T in T_list:
+        extra_args = (phi, K, n_max, A_0, E_A, T)
+        n_traps_annleaing = odeint(
+            neutron_trap_creation_numerical, n_0, t, args=extra_args
+        )
+        end_value = float(n_traps_annleaing[-1])
+        annealed_trap_densities.append(end_value)
+    annealed_trap_densities = (np.array(annealed_trap_densities) / 6.3e28) * 100
+    plt.plot(
+        T_list,
+        annealed_trap_densities,
+        label="{:.2f}".format(A_0 * 1e03),
+        color="black",
+    )
+plt.scatter(temperatures, trap_2, color="blue", marker="x")
+plt.ylabel(r"Trap density, n$_{\mathrm{t}}$ (at. \%)")
+plt.xlabel(r"Annealing Temperature (K)")
+plt.ylim(0, 0.3)
+plt.xlim(0, 1400)
+labelLines(plt.gca().get_lines())
+ax.spines["right"].set_visible(False)
+ax.spines["top"].set_visible(False)
 
 # ##############################################
 # # ############# Variation in T ############# #
 # ##############################################
 
-# t = np.linspace(0, t_annealing, t_annealing)
-# phi = 0
-# K = 1
-# n_max = 1
-# A_0 = A_0_optimised
-# E_A = E_A_optimised
-# n_0 = 0.28e-02 * atom_density_W
+t = np.linspace(0, t_annealing, t_annealing)
+phi = 0
+K = 1
+n_max = 1
+A_0 = A_0_optimised
+E_A = E_A_optimised
+n_0 = 0.28e-02 * atom_density_W
 
-# plt.figure()
-# ax = plt.gca()
-# for T in temperatures:
-#     extra_args = (phi, K, n_max, A_0, E_A, T)
-#     n_traps_annleaing = odeint(neutron_trap_creation_numerical, n_0, t, args=extra_args)
-#     plt.plot(t, n_traps_annleaing, label="{}K".format(int(T)), color="black")
+plt.figure()
+ax = plt.gca()
+for T in temperatures:
+    extra_args = (phi, K, n_max, A_0, E_A, T)
+    n_traps_annleaing = odeint(neutron_trap_creation_numerical, n_0, t, args=extra_args)
+    plt.plot(t, n_traps_annleaing, label="{}K".format(int(T)), color="black")
 
-# plt.ylim(bottom=0)
-# plt.xlim(0, t_annealing)
-# plt.ylabel(r"Trap density, n$_{\mathrm{t}}$ (at. \%)")
-# plt.xlabel(r"Time (s)")
-# plt.xticks([])
-# ax = plt.gca()
-# labelLines(plt.gca().get_lines())
-# ax.spines["right"].set_visible(False)
-# ax.spines["top"].set_visible(False)
+plt.ylim(bottom=0)
+plt.xlim(0, t_annealing)
+plt.ylabel(r"Trap density, n$_{\mathrm{t}}$ (at. \%)")
+plt.xlabel(r"Time (s)")
+plt.xticks([])
+ax = plt.gca()
+labelLines(plt.gca().get_lines())
+ax.spines["right"].set_visible(False)
+ax.spines["top"].set_visible(False)
 
-# ##############################################
-# # ########### plot Etienne data ############ #
-# ##############################################
+##############################################
+# ########### plot Etienne data ############ #
+##############################################
 
-# plt.figure()
-# ax = plt.gca()
-# plt.scatter(temperatures, trap_1, color="blue", marker="x", label=r"trap 1")
-# plt.scatter(temperatures, trap_2, color="black", marker="x", label=r"trap 2")
-# plt.scatter(temperatures, trap_3, color="red", marker="x", label=r"trap 3")
-# plt.ylabel(r"Trap density, n$_{\mathrm{t}}$ (at. \%)")
-# plt.xlabel(r"Annealing Temperature (K)")
-# plt.ylim(0, 0.3)
-# plt.xlim(0, 1400)
-# plt.legend()
-# ax = plt.gca()
-# ax.spines["right"].set_visible(False)
-# ax.spines["top"].set_visible(False)
+plt.figure()
+ax = plt.gca()
+plt.scatter(temperatures, trap_1, color="blue", marker="x", label=r"trap 1")
+plt.scatter(temperatures, trap_2, color="black", marker="x", label=r"trap 2")
+plt.scatter(temperatures, trap_3, color="red", marker="x", label=r"trap 3")
+plt.ylabel(r"Trap density, n$_{\mathrm{t}}$ (at. \%)")
+plt.xlabel(r"Annealing Temperature (K)")
+plt.ylim(0, 0.3)
+plt.xlim(0, 1400)
+plt.legend()
+ax = plt.gca()
+ax.spines["right"].set_visible(False)
+ax.spines["top"].set_visible(False)
 
 ##############################################
 # ############# All 3 data sets ############ #
@@ -313,36 +312,36 @@ ax.spines["top"].set_visible(False)
 # ########### with beta variable ########### #
 ##############################################
 
-# t = np.linspace(0, t_annealing, t_annealing)
-# phi = 0
-# K = 1
-# n_max = 1
-# A_0 = 0.006618356972644625
-# beta = 4.5944499958728266e-06
-# E_A = 0.2839061632941078
+t = np.linspace(0, t_annealing, t_annealing)
+phi = 0
+K = 1
+n_max = 1
+A_0 = 0.006618356972644625
+beta = 4.5944499958728266e-06
+E_A = 0.2839061632941078
 
-# n_0 = 0.28e-02 * atom_density_W
+n_0 = 0.28e-02 * atom_density_W
 
-# annealed_trap_densities = []
-# for T in T_list:
-#     extra_args = (phi, K, n_max, A_0, beta, E_A, T)
-#     n_traps_annleaing = odeint(
-#         neutron_trap_creation_numerical_beta, n_0, t, args=extra_args
-#     )
-#     end_value = float(n_traps_annleaing[-1])
-#     annealed_trap_densities.append(end_value)
+annealed_trap_densities = []
+for T in T_list:
+    extra_args = (phi, K, n_max, A_0, beta, E_A, T)
+    n_traps_annleaing = odeint(
+        neutron_trap_creation_numerical_beta, n_0, t, args=extra_args
+    )
+    end_value = float(n_traps_annleaing[-1])
+    annealed_trap_densities.append(end_value)
 
-# plt.figure()
-# at_fr_annealed_trap_densities = (np.array(annealed_trap_densities) / 6.3e28) * 100
-# plt.plot(T_list, at_fr_annealed_trap_densities, color="black")
-# plt.scatter(temperatures, trap_2, color="blue", marker="x")
-# plt.ylabel(r"Trap density, n$_{\mathrm{t}}$ (at. \%)")
-# plt.xlabel(r"Annealing temperature (K)")
-# plt.ylim(0, 0.3)
-# plt.xlim(0, 1400)
-# ax = plt.gca()
-# ax.spines["right"].set_visible(False)
-# ax.spines["top"].set_visible(False)
+plt.figure()
+at_fr_annealed_trap_densities = (np.array(annealed_trap_densities) / 6.3e28) * 100
+plt.plot(T_list, at_fr_annealed_trap_densities, color="black")
+plt.scatter(temperatures, trap_2, color="blue", marker="x")
+plt.ylabel(r"Trap density, n$_{\mathrm{t}}$ (at. \%)")
+plt.xlabel(r"Annealing temperature (K)")
+plt.ylim(0, 0.3)
+plt.xlim(0, 1400)
+ax = plt.gca()
+ax.spines["right"].set_visible(False)
+ax.spines["top"].set_visible(False)
 
 ##############################################
 # ################ plot show ############### #
