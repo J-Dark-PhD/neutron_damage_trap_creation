@@ -81,22 +81,6 @@ def festim_sim(n1=1, n2=1, n3=1, n4=1, initial_number_cells=500):
                 density=n3 / (1 + sp.exp((F.x - 3e-06) / 5e-07)),
                 materials=tungsten,
             ),
-            # F.Trap(
-            #     k_0=2.4e-7 / (1.1e-10**2 * 6 * atom_density_W),
-            #     E_k=0.39,
-            #     p_0=1e13,
-            #     E_p=1.3,
-            #     density=n2 / (1 + sp.exp((F.x - 3e-06) / 5e-07)),
-            #     materials=tungsten,
-            # ),
-            # F.Trap(
-            #     k_0=2.4e-7 / (1.1e-10**2 * 6 * atom_density_W),
-            #     E_k=0.39,
-            #     p_0=1e13,
-            #     E_p=1.5,
-            #     density=n3 / (1 + sp.exp((F.x - 3e-06) / 5e-07)),
-            #     materials=tungsten,
-            # ),
             F.Trap(
                 k_0=2.4e-7 / (1.1e-10**2 * 6 * atom_density_W),
                 E_k=0.39,
@@ -246,87 +230,51 @@ def festim_sim(n1=1, n2=1, n3=1, n4=1, initial_number_cells=500):
 
 if __name__ == "__main__":
     # 0.001 dpa values
-    # festim_sim(
-    #     n1=3.5e24,
-    #     n2=1e24,
-    #     n3=1e24,
-    #     n4=1e24,
-    # )
+    festim_sim(
+        n1=3.5e24,
+        n2=5e23,
+        n3=5e23,
+        n4=1e24,
+    )
     # 0.005 dpa values
     # festim_sim(
-    #     n1=5.2e24,
-    #     n2=2.5e24,
-    #     n3=1.5e24,
-    #     n4=2.5e24,
+    #     n1=5.3e24,
+    #     n2=1.9e24,
+    #     n3=1.0e24,
+    #     n4=2.0e24,
     # )
     # 0.023 dpa values
     # festim_sim(
-    #     n1=1.75e25,
-    #     n2=1e25,
+    #     n1=2.0e25,
+    #     n2=9.5e24,
     #     n3=6e24,
-    #     n4=2e25,
+    #     n4=1.7e25,
     # )
     # 0.1 dpa values
-    # festim_sim(
-    #     n1=3.7e25,
-    #     n2=2.5e25,
-    #     n3=1.7e25,
-    #     n4=4.3e25,
-    # )
-    # 0.23 dpa values
-    # festim_sim(
-    #     n1=4.1e25,
-    #     n2=2.8e25,
-    #     n3=2.1e25,
-    #     n4=5e25,
-    # )
-    # 0.5 dpa values
     # festim_sim(
     #     n1=4.2e25,
-    #     n2=2.9e25,
-    #     n3=2.4e25,
-    #     n4=5.7e25,
-    # )
-    # 2.5 dpa values
-    # festim_sim(
-    #     n1=4.8e25,
-    #     n2=3.3e25,
-    #     n3=2.5e25,
-    #     n4=6.1e25,
-    # )
-    # ##### new trapping energies ##### #
-    # 0.023 dpa values
-    # festim_sim(
-    #     n1=1.77e25,
-    #     n2=9.71e24,
-    #     n3=1.28e25,
-    #     n4=4.309e25,
-    # )
-    # 0.1 dpa values
-    # festim_sim(
-    #     n1=4.16e25,
-    #     n2=2.63e25,
-    #     n3=1.67e25,
-    #     n4=3.76e25,
+    #     n2=2.6e25,
+    #     n3=2.0e25,
+    #     n4=3.2e25,
     # )
     # 0.23 dpa values
-    festim_sim(
-        n1=4.84e25,
-        n2=3.46e25,
-        n3=1.93e25,
-        n4=4.45e25,
-    )
+    # festim_sim(
+    #     n1=4.5e25,
+    #     n2=3.4e25,
+    #     n3=2.7e25,
+    #     n4=3.4e25,
+    # )
     # 0.5 dpa values
     # festim_sim(
-    #     n1=5.02e25,
-    #     n2=3.67e25,
-    #     n3=2.43e25,
-    #     n4=4.93e25,
+    #     n1=4.7e25,
+    #     n2=3.6e25,
+    #     n3=3.2e25,
+    #     n4=3.8e25,
     # )
     # 2.5 dpa values
     # festim_sim(
-    #     n1=4.89e25,
-    #     n2=4.98e25,
-    #     n3=2.60e25,
-    #     n4=6.04e25,
+    #     n1=5.3e25,
+    #     n2=4.5e25,
+    #     n3=3.9e25,
+    #     n4=4.2e25,
     # )

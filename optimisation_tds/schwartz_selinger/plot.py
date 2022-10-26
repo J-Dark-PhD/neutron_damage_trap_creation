@@ -56,12 +56,12 @@ flux_0_5 = data_0_5[:, 1] / area
 flux_2_5 = data_2_5[:, 1] / area
 
 # plt.scatter(T_0, flux_0, label="0 dpa", color="black")
-# plt.scatter(T_0_001, flux_0_001, label="0.001 dpa")
+plt.scatter(T_0_001, flux_0_001, label="0.001 dpa")
 # plt.scatter(T_0_005, flux_0_005, label="0.005 dpa")
 # plt.scatter(T_0_023, flux_0_023, label="Exp. 0.023 dpa", color="black")
 # plt.scatter(T_0_1, flux_0_1, label="0.1 dpa")
 # plt.scatter(T_0_23, flux_0_23, label="0.23 dpa")
-plt.scatter(T_0_5, flux_0_5, label="0.5 dpa")
+# plt.scatter(T_0_5, flux_0_5, label="0.5 dpa")
 # plt.scatter(T_2_5, flux_2_5, label="2.5 dpa")
 
 T_sim = []
@@ -204,7 +204,7 @@ plt.ylabel(r"Desorption flux (D m$ ^{-2}$ s$ ^{-1}$)")
 ax = plt.gca()
 ax.spines["top"].set_visible(False)
 ax.spines["right"].set_visible(False)
-plt.legend()
+# plt.legend()
 plt.tight_layout()
 
 plt.show()
