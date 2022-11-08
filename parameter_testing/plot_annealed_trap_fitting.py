@@ -70,146 +70,237 @@ for T in T_list:
     end_value_trap_3 = float(n_traps_annleaing_trap_3[-1])
     annealed_trap_3_densities.append(end_value_trap_3)
 
+trap_1 = (np.array(trap_1) / 100) * 6.3e28
+trap_2 = (np.array(trap_2) / 100) * 6.3e28
+trap_3 = (np.array(trap_3) / 100) * 6.3e28
+
 trap_1_err = np.array(trap_1) * 0.1
 trap_2_err = np.array(trap_2) * 0.1
 trap_3_err = np.array(trap_3) * 0.1
-annealed_trap_1_densities = (np.array(annealed_trap_1_densities) / 6.3e28) * 100
-annealed_trap_2_densities = (np.array(annealed_trap_2_densities) / 6.3e28) * 100
-annealed_trap_3_densities = (np.array(annealed_trap_3_densities) / 6.3e28) * 100
+# annealed_trap_1_densities = (np.array(annealed_trap_1_densities) / 6.3e28) * 100
+# annealed_trap_2_densities = (np.array(annealed_trap_2_densities) / 6.3e28) * 100
+# annealed_trap_3_densities = (np.array(annealed_trap_3_densities) / 6.3e28) * 100
 
 # ##### Seperate plots ##### #
 
-plt.figure()
-err_bar_1 = plt.errorbar(
-    temperatures,
-    trap_1,
-    yerr=trap_1_err,
-    fmt=".",
-    capsize=5,
-    color=green_ryb,
-    label=r"Trap 3 ($E_{t} = 1.65$ eV)",
-)
-plot_1 = plt.plot(
-    T_list,
-    annealed_trap_1_densities,
-    color=green_ryb,
-    label=r"Trap 3 fitting ($A_{0} = 0.28$ eV, $E_{A} = 6.18 \cdot 10^{-3}$ s$^{-1}$)",
-)
-plt.ylabel(r"Trap density, n$_{\mathrm{t}}$ (at. \%)")
-plt.xlabel(r"Annealing temperature (K)")
-plt.ylim(bottom=0)
-plt.xlim(0, 1400)
-ax = plt.gca()
-ax.spines["right"].set_visible(False)
-ax.spines["top"].set_visible(False)
 
-plt.figure()
-err_bar_2 = plt.errorbar(
-    temperatures,
-    trap_2,
-    yerr=trap_2_err,
-    fmt=".",
-    capsize=5,
-    color=firebrick,
-    label=r"Trap 4 ($E_{t} = 1.85$ eV)",
-)
-plot_2 = plt.plot(
-    T_list,
-    annealed_trap_2_densities,
-    color=firebrick,
-    label=r"Trap 4 fitting ($A_{0} = 0.28$ eV, $E_{A} = 6.18 \cdot 10^{-3}$ s$^{-1}$)",
-)
-plt.ylabel(r"Trap density, n$_{\mathrm{t}}$ (at. \%)")
-plt.xlabel(r"Annealing temperature (K)")
-plt.ylim(bottom=0)
-plt.xlim(0, 1400)
-ax = plt.gca()
-ax.spines["right"].set_visible(False)
-ax.spines["top"].set_visible(False)
-
-plt.figure()
-err_bar_3 = plt.errorbar(
-    temperatures,
-    trap_3,
-    yerr=trap_3_err,
-    fmt=".",
-    capsize=5,
-    color=blue_jeans,
-    label=r"Trap 5 ($E_{t} = 2.06$ eV)",
-)
-plot_3 = plt.plot(
-    T_list,
-    annealed_trap_3_densities,
-    color=blue_jeans,
-    label=r"Trap 5 fitting ($A_{0} = 0.28$ eV, $E_{A} = 6.18 \cdot 10^{-3}$ s$^{-1}$)",
-)
-plt.ylabel(r"Trap density, n$_{\mathrm{t}}$ (at. \%)")
-plt.xlabel(r"Annealing temperature (K)")
-plt.ylim(bottom=0)
-plt.xlim(0, 1400)
-ax = plt.gca()
-ax.spines["right"].set_visible(False)
-ax.spines["top"].set_visible(False)
+def plot_1():
+    plt.figure()
+    err_bar_1 = plt.errorbar(
+        temperatures,
+        trap_1,
+        yerr=trap_1_err,
+        fmt=".",
+        capsize=5,
+        color=green_ryb,
+    )
+    plot_1 = plt.plot(
+        T_list,
+        annealed_trap_1_densities,
+        color=green_ryb,
+        label=r"Trap 3 ($E_{t} = 1.65$ eV)",
+    )
+    plt.ylabel(r"Trap density, n$_{\mathrm{t}}$ (at. \%)")
+    plt.xlabel(r"Annealing temperature (K)")
+    plt.ylim(bottom=0)
+    plt.xlim(0, 1400)
+    plt.legend(loc="lower left")
+    ax = plt.gca()
+    ax.spines["right"].set_visible(False)
+    ax.spines["top"].set_visible(False)
 
 
-# ##### plot all on one figure ##### #
+def plot_2():
+    plt.figure()
+    err_bar_2 = plt.errorbar(
+        temperatures,
+        trap_2,
+        yerr=trap_2_err,
+        fmt=".",
+        capsize=5,
+        color=firebrick,
+    )
+    plot_2 = plt.plot(
+        T_list,
+        annealed_trap_2_densities,
+        color=firebrick,
+        label=r"Trap 4 ($E_{t} = 1.85$ eV)",
+    )
+    plt.ylabel(r"Trap density, n$_{\mathrm{t}}$ (at. \%)")
+    plt.xlabel(r"Annealing temperature (K)")
+    plt.ylim(bottom=0)
+    plt.xlim(0, 1400)
+    plt.legend(loc="lower left")
+    ax = plt.gca()
+    ax.spines["right"].set_visible(False)
+    ax.spines["top"].set_visible(False)
 
-plt.figure()
-err_bar_4 = plt.errorbar(
-    temperatures,
-    trap_1,
-    yerr=trap_1_err,
-    fmt=".",
-    capsize=5,
-    color=green_ryb,
-    label=r"Trap 3 ($E_{t} = 1.65$ eV)",
-)
-plot_4 = plt.plot(
-    T_list,
-    annealed_trap_1_densities,
-    color=green_ryb,
-    label=r"Trap 3 fitting ($A_{0} = 0.28$ eV, $E_{A} = 6.18 \cdot 10^{-3}$ s$^{-1}$)",
-)
 
-err_bar_5 = plt.errorbar(
-    temperatures,
-    trap_2,
-    yerr=trap_2_err,
-    fmt=".",
-    capsize=5,
-    color=firebrick,
-    label=r"Trap 4 ($E_{t} = 1.85$ eV)",
-)
-plot_5 = plt.plot(
-    T_list,
-    annealed_trap_2_densities,
-    color=firebrick,
-    label=r"Trap 4 fitting ($A_{0} = 0.28$ eV, $E_{A} = 6.18 \cdot 10^{-3}$ s$^{-1}$)",
-)
+def plot_3():
+    plt.figure()
+    err_bar_3 = plt.errorbar(
+        temperatures,
+        trap_3,
+        yerr=trap_3_err,
+        fmt=".",
+        capsize=5,
+        color=blue_jeans,
+    )
+    plot_3 = plt.plot(
+        T_list,
+        annealed_trap_3_densities,
+        color=blue_jeans,
+        label=r"Trap 5 ($E_{t} = 2.06$ eV)",
+    )
+    plt.ylabel(r"Trap density, n$_{\mathrm{t}}$ (at. \%)")
+    plt.xlabel(r"Annealing temperature (K)")
+    plt.ylim(bottom=0)
+    plt.xlim(0, 1400)
+    plt.legend(loc="lower left")
+    ax = plt.gca()
+    ax.spines["right"].set_visible(False)
+    ax.spines["top"].set_visible(False)
 
-err_bar_6 = plt.errorbar(
-    temperatures,
-    trap_3,
-    yerr=trap_3_err,
-    fmt=".",
-    capsize=5,
-    color=blue_jeans,
-    label=r"Trap 5 ($E_{t} = 2.06$ eV)",
-)
-plot_6 = plt.plot(
-    T_list,
-    annealed_trap_3_densities,
-    color=blue_jeans,
-    label=r"Trap 5 fitting ($A_{0} = 0.28$ eV, $E_{A} = 6.18 \cdot 10^{-3}$ s$^{-1}$)",
-)
 
-plt.ylabel(r"Trap density, n$_{\mathrm{t}}$ (at. \%)")
-plt.xlabel(r"Annealing temperature (K)")
-plt.ylim(0, 0.4)
-plt.xlim(0, 1400)
-plt.legend(loc="upper right")
-ax = plt.gca()
-ax.spines["right"].set_visible(False)
-ax.spines["top"].set_visible(False)
+def plot_all_in_one():
+    plt.figure()
+    err_bar_4 = plt.errorbar(
+        temperatures,
+        trap_1,
+        yerr=trap_1_err,
+        fmt=".",
+        capsize=5,
+        color=green_ryb,
+        label=r"Trap 3 ($E_{t} = 1.65$ eV)",
+    )
+    plot_4 = plt.plot(
+        T_list,
+        annealed_trap_1_densities,
+        color=green_ryb,
+        label=r"Trap 3 fitting ($A_{0} = 0.28$ eV, $E_{A} = 6.18 \cdot 10^{-3}$ s$^{-1}$)",
+    )
+
+    err_bar_5 = plt.errorbar(
+        temperatures,
+        trap_2,
+        yerr=trap_2_err,
+        fmt=".",
+        capsize=5,
+        color=firebrick,
+        label=r"Trap 4 ($E_{t} = 1.85$ eV)",
+    )
+    plot_5 = plt.plot(
+        T_list,
+        annealed_trap_2_densities,
+        color=firebrick,
+        label=r"Trap 4 fitting ($A_{0} = 0.28$ eV, $E_{A} = 6.18 \cdot 10^{-3}$ s$^{-1}$)",
+    )
+
+    err_bar_6 = plt.errorbar(
+        temperatures,
+        trap_3,
+        yerr=trap_3_err,
+        fmt=".",
+        capsize=5,
+        color=blue_jeans,
+        label=r"Trap 5 ($E_{t} = 2.06$ eV)",
+    )
+    plot_6 = plt.plot(
+        T_list,
+        annealed_trap_3_densities,
+        color=blue_jeans,
+        label=r"Trap 5 fitting ($A_{0} = 0.28$ eV, $E_{A} = 6.18 \cdot 10^{-3}$ s$^{-1}$)",
+    )
+
+    plt.ylabel(r"Trap density, n$_{\mathrm{t}}$ (at. \%)")
+    plt.xlabel(r"Annealing temperature (K)")
+    plt.ylim(0, 0.4)
+    plt.xlim(0, 1400)
+    plt.legend(loc="upper right")
+    ax = plt.gca()
+    ax.spines["right"].set_visible(False)
+    ax.spines["top"].set_visible(False)
+
+
+def plot_all_with_fitting():
+
+    fig, axs = plt.subplots(3, 1, sharex=True, figsize=(5, 10))
+
+    # trap 2
+    plt.sca(axs[0])
+    err_bar_4 = plt.errorbar(
+        temperatures,
+        trap_1,
+        yerr=trap_1_err,
+        fmt=".",
+        capsize=5,
+        color=green_ryb,
+    )
+    plot_4 = plt.plot(
+        T_list,
+        annealed_trap_1_densities,
+        color=green_ryb,
+        label=r"Trap 3 ($E_{t} = 1.65$ eV)",
+    )
+    plt.legend(loc="lower left")
+    plt.ylabel(r"Trap density, n$_{\mathrm{t}}$ (m$^{-3}$)")
+
+    # Trap 3
+    plt.sca(axs[1])
+    err_bar_5 = plt.errorbar(
+        temperatures,
+        trap_2,
+        yerr=trap_2_err,
+        fmt=".",
+        capsize=5,
+        color=firebrick,
+    )
+    plot_5 = plt.plot(
+        T_list,
+        annealed_trap_2_densities,
+        color=firebrick,
+        label=r"Trap 4 ($E_{t} = 1.85$ eV)",
+    )
+    h, l = plt.gca().get_legend_handles_labels()
+    plt.legend(loc="lower left")
+    plt.ylabel(r"Trap density, n$_{\mathrm{t}}$ (m$^{-3}$)")
+
+    # trap 4
+    plt.sca(axs[2])
+    err_bar_6 = plt.errorbar(
+        temperatures,
+        trap_3,
+        yerr=trap_3_err,
+        fmt=".",
+        capsize=5,
+        color=blue_jeans,
+    )
+    plot_6 = plt.plot(
+        T_list,
+        annealed_trap_3_densities,
+        color=blue_jeans,
+        label=r"Trap 5 ($E_{t} = 2.06$ eV)",
+    )
+    plt.legend(loc="lower left")
+    plt.ylabel(r"Trap density, n$_{\mathrm{t}}$ (m$^{-3}$)")
+    plt.xlabel(r"Annealing temperature (K)")
+
+    for ax in [axs[0], axs[1], axs[2]]:
+        plt.sca(ax)
+        # plt.ylim(0, 7e25)
+        # plt.xlim(0, 3)
+        ax.spines["top"].set_visible(False)
+        ax.spines["right"].set_visible(False)
+
+    plt.subplots_adjust(wspace=0.112, hspace=0.2)
+
+    plt.tight_layout()
+
+
+plot_1()
+plot_2()
+plot_3()
+# plot_all_in_one()
+plot_all_with_fitting()
 
 plt.show()

@@ -43,25 +43,26 @@ E_A = E_A_optimised
 T = 800
 n_0 = 0
 
-trap1_K = 1.5e28
-trap1_n_max = 5.2e25
-trap1_label = r"Trap 2 ($E_{t} = 1.15$ eV)"
-trap1_fitting_label = r"Trap 2 fitting ($K = 1.5 \cdot 10^{28}$ s$^{-1}$, $n_{max, \phi} =  5.2 \cdot 10^{25}$ m$^{-3}$)"
+trap1_K = 6.0e26
+trap1_n_max = 4.5e25
+trap2_K = 3.5e26
+trap2_n_max = 3.1e25
+trap3_K = 2.9e26
+trap3_n_max = 2.4e25
+trap4_K = 8.0e26
+trap4_n_max = 5.8e25
 
-trap2_K = 4e27
-trap2_n_max = 4.5e25
-trap2_label = r"Trap 3 ($E_{t} = 1.35$ eV)"
-trap2_fitting_label = r"Trap 3 fitting ($K = 4.0 \cdot 10^{27}$ s$^{-1}$, $n_{max, \phi} =  4.5 \cdot 10^{25}$ m$^{-3}$)"
+trap1_K = 1e28
+trap1_n_max = 4.8e25
 
-trap3_K = 3e27
-trap3_n_max = 4e25
-trap3_label = r"Trap 4 ($E_{t} = 1.65$ eV)"
-trap3_fitting_label = r"Trap 4 fitting ($K = 3.0 \cdot 10^{27}$ s$^{-1}$, $n_{max, \phi} =  4.0 \cdot 10^{25}$ m$^{-3}$)"
+trap2_K = 9e27
+trap2_n_max = 3.2e25
 
-trap4_K = 9e27
-trap4_n_max = 4.2e25
-trap4_label = r"Trap 5 ($E_{t} = 1.85$ eV)"
-trap4_fitting_label = r"Trap 5 fitting ($K = 9.0 \cdot 10^{27}$ s$^{-1}$, $n_{max, \phi} =  4.2 \cdot 10^{25}$ m$^{-3}$)"
+trap3_K = 5.5e27
+trap3_n_max = 2.6e25
+
+trap4_K = 1.0e28
+trap4_n_max = 6.3e25
 
 phi = 2.5 / t_damage
 K = 5e21
@@ -117,13 +118,13 @@ def plot_trap_1():
         fmt=".",
         capsize=5,
         color=firebrick,
-        label=trap1_label,
+        label=r"Trap 2 ($E_{t} = 1.15$ eV)",
     )
     plot_1 = plt.plot(
         dpa_list,
         damaged_trap1_densities,
         color=firebrick,
-        label=trap1_fitting_label,
+        label=r"Trap 2 fitting ($K = 6.0 \cdot 10^{26}$ s$^{-1}$, $n_{max, \phi} =  4.5\cdot 10^{25}$ m$^{-3}$)",
     )
 
     plt.ylim(bottom=0)
@@ -131,7 +132,7 @@ def plot_trap_1():
     plt.ylabel(r"Trap density, n$_{\mathrm{t}}$ (m$^{-3}$)")
     plt.xlabel(r"Damage (dpa)")
 
-    plt.legend(loc="lower right")
+    # plt.legend(loc="lower right")
     ax = plt.gca()
     ax.spines["right"].set_visible(False)
     ax.spines["top"].set_visible(False)
@@ -147,13 +148,13 @@ def plot_trap_2():
         fmt=".",
         color=electric_blue,
         capsize=5,
-        label=trap2_label,
+        label=r"Trap 3 ($E_{t} = 1.30$ eV)",
     )
     plot_2 = plt.plot(
         dpa_list,
         damaged_trap2_densities,
         color=electric_blue,
-        label=trap2_fitting_label,
+        label=r"Trap 3 fitting ($K = 3.5 \cdot 10^{26}$ s$^{-1}$, $n_{max, \phi} =  3.5\cdot 10^{25}$ m$^{-3}$)",
     )
 
     plt.ylim(bottom=0)
@@ -161,7 +162,7 @@ def plot_trap_2():
     plt.ylabel(r"Trap density, n$_{\mathrm{t}}$ (m$^{-3}$)")
     plt.xlabel(r"Damage (dpa)")
 
-    plt.legend(loc="lower right")
+    # plt.legend(loc="lower right")
     ax = plt.gca()
     ax.spines["right"].set_visible(False)
     ax.spines["top"].set_visible(False)
@@ -178,13 +179,13 @@ def plot_trap_3():
         fmt=".",
         capsize=5,
         color=pewter_blue,
-        label=trap3_label,
+        label=r"Trap 4 ($E_{t} = 1.50$ eV)",
     )
     plot_3 = plt.plot(
         dpa_list,
         damaged_trap3_densities,
         color=pewter_blue,
-        label=trap3_fitting_label,
+        label=r"Trap 4 fitting ($K = 2.9\cdot 10^{26}$ s$^{-1}$, $n_{max, \phi} =  2.4\cdot 10^{25}$ m$^{-3}$)",
     )
 
     plt.ylim(bottom=0)
@@ -192,7 +193,7 @@ def plot_trap_3():
     plt.ylabel(r"Trap density, n$_{\mathrm{t}}$ (m$^{-3}$)")
     plt.xlabel(r"Damage (dpa)")
 
-    plt.legend(loc="lower right")
+    # plt.legend(loc="lower right")
     ax = plt.gca()
     ax.spines["right"].set_visible(False)
     ax.spines["top"].set_visible(False)
@@ -209,13 +210,13 @@ def plot_trap_4():
         fmt=".",
         capsize=5,
         color=green_ryb,
-        label=trap4_label,
+        label=r"Trap 5 ($E_{t} = 1.85$ eV)",
     )
     plot_4 = plt.plot(
         dpa_list,
         damaged_trap4_densities,
         color=green_ryb,
-        label=trap4_fitting_label,
+        label=r"Trap 5 fitting ($K = 8.0\cdot 10^{21}$ s$^{-1}$, $n_{max, \phi} =  5.8\cdot 10^{25}$ m$^{-3}$) ",
     )
 
     plt.ylim(bottom=0)
@@ -223,7 +224,7 @@ def plot_trap_4():
     plt.ylabel(r"Trap density, n$_{\mathrm{t}}$ (m$^{-3}$)")
     plt.xlabel(r"Damage (dpa)")
 
-    plt.legend(loc="lower right")
+    # plt.legend(loc="lower right")
     ax = plt.gca()
     ax.spines["right"].set_visible(False)
     ax.spines["top"].set_visible(False)
@@ -241,13 +242,13 @@ def plot_all_in_one():
         fmt=".",
         capsize=5,
         color=firebrick,
-        label=trap1_label,
+        label=r"Trap 2 ($E_{t} = 1.15$ eV)",
     )
     plot_1 = plt.plot(
         dpa_list,
         damaged_trap1_densities,
         color=firebrick,
-        label=trap1_fitting_label,
+        label=r"Trap 2 fitting ($K = 1.0 \cdot 10^{28}$ s$^{-1}$, $n_{max, \phi} =  4.8\cdot 10^{25}$ m$^{-3}$)",
     )
 
     # trap 2
@@ -258,13 +259,13 @@ def plot_all_in_one():
         fmt=".",
         color=electric_blue,
         capsize=5,
-        label=trap2_label,
+        label=r"Trap 3 ($E_{t} = 1.30$ eV)",
     )
     plot_2 = plt.plot(
         dpa_list,
         damaged_trap2_densities,
         color=electric_blue,
-        label=trap2_fitting_label,
+        label=r"Trap 3 fitting ($K = 9.0 \cdot 10^{27}$ s$^{-1}$, $n_{max, \phi} =  3.2\cdot 10^{25}$ m$^{-3}$)",
     )
 
     # trap 3
@@ -275,13 +276,13 @@ def plot_all_in_one():
         fmt=".",
         capsize=5,
         color=pewter_blue,
-        label=trap3_label,
+        label=r"Trap 4 ($E_{t} = 1.50$ eV)",
     )
     plot_3 = plt.plot(
         dpa_list,
         damaged_trap3_densities,
         color=pewter_blue,
-        label=trap4_fitting_label,
+        label=r"Trap 4 fitting ($K = 5.5\cdot 10^{27}$ s$^{-1}$, $n_{max, \phi} =  2.4\cdot 10^{25}$ m$^{-3}$)",
     )
 
     # trap 4
@@ -292,13 +293,13 @@ def plot_all_in_one():
         fmt=".",
         capsize=5,
         color=green_ryb,
-        label=trap4_label,
+        label=r"Trap 5 ($E_{t} = 1.85$ eV)",
     )
     plot_4 = plt.plot(
         dpa_list,
         damaged_trap4_densities,
         color=green_ryb,
-        label=trap4_fitting_label,
+        label=r"Trap 5 fitting ($K = 8.0\cdot 10^{21}$ s$^{-1}$, $n_{max, \phi} =  5.8\cdot 10^{25}$ m$^{-3}$) ",
     )
 
     # plt.xscale("log")
@@ -334,7 +335,7 @@ def plot_all(i=8):
         fmt=".",
         capsize=5,
         color=firebrick,
-        label=trap1_label,
+        label=r"Trap 2 ($E_{t} = 1.15$ eV)",
     )
     plt.legend(loc="lower right")
     plt.ylabel(r"Trap density, n$_{\mathrm{t}}$ (m$^{-3}$)")
@@ -348,7 +349,7 @@ def plot_all(i=8):
         fmt=".",
         color=electric_blue,
         capsize=5,
-        label=trap2_label,
+        label=r"Trap 3 ($E_{t} = 1.30$ eV)",
     )
     plt.legend(loc="lower right")
 
@@ -361,7 +362,7 @@ def plot_all(i=8):
         fmt=".",
         capsize=5,
         color=pewter_blue,
-        label=trap3_label,
+        label=r"Trap 4 ($E_{t} = 1.50$ eV)",
     )
     plt.legend(loc="lower right")
     plt.ylabel(r"Trap density, n$_{\mathrm{t}}$ (m$^{-3}$)")
@@ -376,7 +377,7 @@ def plot_all(i=8):
         fmt=".",
         capsize=5,
         color=green_ryb,
-        label=trap4_label,
+        label=r"Trap 5 ($E_{t} = 1.85$ eV)",
     )
     plt.legend(loc="lower right")
     plt.xlabel(r"Damage (dpa)")
@@ -486,13 +487,13 @@ def plot_all_with_fitting():
         fmt=".",
         capsize=5,
         color=firebrick,
-        label=trap1_label,
+        label=r"Trap 2 ($E_{t} = 1.15$ eV)",
     )
     plot_1 = plt.plot(
         dpa_list,
         damaged_trap1_densities,
         color=firebrick,
-        label=trap1_fitting_label,
+        label=r"Trap 2 fitting ($K = 6.0 \cdot 10^{26}$ s$^{-1}$, $n_{max, \phi} =  4.5\cdot 10^{25}$ m$^{-3}$)",
     )
     h, l = plt.gca().get_legend_handles_labels()
     plt.legend([h[1], h[0]], [l[1], l[0]], loc="lower right")
@@ -507,13 +508,13 @@ def plot_all_with_fitting():
         fmt=".",
         color=electric_blue,
         capsize=5,
-        label=trap2_label,
+        label=r"Trap 3 ($E_{t} = 1.30$ eV)",
     )
     plot_2 = plt.plot(
         dpa_list,
         damaged_trap2_densities,
         color=electric_blue,
-        label=trap2_fitting_label,
+        label=r"Trap 3 fitting ($K = 3.5 \cdot 10^{26}$ s$^{-1}$, $n_{max, \phi} =  3.5\cdot 10^{25}$ m$^{-3}$)",
     )
     h, l = plt.gca().get_legend_handles_labels()
     plt.legend([h[1], h[0]], [l[1], l[0]], loc="lower right")
@@ -527,13 +528,13 @@ def plot_all_with_fitting():
         fmt=".",
         capsize=5,
         color=pewter_blue,
-        label=trap3_label,
+        label=r"Trap 4 ($E_{t} = 1.50$ eV)",
     )
     plot_3 = plt.plot(
         dpa_list,
         damaged_trap3_densities,
         color=pewter_blue,
-        label=trap3_fitting_label,
+        label=r"Trap 4 fitting ($K = 2.9\cdot 10^{26}$ s$^{-1}$, $n_{max, \phi} =  2.4\cdot 10^{25}$ m$^{-3}$)",
     )
     h, l = plt.gca().get_legend_handles_labels()
     plt.legend([h[1], h[0]], [l[1], l[0]], loc="lower right")
@@ -549,13 +550,13 @@ def plot_all_with_fitting():
         fmt=".",
         capsize=5,
         color=green_ryb,
-        label=trap4_label,
+        label=r"Trap 5 ($E_{t} = 1.85$ eV)",
     )
     plot_4 = plt.plot(
         dpa_list,
         damaged_trap4_densities,
         color=green_ryb,
-        label=trap4_fitting_label,
+        label=r"Trap 5 fitting ($K = 8.0\cdot 10^{26}$ s$^{-1}$, $n_{max, \phi} =  5.8\cdot 10^{25}$ m$^{-3}$) ",
     )
     h, l = plt.gca().get_legend_handles_labels()
     plt.legend([h[1], h[0]], [l[1], l[0]], loc="lower right")
@@ -695,12 +696,12 @@ values = [8, 7, 6, 5, 4, 3, 2, 1]
 # plot_all(i)
 # plot_all_presentation(i)
 
-plot_trap_1()
-plot_trap_2()
-plot_trap_3()
-plot_trap_4()
-plot_all_in_one()
+# plot_trap_1()
+# plot_trap_2()
+# plot_trap_3()
+# plot_trap_4()
+# plot_all_in_one()
 plot_all_with_fitting()
-plot_all_with_fitting_presentation()
+# plot_all_with_fitting_presentation()
 
 plt.show()
