@@ -118,8 +118,8 @@ def error(p, norms=None):
         trap_densities_ref,
         trap_densities_modelled,
         dpa_ref,
-        bounds=[[0.1, 0.5], [2, 3]],
-        weight=[[1.2], [2.25]],
+        bounds=[[2, 3]],
+        weight=[[1.75]],
     )
 
     # print error
@@ -144,15 +144,17 @@ def error(p, norms=None):
 
 dpa_ref = np.array(dpa_values)
 trap_densities_ref = np.array(trap1)
+# trap_densities_ref = np.array(trap2)
+# trap_densities_ref = np.array(trap3)
+# trap_densities_ref = np.array(trap4)
 
 if __name__ == "__main__":
     # initialise counter j
     j = 0
 
     # build initial guess
-    # A_0 = np.log10(2.5858e-03)
-    K = np.log10(1e26)
-    n_max = np.log10(1e25)
+    K = np.log10(4e27)
+    n_max = np.log10(4.5e25)
 
     initial_guess = np.array([K, n_max])
 
@@ -163,6 +165,7 @@ if __name__ == "__main__":
     # xatol = 1e-03
     fatol = 1e19
     xatol = 1e19
+
     # recursive minimise function, useful for restart
     def minimise_with_neldermead(ftol, xtol, initial_guess):
         global fatol
