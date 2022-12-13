@@ -663,18 +663,16 @@ def plot_all_with_fitting_presentation():
     plt.hlines(8e25, 0, 1, color="black", label="Fittings")
     x_annotation = 3.15
     plt.annotate(
-        "Trap 5", (x_annotation, damaged_trap4_densities[-1] * 0.98), color=green_ryb
+        "Trap 5", (x_annotation, damaged_trap4_densities[-1] * 0.97), color="black"
     )
+    plt.annotate("Trap 2", (x_annotation, damaged_trap1_densities[-1]), color="black")
     plt.annotate(
-        "Trap 2", (x_annotation, damaged_trap1_densities[-1] * 0.98), color=firebrick
-    )
-    plt.annotate(
-        "Trap 3", (x_annotation, damaged_trap2_densities[-1] * 0.96), color=pewter_blue
+        "Trap 3", (x_annotation, damaged_trap2_densities[-1] * 0.99), color="black"
     )
     plt.annotate(
         "Trap 4",
-        (x_annotation, damaged_trap3_densities[-1] * 0.96),
-        color=electric_blue,
+        (x_annotation, damaged_trap3_densities[-1] * 0.97),
+        color="black",
     )
 
     plt.legend(loc="lower right")
@@ -686,21 +684,21 @@ def plot_all_with_fitting_presentation():
     ax = plt.gca()
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
-    plt.tight_layout()
+    # plt.tight_layout()
 
 
 values = [8, 7, 6, 5, 4, 3, 2, 1]
 
-# for i in values:
-# plot_all(i)
-# plot_all_presentation(i)
+for i in values:
+    # plot_all(i)
+    plot_all_presentation(i)
 
-plot_trap_1()
-plot_trap_2()
-plot_trap_3()
-plot_trap_4()
-plot_all_in_one()
-plot_all_with_fitting()
+# plot_trap_1()
+# plot_trap_2()
+# plot_trap_3()
+# plot_trap_4()
+# plot_all_in_one()
+# plot_all_with_fitting()
 plot_all_with_fitting_presentation()
 
 plt.show()
