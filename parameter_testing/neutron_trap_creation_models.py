@@ -22,10 +22,10 @@ trap_3 = [0.08, 0.06, 0.05, 0.02, 0.04]
 # ##### T selinger data ##### #
 dpa_values = [0, 0.001, 0.005, 0.023, 0.1, 0.23, 0.5, 2.5]
 dpa_list = np.linspace(0, 3, 50)
-trap1 = [0, 3.5e24, 5e24, 1.75e25, 3.7e25, 4.1e25, 4.2e25, 4.8e25]
-trap2 = [0, 1e24, 2.4e24, 1e25, 2.5e25, 2.8e25, 2.9e25, 3.3e25]
-trap3 = [0, 1e24, 1.5e24, 6.0e24, 1.7e25, 2.1e25, 2.4e25, 2.5e25]
-trap4 = [0, 1e24, 2.5e24, 2e25, 4.3e25, 5.0e25, 5.7e25, 6.1e25]
+trap1 = [0, 3.5e24, 5.3e24, 2.0e25, 4.2e25, 4.5e25, 4.7e25, 5.3e25]
+trap2 = [0, 5.0e23, 1.9e24, 9.5e24, 2.6e25, 3.4e25, 3.6e25, 4.5e25]
+trap3 = [0, 5.0e23, 1.0e24, 6.0e24, 2.0e25, 2.7e25, 3.2e25, 3.9e25]
+trap4 = [0, 1.0e24, 2.0e24, 1.7e25, 3.2e25, 3.4e25, 3.8e25, 4.2e25]
 
 
 # ##### optimised values ##### #
@@ -239,7 +239,7 @@ def damaging_sim(K, n_max):
     t_damage = 3600 * 24
     A_0 = A_0_optimised  # optimised value
     E_A = E_A_optimised  # optimised value
-    T = 370
+    T = 800
     n_0 = 0
     t = np.linspace(0, t_damage, t_damage)
 
