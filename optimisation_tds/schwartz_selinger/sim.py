@@ -176,30 +176,30 @@ def festim_sim(n1=1, n2=1, n3=1, n4=1, initial_number_cells=500):
                 checkpoint=False,
                 mode=1,
             ),
-            # F.XDMFExport(
-            #     "2",
-            #     folder=folder_results,
-            #     checkpoint=False,
-            #     mode=1,
-            # ),
-            # F.XDMFExport(
-            #     "3",
-            #     folder=folder_results,
-            #     checkpoint=False,
-            #     mode=1,
-            # ),
-            # F.XDMFExport(
-            #     "4",
-            #     folder=folder_results,
-            #     checkpoint=False,
-            #     mode=1,
-            # ),
-            # F.XDMFExport(
-            #     "5",
-            #     folder=folder_results,
-            #     checkpoint=False,
-            #     mode=1,
-            # ),
+            F.XDMFExport(
+                "2",
+                folder=folder_results,
+                checkpoint=False,
+                mode=1,
+            ),
+            F.XDMFExport(
+                "3",
+                folder=folder_results,
+                checkpoint=False,
+                mode=1,
+            ),
+            F.XDMFExport(
+                "4",
+                folder=folder_results,
+                checkpoint=False,
+                mode=1,
+            ),
+            F.XDMFExport(
+                "5",
+                folder=folder_results,
+                checkpoint=False,
+                mode=1,
+            ),
             my_derived_quantities,
         ]
     )
@@ -230,12 +230,12 @@ def festim_sim(n1=1, n2=1, n3=1, n4=1, initial_number_cells=500):
 
 if __name__ == "__main__":
     # 0.001 dpa values
-    festim_sim(
-        n1=3.5e24,
-        n2=5e23,
-        n3=5e23,
-        n4=1e24,
-    )
+    # festim_sim(
+    #     n1=3.5e24,
+    #     n2=5e23,
+    #     n3=5e23,
+    #     n4=1e24,
+    # )
     # 0.005 dpa values
     # festim_sim(
     #     n1=5.3e24,
@@ -272,9 +272,9 @@ if __name__ == "__main__":
     #     n4=3.8e25,
     # )
     # 2.5 dpa values
-    # festim_sim(
-    #     n1=5.3e25,
-    #     n2=4.5e25,
-    #     n3=3.9e25,
-    #     n4=4.2e25,
-    # )
+    festim_sim(
+        n1=5.3e25,
+        n2=4.5e25,
+        n3=3.9e25,
+        n4=4.2e25,
+    )
