@@ -258,8 +258,8 @@ trap_2_conc = 2.53e25
 # ##### test ranges ##### #
 
 T_range = np.linspace(400, 1300, num=1000)
-dpa_range = [0, 0.001, 0.01, 0.1, 1, 10]
-alt_dpa_range = np.geomspace(1e-05, 1e03, num=10000)
+dpa_range = [0, 0.001, 0.01, 0.1, 1, 10, 100]
+alt_dpa_range = np.geomspace(1e-03, 1e03, num=1000)
 
 # ##### analytical test results gathering ##### #
 
@@ -274,6 +274,11 @@ inventories_by_T = []
 trap_density_values = []
 
 for dpa in dpa_range:
+    phi = dpa / (3600 * 24 * 365.25)
+    (H_retention, trap_densities, trap_filling_ratios) = analytical_model(
+        phi=phi, T=761
+    )
+    print("H rentention in case dpa = {} = {:.2e}".format(dpa, H_retention))
     inventory_per_dpa = []
     trap_densities_per_dpa = []
     for T in T_range:
@@ -403,9 +408,9 @@ def plot_trap_density_variation_with_damage_standard_temperature():
     plt.plot(alt_dpa_range, trap_4_densities_standard_temp, label="Trap 4 (1.35 eV)")
     plt.plot(alt_dpa_range, trap_5_densities_standard_temp, label="Trap 5 (1.65 eV)")
     plt.plot(alt_dpa_range, trap_6_densities_standard_temp, label="Trap 6 (1.85 eV)")
-    plt.plot(alt_dpa_range, total_trap_density, label="Total")
+    # plt.plot(alt_dpa_range, total_trap_density, label="Total")
     plt.ylabel(r"Trap concentraion (m$^{-3}$)")
-    plt.xlabel(r"damage (dpa)")
+    plt.xlabel(r"Damage rate (dpa/fpy)")
     plt.xlim(alt_dpa_range[0], alt_dpa_range[-1])
     plt.yscale("log")
     plt.xscale("log")
@@ -419,8 +424,8 @@ def plot_trap_density_variation_with_damage_standard_temperature():
 def plot_total_trap_density_variation_with_damage_standard_temperatrue():
     plt.figure()
     plt.plot(alt_dpa_range, total_trap_density, label="Total")
-    plt.ylabel(r"Total trap concentraion (m$^{-3}$)")
-    plt.xlabel(r"Damage (dpa)")
+    plt.ylabel(r"Trap concentraion (m$^{-3}$)")
+    plt.xlabel(r"Damage rate (dpa/fpy)")
     plt.xlim(alt_dpa_range[0], alt_dpa_range[-1])
     plt.xscale("log")
     plt.legend()
@@ -488,20 +493,28 @@ def plot_annealing_vs_detrapping():
     ) = compare_annealing_and_detrapping()
 
     plt.figure()
-    plt.plot(
-        T_range, trap_1_detrapping_rates, color="blue", alpha=0.8, label="De-trapping"
-    )
-    plt.plot(T_range, trap_2_detrapping_rates, color="blue", alpha=0.7)
-    plt.plot(T_range, trap_3_detrapping_rates, color="blue", alpha=0.6)
+    # plt.plot(
+    #     T_range, trap_1_detrapping_rates, color="blue", alpha=0.8, label="De-trapping"
+    # )
+    # plt.plot(T_range, trap_2_detrapping_rates, color="blue", alpha=0.7)
+    plt.plot(T_range, trap_3_detrapping_rates, color="blue", alpha=0.3)
     plt.plot(T_range, trap_4_detrapping_rates, color="blue", alpha=0.5)
-    plt.plot(T_range, trap_5_detrapping_rates, color="blue", alpha=0.4)
-    plt.plot(T_range, trap_6_detrapping_rates, color="blue", alpha=0.3)
+    plt.plot(T_range, trap_5_detrapping_rates, color="blue", alpha=0.7)
+    plt.plot(
+        T_range, trap_6_detrapping_rates, color="blue", alpha=0.9, label="De-trapping"
+    )
     plt.plot(T_range, annealing_rates, color="black", label="Annealing")
+
+    plt.annotate("1.15 eV", (1310, trap_3_detrapping_rates[-1] * 1.1), color="black")
+    plt.annotate("1.35 eV", (1310, trap_4_detrapping_rates[-1] * 0.4), color="black")
+    plt.annotate("1.65 eV", (1310, trap_5_detrapping_rates[-1] * 0.7), color="black")
+    plt.annotate("1.85 eV", (1310, trap_6_detrapping_rates[-1] * 0.5), color="black")
+
     plt.yscale("log")
     plt.legend()
-    plt.xlim(400, 1300)
-    plt.ylabel("Tritium removal rate (s$^{-1}$)")
-    plt.xlabel("Temperature (K)")
+    plt.xlim(400, 1400)
+    plt.ylabel(r"Trapped tritium removal rate (s$^{-1}$)")
+    plt.xlabel(r"Temperature (K)")
     ax = plt.gca()
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
@@ -513,10 +526,13 @@ def plot_annealing_vs_detrapping():
 
 def plot_inventory_varying_damage_standard_temperature():
     plt.figure()
+    plot_dpa_range = alt_dpa_range / (3600 * 24 * 365.25)
     plt.plot(alt_dpa_range, inventories_standard_temp, color="black", label="761 K")
+    # plt.plot(plot_dpa_range, inventories_standard_temp, color="black", label="761 K")
     plt.ylabel(r"T inventory (m$^{-2}$)")
     plt.xlabel(r"Damage rate (dpa/fpy)")
-    plt.xlim(1e-05, 1e03)
+    # plt.xlabel(r"Damage rate (dpa/s)")
+    plt.xlim(plot_dpa_range[0], plot_dpa_range[-1])
     plt.xscale("log")
     plt.yscale("log")
     plt.legend()
@@ -609,9 +625,9 @@ plot_total_trap_density_variation_with_damage_standard_temperatrue()
 plot_trap_6_density_varitation_with_temperature_and_damage()
 plot_filling_ratio_variation_with_temperature()
 plot_annealing_vs_detrapping()
-# plot_inventory_varying_damage_standard_temperature()
-# plot_normalised_inventory_varying_temperature_standard_dpa()
+plot_inventory_varying_damage_standard_temperature()
+plot_normalised_inventory_varying_temperature_standard_dpa()
 plot_inventory_varying_temperature_and_damage()
-# plot_normalised_inventory_varying_temperature_and_damage()
+plot_normalised_inventory_varying_temperature_and_damage()
 
 plt.show()
