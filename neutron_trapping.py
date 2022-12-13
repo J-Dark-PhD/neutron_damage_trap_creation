@@ -1,4 +1,4 @@
-import FESTIM as F
+import festim as F
 import fenics as f
 import numpy as np
 import properties
