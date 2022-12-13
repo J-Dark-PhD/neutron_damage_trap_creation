@@ -1,7 +1,9 @@
 import numpy as np
 
-dpa_para_values = np.linspace(0, 20, 41)
-temperature_values = np.linspace(400, 1300, 73)
+# dpa_para_values = np.linspace(0, 20, 41)
+dpa_para_values = [0, 1, 5, 9, 20]
+# temperature_values = np.linspace(400, 1300, 73)
+temperature_values = np.linspace(400, 1300, 100)
 
 inventories_by_T = []
 inventories_by_T_normalised = []

@@ -6,9 +6,9 @@ plt.rc("font", family="serif", size=12)
 
 
 diff_761 = ((inventories_761[-1] - inventories_761[0]) / inventories_761[0]) * 100
-DEMO_case = ((inventories_761[18] - inventories_761[0]) / inventories_761[0]) * 100
+# DEMO_case = ((inventories_761[18] - inventories_761[0]) / inventories_761[0]) * 100
 print("Inventory difference = {:.1f}%".format(diff_761))
-print("DEMO case = {:.1f}%".format(DEMO_case))
+# print("DEMO case = {:.1f}%".format(DEMO_case))
 plt.figure()
 plt.plot(dpa_para_values, inventories_761, label="761 K")
 plt.ylabel(r"Hydrogen inventory (m$^{-2}$)")
