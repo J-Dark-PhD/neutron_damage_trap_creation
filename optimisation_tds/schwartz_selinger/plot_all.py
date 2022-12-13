@@ -60,6 +60,30 @@ T_2_5 = data_2_5[:, 0]
 flux_2_5 = data_2_5[:, 1] / area
 
 
+def plot_TDS_data():
+
+    plt.figure(figsize=(6.4, 5.5))
+    plt.scatter(T_2_5, flux_2_5, label=r"2.5 dpa")
+    plt.scatter(T_0_5, flux_0_5, label=r"0.5 dpa")
+    plt.scatter(T_0_23, flux_0_23, label=r"0.23 dpa")
+    plt.scatter(T_0_1, flux_0_1, label=r"0.1 dpa")
+    plt.scatter(T_0_023, flux_0_023, label=r"0.023 dpa")
+    plt.scatter(T_0_005, flux_0_005, label=r"0.005 dpa")
+    plt.scatter(T_0_001, flux_0_001, label=r"0.001 dpa")
+    plt.scatter(T_0, flux_0, label=r"0 dpa")
+
+    plt.xlim(300, 1000)
+    plt.ylim(0, 1.2e17)
+    plt.xlabel("Temperature (K)")
+    plt.ylabel(r"Desorption flux (D m$ ^{-2}$ s$ ^{-1}$)")
+    ax = plt.gca()
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    plt.legend()
+    plt.tight_layout()
+    # plt.savefig("tds_data.svg")
+
+
 def plot_dpa_0():
     data_0 = np.genfromtxt(tds_dpa_0, delimiter=",")
     T_0 = data_0[:, 0]
@@ -1808,6 +1832,77 @@ def plot_dpa_0_1_detailed():
     plt.savefig("tds_fitting_0.1_dpa_detailed.svg")
 
 
+def plot_dpa_0_detailed():
+    data_0_1 = np.genfromtxt(tds_dpa_0_1, delimiter=",")
+    T_0_1 = data_0_1[:, 0]
+    flux_0_1 = data_0_1[:, 1] / area
+
+    T_sim = []
+    flux1, flux2 = [], []
+    solute = []
+    ret = []
+    t = []
+    trap1 = []
+    trap2 = []
+    trap3 = []
+    trap4 = []
+    trap5 = []
+
+    with open("Results/dpa_0/last.csv", "r") as csvfile:
+        plots = csv.reader(csvfile, delimiter=",")
+        for row in plots:
+            if "t(s)" not in row:
+                if float(row[0]) >= implantation_time + resting_time * 0.75:
+                    t.append(float(row[0]))
+                    T_sim.append(float(row[1]))
+                    flux1.append(float(row[2]))
+                    flux2.append(float(row[3]))
+                    solute.append(float(row[4]))
+                    ret.append(float(row[5]))
+                    trap1.append(float(row[6]))
+
+    trap_1_contrib = (np.diff(trap1) / np.diff(t)) * -1
+    solute_contrib = (np.diff(solute) / np.diff(t)) * -1
+
+    plt.figure(figsize=(6.4, 5.5))
+
+    plt.scatter(T_0, flux_0, label=r"Exp", color="black")
+    plt.plot(
+        T_sim,
+        -np.asarray(flux1) - np.asarray(flux2),
+        label="Simulation",
+        color="orange",
+        linewidth=2,
+    )
+    plt.plot(
+        T_sim[1:],
+        trap_1_contrib,
+        linestyle="dashed",
+        color="black",
+        label=r"Trap 1 ($E_{t} = 1.00$ eV)",
+    )
+    plt.plot(
+        T_sim[1:],
+        solute_contrib,
+        linestyle="dashed",
+        color="purple",
+        label=r"Mobile H (c$_{\mathrm{m}}$)",
+    )
+
+    plt.fill_between(T_sim[1:], 0, trap_1_contrib, color="grey", alpha=0.1)
+
+    plt.xlim(300, 1000)
+    plt.ylim(top=1.2e16)
+    plt.xlabel("Temperature (K)")
+    plt.ylabel(r"Desorption flux (D m$ ^{-2}$ s$ ^{-1}$)")
+    ax = plt.gca()
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    plt.legend()
+    plt.tight_layout()
+    plt.savefig("tds_fitting_0.1_dpa_detailed.svg")
+
+
 def plot_with_previous():
     plot_dpa_0()
     plot_dpa_0_001()
@@ -1833,5 +1928,7 @@ def plot_alone():
 # plot_alone()
 # plot_with_previous()
 plot_dpa_0_1_detailed()
+# plot_dpa_0_detailed()
+# plot_TDS_data()
 
 plt.show()
