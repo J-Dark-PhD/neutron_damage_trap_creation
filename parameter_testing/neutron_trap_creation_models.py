@@ -58,34 +58,6 @@ def neutron_trap_creation_numerical(
     return dndt
 
 
-def neutron_trap_creation_numerical_beta(
-    n, t, phi=9.64e-7, K=3.5e28, n_max=1e40, A_0=6.1838e-03, beta=1, E_A=0.2792, T=298
-):
-    """
-    Temporal evolution of n with resepct to time, for a given value of n and t
-
-    Args:
-        n (float): number of traps (m-3)
-        t (float): time of simulation (s)
-        phi (float): damage per second (dpa s-1). Defaults to 9.64e-07
-        K (float): trap creation factor (traps dpa-1). Defaults to 1e28 traps
-            s-1
-        n_max (float): maximum traps per unit damage (m-3). Defaults to 1e40
-            m-3
-        A_0 (float): trap annealing factor (s-1). Defaults to 1e-02 s-1
-        beta (float): Another factor varying temperture. Defaults to 1
-        E_A (float): Annealing activation energy (eV). Defaults to 0.1034 eV
-        T (float): the annealing temperature (K). Defaults to 298 K
-
-    Returns:
-        float: dn/dt
-    """
-    dndt = (
-        phi * K * (1 - (n / n_max)) - (A_0 * T**beta) * np.exp(-E_A / (k_B * T)) * n
-    )
-    return dndt
-
-
 def damage_then_annealing(
     n,
     t,
@@ -175,50 +147,12 @@ def annealing_sim(A_0, E_A):
         (list): A list of trap densities at various annealing tempertures
     """
     annealed_trap_densities = []
-    phi = 0
-    K = 0
-    n_max = 1
     n_0 = 0.28 * atom_density_W
-    t = np.linspace(0, t_annealing, t_annealing)
 
     for T in T_list:
-        extra_args = (phi, K, n_max, A_0, E_A, T)
-        n_traps_annleaing = odeint(
-            neutron_trap_creation_numerical, n_0, t, args=extra_args
-        )
-        end_value = float(n_traps_annleaing[-1])
-        annealed_trap_densities.append(end_value)
-
-    return annealed_trap_densities
-
-
-def annealing_sim_beta(A_0, beta, E_A):
-    """
-    Runs a numerical model of annealing effects on traps induced by neutron
-    damage
-
-    Args:
-        A_0 (float): trap annealing factor (s-1).
-        beta (float): another factor
-        E_A (float): Annealing activation energy (eV).
-
-    Returns:
-        (list): A list of trap densities at various annealing tempertures
-    """
-    annealed_trap_densities = []
-    phi = 0
-    K = 0
-    n_max = 1
-    n_0 = 0.28 * atom_density_W
-    t = np.linspace(0, t_annealing, t_annealing)
-
-    for T in T_list_2:
-        extra_args = (phi, K, n_max, A_0, beta, E_A, T)
-        n_traps_annleaing = odeint(
-            neutron_trap_creation_numerical_beta, n_0, t, args=extra_args
-        )
-        end_value = float(n_traps_annleaing[-1])
-        annealed_trap_densities.append(end_value)
+        A = A_0 * np.exp((-E_A) / (k_B * T))
+        trap_density = n_0 * np.exp(-A * 3600)
+        annealed_trap_densities.append(trap_density)
 
     return annealed_trap_densities
 
