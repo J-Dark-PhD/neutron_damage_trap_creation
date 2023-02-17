@@ -9,16 +9,19 @@ def trap_conc_steady(A_0, E_A, phi, K, n_max, T):
     """
     if phi == 0:
         return 0
-    else: 
+    else:
         A = A_0 * f.exp(-E_A / F.k_B / T)
         return 1 / ((A / (phi * K) + (1 / (n_max))))
 
 
 def festim_sim(
-    dpa=1, T=761, results_folder_name="Results/damaged_traps_testing/{:.0}_dpa/", transient_run=False
+    dpa=1,
+    T=761,
+    results_folder_name="Results/damaged_traps_testing/{:.0}_dpa/",
+    transient_run=False,
 ):
 
-    my_model = F.Simulation(log_level=20)
+    my_model = F.Simulation(log_level=30)
 
     # define mesh
     my_model.mesh = F.MeshFromRefinements(500, size=2e-03)
@@ -31,6 +34,11 @@ def festim_sim(
 
     # define traps
     fpy = 3600 * 24 * 365.25
+    A_0_W = 6.1838e-03
+    E_A_W = 0.2792
+    defined_absolute_tolerance = 1e05
+    defined_relative_tolerance = 1e-08
+    defined_maximum_iterations = 10
 
     trap_W_1 = F.Trap(
         k_0=properties.D_0_W / (1.1e-10**2 * 6 * properties.atom_density_W),
@@ -48,56 +56,118 @@ def festim_sim(
         density=4e-4 * properties.atom_density_W,
         materials=tungsten,
     )
-    trap_W_damage_1 = F.Trap(
-        k_0=4.1e-7 / (1.1e-10**2 * 6 * properties.atom_density_W),
-        E_k=properties.E_D_W,
-        p_0=1e13,
-        E_p=1.15,
-        density=trap_conc_steady(
-            A_0=6.1838e-03, E_A=0.2792, phi=dpa / fpy, K=1.5e28, n_max=5.2e25, T=T
-        ),
-        materials=tungsten,
-    )
-    trap_W_damage_2 = F.Trap(
-        k_0=4.1e-7 / (1.1e-10**2 * 6 * properties.atom_density_W),
-        E_k=properties.E_D_W,
-        p_0=1e13,
-        E_p=1.35,
-        density=trap_conc_steady(
-            A_0=6.1838e-03, E_A=0.2792, phi=dpa / fpy, K=4.0e27, n_max=4.5e25, T=T
-        ),
-        materials=tungsten,
-    )
-    trap_W_damage_3 = F.Trap(
-        k_0=4.1e-7 / (1.1e-10**2 * 6 * properties.atom_density_W),
-        E_k=properties.E_D_W,
-        p_0=1e13,
-        E_p=1.65,
-        density=trap_conc_steady(
-            A_0=6.1838e-03,
-            E_A=0.2792,
+    if transient_run:
+        trap_W_damage_1 = F.NeutronInducedTrap(
+            k_0=4.1e-7 / (1.1e-10**2 * 6 * properties.atom_density_W),
+            E_k=properties.E_D_W,
+            p_0=1e13,
+            E_p=1.15,
+            A_0=A_0_W,
+            E_A=E_A_W,
+            phi=dpa / fpy,
+            K=1.5e28,
+            n_max=5.2e25,
+            materials=tungsten,
+            absolute_tolerance=defined_absolute_tolerance,
+            relative_tolerance=defined_relative_tolerance,
+            maximum_iterations=defined_maximum_iterations,
+        )
+        trap_W_damage_2 = F.NeutronInducedTrap(
+            k_0=4.1e-7 / (1.1e-10**2 * 6 * properties.atom_density_W),
+            E_k=properties.E_D_W,
+            p_0=1e13,
+            E_p=1.35,
+            A_0=A_0_W,
+            E_A=E_A_W,
+            phi=dpa / fpy,
+            K=4.0e27,
+            n_max=4.5e25,
+            materials=tungsten,
+            absolute_tolerance=defined_absolute_tolerance,
+            relative_tolerance=defined_relative_tolerance,
+            maximum_iterations=defined_maximum_iterations,
+        )
+        trap_W_damage_3 = F.NeutronInducedTrap(
+            k_0=4.1e-7 / (1.1e-10**2 * 6 * properties.atom_density_W),
+            E_k=properties.E_D_W,
+            p_0=1e13,
+            E_p=1.65,
+            A_0=A_0_W,
+            E_A=E_A_W,
             phi=dpa / fpy,
             K=3.0e27,
             n_max=4.0e25,
-            T=T,
-        ),
-        materials=tungsten,
-    )
-    trap_W_damage_4 = F.Trap(
-        k_0=4.1e-7 / (1.1e-10**2 * 6 * properties.atom_density_W),
-        E_k=properties.E_D_W,
-        p_0=1e13,
-        E_p=1.85,
-        density=trap_conc_steady(
-            A_0=6.1838e-03,
-            E_A=0.2792,
+            materials=tungsten,
+            absolute_tolerance=defined_absolute_tolerance,
+            relative_tolerance=defined_relative_tolerance,
+            maximum_iterations=defined_maximum_iterations,
+        )
+        trap_W_damage_4 = F.NeutronInducedTrap(
+            k_0=4.1e-7 / (1.1e-10**2 * 6 * properties.atom_density_W),
+            E_k=properties.E_D_W,
+            p_0=1e13,
+            E_p=1.85,
+            A_0=A_0_W,
+            E_A=E_A_W,
             phi=dpa / fpy,
             K=9.0e27,
             n_max=4.2e25,
-            T=T,
-        ),
-        materials=tungsten,
-    )
+            materials=tungsten,
+            absolute_tolerance=defined_absolute_tolerance,
+            relative_tolerance=defined_relative_tolerance,
+            maximum_iterations=defined_maximum_iterations,
+        )
+    else:
+        trap_W_damage_1 = F.Trap(
+            k_0=4.1e-7 / (1.1e-10**2 * 6 * properties.atom_density_W),
+            E_k=properties.E_D_W,
+            p_0=1e13,
+            E_p=1.15,
+            density=trap_conc_steady(
+                A_0=A_0_W, E_A=E_A_W, phi=dpa / fpy, K=1.5e28, n_max=5.2e25, T=T
+            ),
+            materials=tungsten,
+        )
+        trap_W_damage_2 = F.Trap(
+            k_0=4.1e-7 / (1.1e-10**2 * 6 * properties.atom_density_W),
+            E_k=properties.E_D_W,
+            p_0=1e13,
+            E_p=1.35,
+            density=trap_conc_steady(
+                A_0=A_0_W, E_A=E_A_W, phi=dpa / fpy, K=4.0e27, n_max=4.5e25, T=T
+            ),
+            materials=tungsten,
+        )
+        trap_W_damage_3 = F.Trap(
+            k_0=4.1e-7 / (1.1e-10**2 * 6 * properties.atom_density_W),
+            E_k=properties.E_D_W,
+            p_0=1e13,
+            E_p=1.65,
+            density=trap_conc_steady(
+                A_0=A_0_W,
+                E_A=E_A_W,
+                phi=dpa / fpy,
+                K=3.0e27,
+                n_max=4.0e25,
+                T=T,
+            ),
+            materials=tungsten,
+        )
+        trap_W_damage_4 = F.Trap(
+            k_0=4.1e-7 / (1.1e-10**2 * 6 * properties.atom_density_W),
+            E_k=properties.E_D_W,
+            p_0=1e13,
+            E_p=1.85,
+            density=trap_conc_steady(
+                A_0=A_0_W,
+                E_A=E_A_W,
+                phi=dpa / fpy,
+                K=9.0e27,
+                n_max=4.2e25,
+                T=T,
+            ),
+            materials=tungsten,
+        )
 
     my_model.traps = F.Traps(
         [
@@ -221,22 +291,23 @@ def festim_sim(
 
     # define settings
     if transient_run:
-        my_model.dt = F.Stepsize(initial_value=1, stepsize_change_ratio=1.08, dt_min=1e-8)
+        my_model.dt = F.Stepsize(
+            initial_value=0.1, stepsize_change_ratio=1.05, dt_min=1e-8
+        )
         my_model.settings = F.Settings(
             transient=True,
-            final_time=86400 * 12,
+            final_time=1e09,
             absolute_tolerance=1e12,
-            relative_tolerance=1e-08,
-            maximum_iterations=50,
+            relative_tolerance=1e-10,
+            maximum_iterations=30,
         )
     else:
         my_model.settings = F.Settings(
-        transient=False,
-        final_time=86400 * 12,
-        absolute_tolerance=1e12,
-        relative_tolerance=1e-08,
-        maximum_iterations=50,
-    )
+            transient=False,
+            absolute_tolerance=1e12,
+            relative_tolerance=1e-10,
+            maximum_iterations=30,
+        )
 
     # run simulation
     my_model.initialise()
@@ -246,5 +317,8 @@ def festim_sim(
 if __name__ == "__main__":
 
     festim_sim(
-        dpa=9, T=761, results_folder_name="Results/damaged_traps_testing/test/", transient_run=False
+        dpa=9,
+        T=761,
+        results_folder_name="Results/",
+        transient_run=False,
     )
