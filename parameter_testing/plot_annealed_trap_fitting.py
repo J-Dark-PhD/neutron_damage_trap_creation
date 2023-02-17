@@ -4,7 +4,6 @@ from scipy.integrate import odeint
 
 from neutron_trap_creation_models import (
     neutron_trap_creation_numerical,
-    neutron_trap_creation_numerical_beta,
     t_annealing,
     A_0_optimised,
     E_A_optimised,
@@ -35,9 +34,6 @@ K = 1
 n_max = 1
 A_0 = A_0_optimised
 E_A = E_A_optimised
-
-# A_0 = 1e5
-# E_A = 1.7
 
 n_0_trap1 = trap_1[0] * atom_density_W * 1e-02
 n_0_trap2 = trap_2[0] * atom_density_W * 1e-02
@@ -214,7 +210,7 @@ def plot_all_in_one():
 
     plt.ylabel(r"Trap density, n$_{\mathrm{t}}$ (at. \%)")
     plt.xlabel(r"Annealing temperature (K)")
-    plt.ylim(0, 0.4)
+    # plt.ylim(0, 0.4)
     plt.xlim(0, 1400)
     plt.legend(loc="upper right")
     ax = plt.gca()
@@ -297,10 +293,63 @@ def plot_all_with_fitting():
     plt.tight_layout()
 
 
-plot_1()
-plot_2()
-plot_3()
+def plot_all_with_fitting_wo_t4():
+
+    fig, axs = plt.subplots(2, 1, sharex=True, figsize=(5, 7.5))
+
+    # trap 1
+    plt.sca(axs[0])
+    values_4 = plt.scatter(
+        temperatures,
+        trap_1,
+        marker="x",
+        color=green_ryb,
+        # label=r"Trap A3 ($E_{t} = 1.65$ eV)",
+    )
+    plot_4 = plt.plot(
+        T_list,
+        annealed_trap_1_densities,
+        color=green_ryb,
+        label=r"Trap A3 ($E_{t} = 1.65$ eV)",
+    )
+
+    # trap 2
+    plt.sca(axs[1])
+    values_5 = plt.scatter(
+        temperatures,
+        trap_2,
+        marker="x",
+        color=firebrick,
+        # label=r"Trap A4 ($E_{t} = 1.85$ eV)"
+    )
+    plot_5 = plt.plot(
+        T_list,
+        annealed_trap_2_densities,
+        color=firebrick,
+        label=r"Trap A4 ($E_{t} = 1.85$ eV)",
+    )
+    h, l = plt.gca().get_legend_handles_labels()
+    plt.xlabel(r"Annealing temperature (K)")
+
+    for ax in [axs[0], axs[1]]:
+        plt.sca(ax)
+        plt.ylim(bottom=0)
+        plt.xlim(0, 1400)
+        plt.ylabel(r"Trap density, n$_{\mathrm{t}}$ (m$^{-3}$)")
+        plt.legend(loc="lower left")
+        ax.spines["top"].set_visible(False)
+        ax.spines["right"].set_visible(False)
+
+    plt.subplots_adjust(wspace=0.112, hspace=0.2)
+
+    plt.tight_layout()
+
+
+# plot_1()
+# plot_2()
+# plot_3()
 # plot_all_in_one()
-plot_all_with_fitting()
+# plot_all_with_fitting()
+plot_all_with_fitting_wo_t4()
 
 plt.show()
