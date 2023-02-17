@@ -10,9 +10,9 @@ pewter_blue = (113 / 255, 162 / 255, 182 / 255)
 blue_jeans = (96 / 255, 178 / 255, 229 / 255)
 electric_blue = (83 / 255, 244 / 255, 255 / 255)
 
-tds_no_annealing = "tds_data/no_annealing.csv"
-tds_800K = "tds_data/800K.csv"
-tds_1200K = "tds_data/1200K.csv"
+tds_no_annealing = "../etienne_tds_data/no_annealing.csv"
+tds_800K = "../etienne_tds_data/800K.csv"
+tds_1200K = "../etienne_tds_data/1200K.csv"
 
 data_no_annealing = np.genfromtxt(tds_no_annealing, delimiter=",")
 data_800K = np.genfromtxt(tds_800K, delimiter=",")
