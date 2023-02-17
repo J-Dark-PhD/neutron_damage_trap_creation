@@ -21,13 +21,3 @@ print("Just Annleaing effects = ", sol_an)
 dndt = sp.Eq(n.diff(t), F * (1 - (n / n_max)) - A * n)
 sol = sp.dsolve(dndt, ics=ics, simplify=True)
 print("Creation and annealing = ", sol)
-
-# ##### Messing ##### #
-# T, A_0, E_A = sp.symbols('T, A_0, E_A')
-# k_B = sp.symbols("k_B", integer=True)
-# n_T = sp.Function("n")(T)
-# ics = {n.subs(T, 0): n_0}
-
-# dndT = sp.Eq(n_T.diff(T), -A_0*np.exp(-E_A/(k_B*T)))*n_T
-# sol_T = sp.dsolve(dndT, ics=ics, simplify=True)
-# print("Just Annleaing effects = ", sol_T)
