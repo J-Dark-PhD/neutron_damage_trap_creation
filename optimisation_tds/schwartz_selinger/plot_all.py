@@ -63,14 +63,14 @@ flux_2_5 = data_2_5[:, 1] / area
 def plot_TDS_data():
 
     plt.figure(figsize=(6.4, 5.5))
-    plt.scatter(T_2_5, flux_2_5, label=r"2.5 dpa")
-    plt.scatter(T_0_5, flux_0_5, label=r"0.5 dpa")
-    plt.scatter(T_0_23, flux_0_23, label=r"0.23 dpa")
-    plt.scatter(T_0_1, flux_0_1, label=r"0.1 dpa")
-    plt.scatter(T_0_023, flux_0_023, label=r"0.023 dpa")
-    plt.scatter(T_0_005, flux_0_005, label=r"0.005 dpa")
-    plt.scatter(T_0_001, flux_0_001, label=r"0.001 dpa")
-    plt.scatter(T_0, flux_0, label=r"0 dpa")
+    plt.plot(T_2_5, flux_2_5, label=r"2.5 dpa", linewidth=3)
+    plt.plot(T_0_5, flux_0_5, label=r"0.5 dpa", linewidth=3)
+    plt.plot(T_0_23, flux_0_23, label=r"0.23 dpa", linewidth=3)
+    plt.plot(T_0_1, flux_0_1, label=r"0.1 dpa", linewidth=3)
+    plt.plot(T_0_023, flux_0_023, label=r"0.023 dpa", linewidth=3)
+    plt.plot(T_0_005, flux_0_005, label=r"0.005 dpa", linewidth=3)
+    plt.plot(T_0_001, flux_0_001, label=r"0.001 dpa", linewidth=3)
+    plt.plot(T_0, flux_0, label=r"0 dpa", linewidth=3)
 
     plt.xlim(300, 1000)
     plt.ylim(0, 1.2e17)
@@ -1791,28 +1791,28 @@ def plot_dpa_0_1_detailed():
         trap_2_contrib,
         linestyle="dashed",
         color=firebrick,
-        label=r"Trap 2 ($E_{t} = 1.15$ eV)",
+        label=r"Trap D1 ($E_{t} = 1.15$ eV)",
     )
     plt.plot(
         T_sim[1:],
         trap_3_contrib,
         linestyle="dashed",
         color=pewter_blue,
-        label=r"Trap 3 ($E_{t} = 1.35$ eV)",
+        label=r"Trap D2 ($E_{t} = 1.35$ eV)",
     )
     plt.plot(
         T_sim[1:],
         trap_4_contrib,
         linestyle="dashed",
         color=electric_blue,
-        label=r"Trap 4 ($E_{t} = 1.65$ eV)",
+        label=r"Trap D3 ($E_{t} = 1.65$ eV)",
     )
     plt.plot(
         T_sim[1:],
         trap_5_contrib,
         linestyle="dashed",
         color=green_ryb,
-        label=r"Trap 5 ($E_{t} = 1.85$ eV)",
+        label=r"Trap D4 ($E_{t} = 1.85$ eV)",
     )
     plt.fill_between(T_sim[1:], 0, trap_1_contrib, color="grey", alpha=0.1)
     plt.fill_between(T_sim[1:], 0, trap_2_contrib, color="grey", alpha=0.1)
@@ -1821,7 +1821,7 @@ def plot_dpa_0_1_detailed():
     plt.fill_between(T_sim[1:], 0, trap_5_contrib, color="grey", alpha=0.1)
 
     plt.xlim(300, 1000)
-    plt.ylim(0, 1.2e17)
+    plt.ylim(0, 1.0e17)
     plt.xlabel("Temperature (K)")
     plt.ylabel(r"Desorption flux (D m$ ^{-2}$ s$ ^{-1}$)")
     ax = plt.gca()
