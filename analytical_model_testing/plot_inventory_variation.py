@@ -1,5 +1,8 @@
 import matplotlib.pyplot as plt
 from matplotlib import ticker
+from matplotlib import cm
+from matplotlib.ticker import FormatStrFormatter
+from matplotlib.colors import LogNorm, ListedColormap
 import numpy as np
 from analytical_model_testing import (
     alt_dpa_range,
@@ -13,6 +16,8 @@ from analytical_model_testing import (
     T_range_contour,
     inventories_contour,
     normalised_inventories_contour,
+    inventories_alt,
+    test_dpa_range,
 )
 
 plt.rc("text", usetex=True)
@@ -87,6 +92,34 @@ def plot_inventory_varying_temperature_and_damage():
     plt.tight_layout()
 
 
+def plot_inventory_varying_temperature_and_damage_expanded():
+
+    norm = LogNorm(vmin=min(test_dpa_range), vmax=max(test_dpa_range))
+    # colorbar = cm.viridis(np.linspace(0, 1, 200))
+    # needed to avoidhaving white lines
+    # colorbar = ListedColormap(colorbar[50:, :-1])
+    colorbar = cm.viridis
+    # https://stackoverflow.com/questions/51034408/how-to-make-the-color-of-one-end-of-colorbar-darker-in-matplotlib
+    sm = plt.cm.ScalarMappable(cmap=colorbar, norm=norm)
+
+    colours = [colorbar(norm(dpa)) for dpa in test_dpa_range]
+
+    plt.figure()
+    for inv, dpa, colour in zip(inventories_alt, test_dpa_range, colours):
+        plt.plot(T_range, inv, label="{} dpa/fpy".format(dpa), color=colour)
+    plt.ylabel(r"T inventory (m$^{-3}$)")
+    plt.xlabel(r"Temperature (K)")
+    plt.xlim(400, 1300)
+    plt.ylim(1e16, 1e24)
+    plt.yscale("log")
+    ax = plt.gca()
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    plt.tight_layout()
+    plt.subplots_adjust(wspace=0.112, hspace=0.071)
+    cb = plt.colorbar(sm, label=r"Damage rate (dpa/fpy)")
+
+
 def plot_normalised_inventory_varying_temperature_and_damage():
     print(
         "Max inventory difference at {:.0f} dpa/fpy = {:.0f}".format(
@@ -155,10 +188,11 @@ def plot_inventory_contour(dpa_range_contour):
     plt.tight_layout()
 
 
-plot_inventory_varying_damage_standard_temperature()
-plot_normalised_inventory_varying_temperature_standard_dpa()
-plot_inventory_varying_temperature_and_damage()
-plot_normalised_inventory_varying_temperature_and_damage()
-plot_inventory_contour(dpa_range_contour)
+# plot_inventory_varying_damage_standard_temperature()
+# plot_normalised_inventory_varying_temperature_standard_dpa()
+# plot_inventory_varying_temperature_and_damage()
+plot_inventory_varying_temperature_and_damage_expanded()
+# plot_normalised_inventory_varying_temperature_and_damage()
+# plot_inventory_contour(dpa_range_contour)
 
 plt.show()

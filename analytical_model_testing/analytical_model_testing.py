@@ -1,8 +1,4 @@
 import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib import ticker
-from matplotlib.colors import LogNorm
-from matplotlib import cm
 
 
 def trap_concentration(T, phi, K, n_max, A_0, E_A):
@@ -265,11 +261,13 @@ T_range_contour = np.linspace(400, 1300, num=100)
 dpa_range = [0, 0.001, 0.01, 0.1, 1, 10, 100]
 alt_dpa_range = np.geomspace(1e-03, 1e03, num=1000)
 dpa_range_contour = np.geomspace(1e-3, 1e03, num=100)
+test_dpa_range = np.geomspace(1e-5, 1e03, num=500)
 
 # ##### analytical test results gathering ##### #
 
 
 inventories = []
+inventories_alt = []
 inventories_normalised = []
 filling_ratios = []
 trap_density_values_by_T = []
@@ -336,6 +334,16 @@ for dpa in dpa_range_contour:
     trap_densities_contour_3.append(trap_densities_temporary_3)
     trap_densities_contour_4.append(trap_densities_temporary_4)
     inventories_contour.append(inventory_temp)
+
+for dpa in test_dpa_range:
+    inventory_per_dpa_alt = []
+    for T in T_range:
+        phi = dpa / (3600 * 24 * 365.25)
+        (H_retention, trap_densities, trap_filling_ratios) = analytical_model(
+            phi=phi, T=T
+        )
+        inventory_per_dpa_alt.append(H_retention)
+    inventories_alt.append(inventory_per_dpa_alt)
 
 for T in T_range:
     inventory_per_temp = []
