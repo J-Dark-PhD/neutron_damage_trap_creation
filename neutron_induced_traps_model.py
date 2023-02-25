@@ -1,6 +1,8 @@
 import festim as F
 import fenics as f
 import properties
+from compute_profile_depth import automatic_vertices
+import numpy as np
 
 
 def trap_conc_steady(A_0, E_A, phi, K, n_max, T):
@@ -19,14 +21,23 @@ def festim_sim(
     T=761,
     results_folder_name="Results/damaged_traps_testing/{:.0}_dpa/",
     transient_run=False,
+    total_time=1e05,
 ):
 
-    my_model = F.Simulation(log_level=30)
+    my_model = F.Simulation(log_level=40)
 
     # define mesh
-    my_model.mesh = F.MeshFromRefinements(500, size=2e-03)
+    # my_model.mesh = F.MeshFromRefinements(1000, size=2e-03)
 
-    V = f.FunctionSpace(my_model.mesh.mesh, "DG", 1)
+    # vertices = np.concatenate(
+    #     [
+    #         np.array([0]),
+    #         np.geomspace(1e-8, 1e-03, num=3000),
+    #         np.linspace(1e-03, 2e-03, num=200),
+    #     ]
+    # )
+    # vertices = np.unique(vertices)
+    # my_model.mesh = F.MeshFromVertices(vertices)
 
     # define materials
     tungsten = F.Material(D_0=properties.D_0_W, E_D=properties.E_D_W, id=1)
@@ -36,8 +47,8 @@ def festim_sim(
     fpy = 3600 * 24 * 365.25
     A_0_W = 6.1838e-03
     E_A_W = 0.2792
-    defined_absolute_tolerance = 1e05
-    defined_relative_tolerance = 1e-08
+    defined_absolute_tolerance = 1e06
+    defined_relative_tolerance = 1e-01
     defined_maximum_iterations = 10
 
     trap_W_1 = F.Trap(
@@ -180,6 +191,14 @@ def festim_sim(
         ]
     )
 
+    implantation_depth = 3e-09
+    implantation_flux = 1e20
+
+    vertices = automatic_vertices(
+        dpa=dpa, T=T, implantation_time=1e09, traps=my_model.traps.traps
+    )
+    my_model.mesh = F.MeshFromVertices(vertices)
+
     # define temperature
     my_model.T = F.Temperature(value=T)
 
@@ -187,8 +206,8 @@ def festim_sim(
     my_model.boundary_conditions = [
         F.ImplantationDirichlet(
             surfaces=1,
-            phi=1e20,
-            R_p=3e-09,
+            phi=implantation_flux,
+            R_p=implantation_depth,
             D_0=properties.D_0_W,
             E_D=properties.E_D_W,
         )
@@ -212,78 +231,78 @@ def festim_sim(
 
     my_exports = F.Exports(
         [
-            F.XDMFExport(
-                "solute",
-                label="solute",
-                folder=results_folder,
-                checkpoint=False,
-                mode=1,
-            ),
-            F.XDMFExport(
-                "retention",
-                label="retention",
-                folder=results_folder,
-                checkpoint=False,
-                mode=1,
-            ),
-            F.XDMFExport(
-                "1", label="trap_W_1", folder=results_folder, checkpoint=False, mode=1
-            ),
-            F.XDMFExport(
-                "2", label="trap_W_2", folder=results_folder, checkpoint=False, mode=1
-            ),
-            F.XDMFExport(
-                "3",
-                label="trap_damaged_1",
-                folder=results_folder,
-                checkpoint=False,
-                mode=1,
-            ),
-            F.XDMFExport(
-                "4",
-                label="trap_damaged_2",
-                folder=results_folder,
-                checkpoint=False,
-                mode=1,
-            ),
-            F.XDMFExport(
-                "5",
-                label="trap_damaged_3",
-                folder=results_folder,
-                checkpoint=False,
-                mode=1,
-            ),
-            F.XDMFExport(
-                "6",
-                label="trap_damaged_4",
-                folder=results_folder,
-                checkpoint=False,
-                mode=1,
-            ),
-            F.TrapDensityXDMF(
-                trap=trap_W_damage_1,
-                label="density_1",
-                folder=results_folder,
-                checkpoint=False,
-            ),
-            F.TrapDensityXDMF(
-                trap=trap_W_damage_2,
-                label="density_2",
-                folder=results_folder,
-                checkpoint=False,
-            ),
-            F.TrapDensityXDMF(
-                trap=trap_W_damage_3,
-                label="density_3",
-                folder=results_folder,
-                checkpoint=False,
-            ),
-            F.TrapDensityXDMF(
-                trap=trap_W_damage_4,
-                label="density_4",
-                folder=results_folder,
-                checkpoint=False,
-            ),
+            # F.XDMFExport(
+            #     "solute",
+            #     label="solute",
+            #     folder=results_folder,
+            #     checkpoint=False,
+            #     mode=1,
+            # ),
+            # F.XDMFExport(
+            #     "retention",
+            #     label="retention",
+            #     folder=results_folder,
+            #     checkpoint=False,
+            #     mode=1,
+            # ),
+            # F.XDMFExport(
+            #     "1", label="trap_W_1", folder=results_folder, checkpoint=False, mode=1
+            # ),
+            # F.XDMFExport(
+            #     "2", label="trap_W_2", folder=results_folder, checkpoint=False, mode=1
+            # ),
+            # F.XDMFExport(
+            #     "3",
+            #     label="trap_damaged_1",
+            #     folder=results_folder,
+            #     checkpoint=False,
+            #     mode=1,
+            # ),
+            # F.XDMFExport(
+            #     "4",
+            #     label="trap_damaged_2",
+            #     folder=results_folder,
+            #     checkpoint=False,
+            #     mode=1,
+            # ),
+            # F.XDMFExport(
+            #     "5",
+            #     label="trap_damaged_3",
+            #     folder=results_folder,
+            #     checkpoint=False,
+            #     mode=1,
+            # ),
+            # F.XDMFExport(
+            #     "6",
+            #     label="trap_damaged_4",
+            #     folder=results_folder,
+            #     checkpoint=False,
+            #     mode=1,
+            # ),
+            # F.TrapDensityXDMF(
+            #     trap=trap_W_damage_1,
+            #     label="density_1",
+            #     folder=results_folder,
+            #     checkpoint=False,
+            # ),
+            # F.TrapDensityXDMF(
+            #     trap=trap_W_damage_2,
+            #     label="density_2",
+            #     folder=results_folder,
+            #     checkpoint=False,
+            # ),
+            # F.TrapDensityXDMF(
+            #     trap=trap_W_damage_3,
+            #     label="density_3",
+            #     folder=results_folder,
+            #     checkpoint=False,
+            # ),
+            # F.TrapDensityXDMF(
+            #     trap=trap_W_damage_4,
+            #     label="density_4",
+            #     folder=results_folder,
+            #     checkpoint=False,
+            # ),
             my_derived_quantities,
         ]
     )
@@ -292,11 +311,12 @@ def festim_sim(
     # define settings
     if transient_run:
         my_model.dt = F.Stepsize(
-            initial_value=0.1, stepsize_change_ratio=1.05, dt_min=1e-8
+            initial_value=0.1, stepsize_change_ratio=1.02, dt_min=1e-8
         )
         my_model.settings = F.Settings(
+            update_jacobian=True,
             transient=True,
-            final_time=1e09,
+            final_time=total_time,
             absolute_tolerance=1e12,
             relative_tolerance=1e-10,
             maximum_iterations=30,
