@@ -2,19 +2,19 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib import cm
 from matplotlib.ticker import FormatStrFormatter
-from matplotlib.colors import LogNorm, ListedColormap
+from matplotlib.colors import LogNorm, ListedColormap, Normalize
 
 dpa_values = np.geomspace(1e-03, 1e03, num=7)
 
 ts = []
 inventories = []
 
-# for dpa in dpa_values:
-#     results_folder = "../transient_testing/"
-#     filename = results_folder + "{:.0e}_dpa/derived_quantities.csv".format(dpa)
-#     data = np.genfromtxt(filename, delimiter=",", names=True)
-#     ts.append(data["ts"])
-#     inventories.append(data["Total_retention_volume_1"])
+for dpa in dpa_values:
+    results_folder = "../transient_testing/"
+    filename = results_folder + "{:.0e}_dpa/derived_quantities.csv".format(dpa)
+    data = np.genfromtxt(filename, delimiter=",", names=True)
+    ts.append(data["ts"])
+    inventories.append(data["Total_retention_volume_1"])
 
 plt.rc("text", usetex=True)
 plt.rc("font", family="serif", size=12)
@@ -186,8 +186,11 @@ def plot_total_retention_1e5s_case():
 
 def plot_transient_inventories_varying_T_and_damage():
 
-    dpa_values = np.geomspace(1e-03, 1e03, num=7)
-    T_values = np.linspace(400, 1400, num=50)
+    dpa_values = np.geomspace(1e-03, 1e03, num=50)
+    T_values = np.linspace(400, 1300, num=50)
+    T_values_alt = np.linspace(1300, 400, num=50)
+    print(T_values)
+    print(T_values_alt)
 
     norm = LogNorm(vmin=min(dpa_values), vmax=max(dpa_values))
     colorbar = cm.viridis
@@ -197,35 +200,18 @@ def plot_transient_inventories_varying_T_and_damage():
 
     plt.figure()
 
-    # T_values = [400, 420, 441]
-    # for dpa, colour in zip(dpa_values, colours):
-    #     invs_per_dpa = []
-    #     for T in T_values:
-    #         try:
-    #             results_folder = "../parametric_study/"
-    #             data_file = (
-    #                 results_folder
-    #                 + "dpa={:.1e}/T={:.0f}/derived_quantities.csv".format(dpa, T)
-    #             )
-    #             data = np.genfromtxt(data_file, delimiter=",", names=True)
-    #             invs_per_dpa.append(data["Total_retention_volume_1"][-1])
-    #         except:
-    #             continue
-    #     plt.plot(T_values, invs_per_dpa, color=colour)
-
-    for T in T_values:
-        for dpa, colour in zip(dpa_values, colours):
-            try:
-                results_folder = "../parametric_study/"
-                data_file = (
-                    results_folder
-                    + "dpa={:.1e}/T={:.0f}/derived_quantities.csv".format(dpa, T)
-                )
-                data = np.genfromtxt(data_file, delimiter=",", names=True)
-                inv = data["Total_retention_volume_1"][-1]
-                plt.scatter(T, inv, color=colour)
-            except:
-                continue
+    T_values = T_values
+    for dpa, colour in zip(dpa_values, colours):
+        invs_per_dpa = []
+        for T in T_values:
+            results_folder = "../parametric_study/"
+            data_file = (
+                results_folder
+                + "dpa={:.0e}/T={:.0f}/derived_quantities.csv".format(dpa, T)
+            )
+            data = np.genfromtxt(data_file, delimiter=",", names=True)
+            invs_per_dpa.append(data["Total_retention_volume_1"][-1])
+        plt.plot(T_values, invs_per_dpa, color=colour)
 
     plt.ylabel(r"T inventory (m$^{-3}$)")
     plt.xlabel(r"Temperature (K)")
@@ -240,10 +226,103 @@ def plot_transient_inventories_varying_T_and_damage():
     plt.colorbar(sm, label=r"Damage rate (dpa/fpy)")
 
 
+def plot_characteristic_time_evolution():
+
+    dpa_values = np.geomspace(1e-03, 1e03, num=50)
+    T_values = np.linspace(1300, 400, num=50)
+
+    inventories = []
+    inventories_steady = []
+    ts = []
+
+    results_folder = "../parametric_studies/case_1e09s/"
+    steady_results_folder = "../parametric_studies/case_steady/"
+
+    for T in T_values[:1]:
+        invs_per_T = []
+        ts_per_T = []
+        steady_invs_per_T = []
+        for dpa in dpa_values:
+            data_file = (
+                results_folder
+                + "dpa={:.2e}/T={:.0f}/derived_quantities.csv".format(dpa, T)
+            )
+            steady_data_file = (
+                steady_results_folder
+                + "dpa={:.2e}/T={:.0f}/derived_quantities.csv".format(dpa, T)
+            )
+            data = np.genfromtxt(data_file, delimiter=",", names=True)
+            steady_data = np.genfromtxt(steady_data_file, delimiter=",", names=True)
+            invs_per_T.append(data["Total_retention_volume_1"])
+            steady_invs_per_T.append(steady_data["Total_retention_volume_1"])
+            ts_per_T.append(data["ts"])
+        inventories.append(invs_per_T)
+        inventories_steady.append(steady_invs_per_T)
+        ts.append(ts_per_T)
+
+        # plt.plot(T_values, invs_per_dpa, color=colour)
+
+    normalised_inventories = []
+    for T_case, T_case_steady in zip(inventories, inventories_steady):
+        normalised_invs_per_T = []
+        for dpa_case, dpa_case_steady in zip(T_case, T_case_steady):
+            norm_values = dpa_case / dpa_case_steady
+            normalised_invs_per_T.append(norm_values)
+        normalised_inventories.append(normalised_invs_per_T)
+
+    characteristic_times = []
+    for T_case, T_t in zip(normalised_inventories, ts):
+        char_times_per_T = []
+        for dpa_case, t in zip(T_case, T_t):
+            char_time = np.where(dpa_case > 0.99)
+            first = char_time[0][0]
+            char_times_per_T.append(t[first])
+        characteristic_times.append(char_times_per_T)
+
+    norm = Normalize(vmin=min(T_values), vmax=max(T_values))
+    colorbar = cm.viridis
+    sm = plt.cm.ScalarMappable(cmap=colorbar, norm=norm)
+
+    colours = [colorbar(norm(T)) for T in T_values]
+
+    plt.figure()
+
+    day = 3600 * 24
+    month = day * 31
+    year = day * 365.25
+    plt.hlines(day, 1e-03, 1e03, color="black", alpha=0.3, linestyle="dashed")
+    plt.hlines(month, 1e-03, 1e03, color="black", alpha=0.3, linestyle="dashed")
+    plt.hlines(year, 1e-03, 1e03, color="black", alpha=0.3, linestyle="dashed")
+    plt.hlines(year * 10, 1e-03, 1e03, color="black", alpha=0.3, linestyle="dashed")
+
+    for T, char_times, colour in zip(T_values, characteristic_times, colours):
+        plt.plot(dpa_values, char_times, color=colour)
+
+    plt.xscale("log")
+    plt.yscale("log")
+    ax = plt.gca()
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    plt.ylabel(r"$\tau_{c}$ (s)")
+    plt.xlabel(r"Damage rate (dpa/fpy)")
+    plt.subplots_adjust(wspace=0.112, hspace=0.071)
+    plt.colorbar(sm, label=r"Temperature (K)")
+    plt.xlim(1e-03, 1e03)
+    plt.ylim(1e03, 1e09)
+
+    plt.annotate("1 day", [2.5e02, day * 1.1], color="black", alpha=0.3)
+    plt.annotate("1 month", [1.5e-03, month * 1.1], color="black", alpha=0.3)
+    plt.annotate("1 year", [1.5e-03, year * 1.1], color="black", alpha=0.3)
+    plt.annotate("10 years", [1.5e-03, year * 10 * 1.1], color="black", alpha=0.3)
+
+    # print(characteristic_times)
+
+
 # plot_transient_inventories()
 # plot_comparison_transient_vs_analytical()
 # plot_retention_profile_1e5s()
 # plot_total_retention_1e5s_case()
-plot_transient_inventories_varying_T_and_damage()
+# plot_transient_inventories_varying_T_and_damage()
+plot_characteristic_time_evolution()
 
 plt.show()

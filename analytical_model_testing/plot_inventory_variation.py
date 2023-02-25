@@ -18,6 +18,7 @@ from analytical_model_testing import (
     normalised_inventories_contour,
     inventories_alt,
     test_dpa_range,
+    testing_T_range,
 )
 
 plt.rc("text", usetex=True)
@@ -106,7 +107,7 @@ def plot_inventory_varying_temperature_and_damage_expanded():
 
     plt.figure()
     for inv, dpa, colour in zip(inventories_alt, test_dpa_range, colours):
-        plt.plot(T_range, inv, label="{} dpa/fpy".format(dpa), color=colour)
+        plt.plot(testing_T_range, inv, label="{} dpa/fpy".format(dpa), color=colour)
     plt.ylabel(r"T inventory (m$^{-3}$)")
     plt.xlabel(r"Temperature (K)")
     plt.xlim(400, 1300)

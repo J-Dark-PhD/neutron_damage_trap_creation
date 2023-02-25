@@ -45,22 +45,22 @@ n_0 = 0
 
 trap1_K = 1.5e28
 trap1_n_max = 5.2e25
-trap1_label = r"Trap 2 ($E_{t} = 1.15$ eV)"
+trap1_label = r"Trap D1 ($E_{t} = 1.15$ eV)"
 trap1_fitting_label = r"Trap 2 fitting ($K = 1.5 \cdot 10^{28}$ s$^{-1}$, $n_{max, \phi} =  5.2 \cdot 10^{25}$ m$^{-3}$)"
 
 trap2_K = 4e27
 trap2_n_max = 4.5e25
-trap2_label = r"Trap 3 ($E_{t} = 1.35$ eV)"
+trap2_label = r"Trap D2 ($E_{t} = 1.35$ eV)"
 trap2_fitting_label = r"Trap 3 fitting ($K = 4.0 \cdot 10^{27}$ s$^{-1}$, $n_{max, \phi} =  4.5 \cdot 10^{25}$ m$^{-3}$)"
 
 trap3_K = 3e27
 trap3_n_max = 4e25
-trap3_label = r"Trap 4 ($E_{t} = 1.65$ eV)"
+trap3_label = r"Trap D3 ($E_{t} = 1.65$ eV)"
 trap3_fitting_label = r"Trap 4 fitting ($K = 3.0 \cdot 10^{27}$ s$^{-1}$, $n_{max, \phi} =  4.0 \cdot 10^{25}$ m$^{-3}$)"
 
 trap4_K = 9e27
 trap4_n_max = 4.2e25
-trap4_label = r"Trap 5 ($E_{t} = 1.85$ eV)"
+trap4_label = r"Trap D4 ($E_{t} = 1.85$ eV)"
 trap4_fitting_label = r"Trap 5 fitting ($K = 9.0 \cdot 10^{27}$ s$^{-1}$, $n_{max, \phi} =  4.2 \cdot 10^{25}$ m$^{-3}$)"
 
 phi = 2.5 / t_damage
@@ -397,55 +397,55 @@ def plot_all_presentation(i=8):
     plt.figure(figsize=(6.4, 6.4))
 
     # trap 5
-    err_bar_4 = plt.errorbar(
-        dpa_values[:i],
-        trap4[:i],
-        yerr=trap4_err[:i],
-        fmt=".",
-        capsize=5,
-        color=green_ryb,
-    )
+    # err_bar_4 = plt.errorbar(
+    #     dpa_values[:i],
+    #     trap4[:i],
+    #     yerr=trap4_err[:i],
+    #     fmt=".",
+    #     capsize=5,
+    #     color=green_ryb,
+    # )
     points_4 = plt.scatter(
-        dpa_values[:i], trap4[:i], color=green_ryb, s=10, label="Trap 5"
+        dpa_values[:i], trap4[:i], color=green_ryb, marker="D", s=30, label="Trap 5"
     )
 
     # trap 2
-    err_bar_1 = plt.errorbar(
-        dpa_values[:i],
-        trap1[:i],
-        yerr=trap1_err[:i],
-        fmt=".",
-        capsize=5,
-        color=firebrick,
-    )
+    # err_bar_1 = plt.errorbar(
+    #     dpa_values[:i],
+    #     trap1[:i],
+    #     yerr=trap1_err[:i],
+    #     fmt=".",
+    #     capsize=5,
+    #     color=firebrick,
+    # )
     points_4 = plt.scatter(
-        dpa_values[:i], trap1[:i], color=firebrick, s=10, label="Trap 2"
+        dpa_values[:i], trap1[:i], color=firebrick, marker="D", s=30, label="Trap 2"
     )
 
     # Trap 3
-    err_bar_2 = plt.errorbar(
-        dpa_values[:i],
-        trap2[:i],
-        yerr=trap2_err[:i],
-        fmt=".",
-        color=pewter_blue,
-        capsize=5,
-    )
+    # err_bar_2 = plt.errorbar(
+    #     dpa_values[:i],
+    #     trap2[:i],
+    #     yerr=trap2_err[:i],
+    #     fmt=".",
+    #     color=pewter_blue,
+    #     capsize=5,
+    # )
     points_4 = plt.scatter(
-        dpa_values[:i], trap2[:i], color=pewter_blue, s=10, label="Trap 3"
+        dpa_values[:i], trap2[:i], color=pewter_blue, marker="D", s=30, label="Trap 3"
     )
 
     # trap 4
-    err_bar_3 = plt.errorbar(
-        dpa_values[:i],
-        trap3[:i],
-        yerr=trap3_err[:i],
-        fmt=".",
-        capsize=5,
-        color=electric_blue,
-    )
+    # err_bar_3 = plt.errorbar(
+    #     dpa_values[:i],
+    #     trap3[:i],
+    #     yerr=trap3_err[:i],
+    #     fmt=".",
+    #     capsize=5,
+    #     color=electric_blue,
+    # )
     points_3 = plt.scatter(
-        dpa_values[:i], trap3[:i], color=electric_blue, s=10, label="Trap 4"
+        dpa_values[:i], trap3[:i], color=electric_blue, marker="D", s=30, label="Trap 4"
     )
 
     # # trap 5
@@ -470,6 +470,7 @@ def plot_all_presentation(i=8):
     ax = plt.gca()
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
+    plt.tight_layout()
     plt.savefig("figure_{}.svg".format(i))
 
 
@@ -578,19 +579,20 @@ def plot_all_with_fitting_presentation():
     plt.figure(figsize=(6.4, 6.4))
 
     # trap 2
-    err_bar_1 = plt.errorbar(
-        dpa_values,
-        trap1,
-        yerr=trap1_err,
-        fmt=".",
-        capsize=5,
-        color=firebrick,
-    )
+    # err_bar_1 = plt.errorbar(
+    #     dpa_values,
+    #     trap1,
+    #     yerr=trap1_err,
+    #     fmt=".",
+    #     capsize=5,
+    #     color=firebrick,
+    # )
     points_1 = plt.scatter(
         dpa_values,
         trap1,
         color=firebrick,
-        s=10,
+        marker="D",
+        s=30,
     )
     plot_1 = plt.plot(
         dpa_list,
@@ -599,19 +601,20 @@ def plot_all_with_fitting_presentation():
     )
 
     # Trap 3
-    err_bar_2 = plt.errorbar(
-        dpa_values,
-        trap2,
-        yerr=trap2_err,
-        fmt=".",
-        color=pewter_blue,
-        capsize=5,
-    )
+    # err_bar_2 = plt.errorbar(
+    #     dpa_values,
+    #     trap2,
+    #     yerr=trap2_err,
+    #     fmt=".",
+    #     color=pewter_blue,
+    #     capsize=5,
+    # )
     points_1 = plt.scatter(
         dpa_values,
         trap2,
         color=pewter_blue,
-        s=10,
+        marker="D",
+        s=30,
     )
     plot_2 = plt.plot(
         dpa_list,
@@ -620,19 +623,20 @@ def plot_all_with_fitting_presentation():
     )
 
     # trap 4
-    err_bar_3 = plt.errorbar(
-        dpa_values,
-        trap3,
-        yerr=trap3_err,
-        fmt=".",
-        capsize=5,
-        color=electric_blue,
-    )
+    # err_bar_3 = plt.errorbar(
+    #     dpa_values,
+    #     trap3,
+    #     yerr=trap3_err,
+    #     fmt=".",
+    #     capsize=5,
+    #     color=electric_blue,
+    # )
     points_1 = plt.scatter(
         dpa_values,
         trap3,
         color=electric_blue,
-        s=10,
+        marker="D",
+        s=30,
     )
     plot_3 = plt.plot(
         dpa_list,
@@ -641,19 +645,20 @@ def plot_all_with_fitting_presentation():
     )
 
     # trap 5
-    err_bar_4 = plt.errorbar(
-        dpa_values,
-        trap4,
-        yerr=trap4_err,
-        fmt=".",
-        capsize=5,
-        color=green_ryb,
-    )
+    # err_bar_4 = plt.errorbar(
+    #     dpa_values,
+    #     trap4,
+    #     yerr=trap4_err,
+    #     fmt=".",
+    #     capsize=5,
+    #     color=green_ryb,
+    # )
     points_1 = plt.scatter(
         dpa_values,
         trap4,
         color=green_ryb,
-        s=10,
+        marker="D",
+        s=30,
     )
     plot_4 = plt.plot(
         dpa_list,
@@ -684,14 +689,103 @@ def plot_all_with_fitting_presentation():
     ax = plt.gca()
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
-    # plt.tight_layout()
+    plt.tight_layout()
+    plt.savefig("figure_fitted.svg")
+
+
+
+def plot_all_paper():
+    # ## Plot
+    fig = plt.figure(figsize=(4.5, 9))
+
+    # create one big plot to have a common y label
+    ax = fig.add_subplot(111)
+    ax.spines["top"].set_color("none")
+    ax.spines["bottom"].set_color("none")
+    ax.spines["left"].set_color("none")
+    ax.spines["right"].set_color("none")
+    ax.tick_params(labelcolor="w", top=False, bottom=False, left=False, right=False)
+    ax.set_ylabel(r"Trap density (m$^{-3}$)")
+
+    # Trap 2
+    ax1 = fig.add_subplot(411)
+    plt.sca(ax1)
+    values_1 = plt.scatter(
+        dpa_values,
+        trap1,
+        marker="x",
+        color=firebrick,
+    )
+    plot_1 = plt.plot(
+        dpa_list, damaged_trap1_densities, color=firebrick, label=trap1_label
+    )
+    plot_2 = plt.plot(dpa_list, damaged_trap2_densities, color="grey", alpha=0.2)
+    plot_3 = plt.plot(dpa_list, damaged_trap3_densities, color="grey", alpha=0.2)
+    plot_4 = plt.plot(dpa_list, damaged_trap4_densities, color="grey", alpha=0.2)
+    plt.legend(loc="lower right")
+
+    # Trap 3
+    ax2 = fig.add_subplot(412)
+    plt.sca(ax2)
+
+    points_2 = plt.scatter(dpa_values, trap2, color=pewter_blue, marker="x")
+    plot_2 = plt.plot(
+        dpa_list, damaged_trap2_densities, color=pewter_blue, label=trap2_label
+    )
+    plot_1 = plt.plot(dpa_list, damaged_trap1_densities, color="grey", alpha=0.2)
+    plot_3 = plt.plot(dpa_list, damaged_trap3_densities, color="grey", alpha=0.2)
+    plot_4 = plt.plot(dpa_list, damaged_trap4_densities, color="grey", alpha=0.2)
+    plt.legend(loc="lower right")
+
+    # Pipes
+    ax3 = fig.add_subplot(413)
+    plt.sca(ax3)
+    points_1 = plt.scatter(dpa_values, trap3, color=electric_blue, marker="x")
+    plot_3 = plt.plot(
+        dpa_list, damaged_trap3_densities, color=electric_blue, label=trap3_label
+    )
+    plot_1 = plt.plot(dpa_list, damaged_trap1_densities, color="grey", alpha=0.2)
+    plot_2 = plt.plot(dpa_list, damaged_trap2_densities, color="grey", alpha=0.2)
+    plot_4 = plt.plot(dpa_list, damaged_trap4_densities, color="grey", alpha=0.2)
+    plt.legend(loc="lower right")
+
+    # Trap 5
+    ax4 = fig.add_subplot(414)
+    plt.sca(ax4)
+    points_1 = plt.scatter(dpa_values, trap4, color=green_ryb, marker="x")
+    plot_4 = plt.plot(
+        dpa_list, damaged_trap4_densities, color=green_ryb, label=trap4_label
+    )
+    plot_1 = plt.plot(dpa_list, damaged_trap1_densities, color="grey", alpha=0.2)
+    plot_2 = plt.plot(dpa_list, damaged_trap2_densities, color="grey", alpha=0.2)
+    plot_3 = plt.plot(dpa_list, damaged_trap3_densities, color="grey", alpha=0.2)
+    plt.legend(loc="lower right")
+
+    # axs[-1].set_ylabel(r"Inventory (T m$^{-1}$)")
+
+    plt.xlabel(r"Damage (dpa)")
+
+    for ax in [ax1, ax2, ax3, ax4]:
+        plt.sca(ax)
+        ax.get_shared_x_axes().join(ax, ax4)
+        plt.ylim(0, 6e25)
+        plt.xlim(left=0)
+        ax.spines["top"].set_visible(False)
+        ax.spines["right"].set_visible(False)
+
+    # remove the xticks for top plots
+    ax1.set_xticklabels([])
+    ax2.set_xticklabels([])
+    ax3.set_xticklabels([])
+
+    plt.tight_layout()
 
 
 values = [8, 7, 6, 5, 4, 3, 2, 1]
 
-for i in values:
-    # plot_all(i)
-    plot_all_presentation(i)
+# for i in values:
+# plot_all(i)
+    # plot_all_presentation(i)
 
 # plot_trap_1()
 # plot_trap_2()
@@ -700,5 +794,6 @@ for i in values:
 # plot_all_in_one()
 # plot_all_with_fitting()
 plot_all_with_fitting_presentation()
+# plot_all_paper()
 
 plt.show()
