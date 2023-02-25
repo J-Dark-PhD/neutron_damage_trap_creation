@@ -257,11 +257,12 @@ trap_2_conc = 2.53e25
 # ##### test ranges ##### #
 
 T_range = np.linspace(400, 1300, num=1000)
+testing_T_range = np.linspace(400, 1300, num=50)
 T_range_contour = np.linspace(400, 1300, num=100)
 dpa_range = [0, 0.001, 0.01, 0.1, 1, 10, 100]
 alt_dpa_range = np.geomspace(1e-03, 1e03, num=1000)
 dpa_range_contour = np.geomspace(1e-3, 1e03, num=100)
-test_dpa_range = np.geomspace(1e-5, 1e03, num=500)
+test_dpa_range = np.geomspace(1e-3, 1e03, num=50)
 
 # ##### analytical test results gathering ##### #
 
@@ -337,7 +338,7 @@ for dpa in dpa_range_contour:
 
 for dpa in test_dpa_range:
     inventory_per_dpa_alt = []
-    for T in T_range:
+    for T in testing_T_range:
         phi = dpa / (3600 * 24 * 365.25)
         (H_retention, trap_densities, trap_filling_ratios) = analytical_model(
             phi=phi, T=T
