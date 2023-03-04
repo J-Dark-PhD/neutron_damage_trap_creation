@@ -26,19 +26,6 @@ def festim_sim(
 
     my_model = F.Simulation(log_level=40)
 
-    # define mesh
-    # my_model.mesh = F.MeshFromRefinements(1000, size=2e-03)
-
-    # vertices = np.concatenate(
-    #     [
-    #         np.array([0]),
-    #         np.geomspace(1e-8, 1e-03, num=3000),
-    #         np.linspace(1e-03, 2e-03, num=200),
-    #     ]
-    # )
-    # vertices = np.unique(vertices)
-    # my_model.mesh = F.MeshFromVertices(vertices)
-
     # define materials
     tungsten = F.Material(D_0=properties.D_0_W, E_D=properties.E_D_W, id=1)
     my_model.materials = F.Materials([tungsten])
@@ -47,7 +34,7 @@ def festim_sim(
     fpy = 3600 * 24 * 365.25
     A_0_W = 6.1838e-03
     E_A_W = 0.2792
-    defined_absolute_tolerance = 1e06
+    defined_absolute_tolerance = 1e07
     defined_relative_tolerance = 1e-01
     defined_maximum_iterations = 10
 
@@ -195,7 +182,7 @@ def festim_sim(
     implantation_flux = 1e20
 
     vertices = automatic_vertices(
-        dpa=dpa, T=T, implantation_time=1e09, traps=my_model.traps.traps
+        dpa=dpa, T=T, implantation_time=total_time, traps=my_model.traps.traps
     )
     my_model.mesh = F.MeshFromVertices(vertices)
 
@@ -210,7 +197,8 @@ def festim_sim(
             R_p=implantation_depth,
             D_0=properties.D_0_W,
             E_D=properties.E_D_W,
-        )
+        ),
+        # F.DirichletBC(surfaces=2, value=0, field="solute"),
     ]
 
     # define exports
@@ -223,10 +211,10 @@ def festim_sim(
         F.TotalVolume("retention", volume=1),
         F.TotalVolume("1", volume=1),
         F.TotalVolume("2", volume=1),
-        F.TotalVolume("3", volume=1),
-        F.TotalVolume("4", volume=1),
-        F.TotalVolume("5", volume=1),
-        F.TotalVolume("6", volume=1),
+        # F.TotalVolume("3", volume=1),
+        # F.TotalVolume("4", volume=1),
+        # F.TotalVolume("5", volume=1),
+        # F.TotalVolume("6", volume=1),
     ]
 
     my_exports = F.Exports(
@@ -238,13 +226,13 @@ def festim_sim(
             #     checkpoint=False,
             #     mode=1,
             # ),
-            # F.XDMFExport(
-            #     "retention",
-            #     label="retention",
-            #     folder=results_folder,
-            #     checkpoint=False,
-            #     mode=1,
-            # ),
+            F.XDMFExport(
+                "retention",
+                label="retention",
+                folder=results_folder,
+                checkpoint=False,
+                mode=1,
+            ),
             # F.XDMFExport(
             #     "1", label="trap_W_1", folder=results_folder, checkpoint=False, mode=1
             # ),
@@ -280,28 +268,32 @@ def festim_sim(
             #     mode=1,
             # ),
             # F.TrapDensityXDMF(
-            #     trap=trap_W_damage_1,
-            #     label="density_1",
+            #     trap_W_damage_1,
+            #     label="trap_damaged_1_density",
             #     folder=results_folder,
             #     checkpoint=False,
+            #     mode=1,
             # ),
             # F.TrapDensityXDMF(
-            #     trap=trap_W_damage_2,
-            #     label="density_2",
+            #     trap_W_damage_2,
+            #     label="trap_damaged_2_density",
             #     folder=results_folder,
             #     checkpoint=False,
+            #     mode=1,
             # ),
             # F.TrapDensityXDMF(
-            #     trap=trap_W_damage_3,
-            #     label="density_3",
+            #     trap_W_damage_3,
+            #     label="trap_damaged_3_density",
             #     folder=results_folder,
             #     checkpoint=False,
+            #     mode=1,
             # ),
             # F.TrapDensityXDMF(
-            #     trap=trap_W_damage_4,
-            #     label="density_4",
+            #     trap_W_damage_4,
+            #     label="trap_damaged_4_density",
             #     folder=results_folder,
             #     checkpoint=False,
+            #     mode=1,
             # ),
             my_derived_quantities,
         ]
@@ -311,10 +303,13 @@ def festim_sim(
     # define settings
     if transient_run:
         my_model.dt = F.Stepsize(
-            initial_value=0.1, stepsize_change_ratio=1.02, dt_min=1e-8
+            initial_value=0.1,
+            stepsize_change_ratio=1.02,
+            dt_min=1e-8,
+            t_stop=1e05,
+            stepsize_stop_max=1e04,
         )
         my_model.settings = F.Settings(
-            update_jacobian=True,
             transient=True,
             final_time=total_time,
             absolute_tolerance=1e12,
@@ -324,7 +319,7 @@ def festim_sim(
     else:
         my_model.settings = F.Settings(
             transient=False,
-            absolute_tolerance=1e12,
+            absolute_tolerance=1e10,
             relative_tolerance=1e-10,
             maximum_iterations=30,
         )
@@ -335,10 +330,10 @@ def festim_sim(
 
 
 if __name__ == "__main__":
-
     festim_sim(
-        dpa=9,
-        T=761,
+        dpa=1e02,
+        T=1200,
         results_folder_name="Results/",
-        transient_run=False,
+        transient_run=True,
+        total_time=1e09,
     )
