@@ -1,9 +1,134 @@
 import numpy as np
 from scipy.integrate import odeint
 import properties
-import matplotlib.pyplot as plt
 
 k_B = 8.6173303e-5
+
+
+def penetration_depth_at_1e05(dpa, T, implantation_time=1e05):
+    """Generates an array of vertices for the TDS simulation
+
+    Args:
+        dpa (float): the damage (dpa/fpy)
+        T (float): the temperature (K)
+        implantation_time (float): implantation time
+        traps (list of FESTIM.Traps): the traps
+
+    Returns:
+        numpy.array: the mesh vertices
+    """
+    r_p = 3e-09
+    A_0_W = 6.1838e-03
+    E_A_W = 0.2792
+    fpy = 3600 * 24 * 365.25
+    phi = dpa / fpy
+    flux = 1e20
+    n_0 = 0
+    t = np.linspace(0, int(implantation_time), int(1000))
+
+    def numerical_trap_creation_model_trap_1(n, t, phi=phi, A_0=A_0_W, E_A=E_A_W, T=T):
+        K = 1.5e28
+        n_max = 5.2e25
+
+        dndt = phi * K * (1 - (n / n_max)) - A_0 * np.exp(-E_A / (k_B * T)) * n
+
+        return dndt
+
+    def numerical_trap_creation_model_trap_2(n, t, phi=phi, A_0=A_0_W, E_A=E_A_W, T=T):
+        K = 4.0e27
+        n_max = 4.5e25
+
+        dndt = phi * K * (1 - (n / n_max)) - A_0 * np.exp(-E_A / (k_B * T)) * n
+
+        return dndt
+
+    def numerical_trap_creation_model_trap_3(n, t, phi=phi, A_0=A_0_W, E_A=E_A_W, T=T):
+        K = 3.0e27
+        n_max = 4.0e25
+
+        dndt = phi * K * (1 - (n / n_max)) - A_0 * np.exp(-E_A / (k_B * T)) * n
+
+        return dndt
+
+    def numerical_trap_creation_model_trap_4(n, t, phi=phi, A_0=A_0_W, E_A=E_A_W, T=T):
+        K = 9.0e27
+        n_max = 4.2e25
+
+        dndt = phi * K * (1 - (n / n_max)) - A_0 * np.exp(-E_A / (k_B * T)) * n
+
+        return dndt
+
+    ns1 = 1.3e-3 * properties.atom_density_W
+    ns2 = 4e-4 * properties.atom_density_W
+    nsd1 = odeint(
+        numerical_trap_creation_model_trap_1,
+        n_0,
+        t,
+    )
+    nsd2 = odeint(
+        numerical_trap_creation_model_trap_2,
+        n_0,
+        t,
+    )
+    nsd3 = odeint(
+        numerical_trap_creation_model_trap_3,
+        n_0,
+        t,
+    )
+    nsd4 = odeint(
+        numerical_trap_creation_model_trap_4,
+        n_0,
+        t,
+    )
+
+    D = properties.D_0_W * np.exp(-properties.E_D_W / k_B / T)
+
+    ns = np.array(
+        [np.array([ns1]), np.array([ns2]), nsd1[-1], nsd2[-1], nsd3[-1], nsd4[-1]]
+    )
+    E_ps = np.array([0.87, 1.00, 1.15, 1.35, 1.65, 1.85])
+    E_ks = np.array(
+        [
+            properties.E_D_W,
+            properties.E_D_W,
+            properties.E_D_W,
+            properties.E_D_W,
+            properties.E_D_W,
+            properties.E_D_W,
+        ]
+    )
+    k_0s = np.array(
+        [
+            4.1e-7 / (1.1e-10**2 * 6 * properties.atom_density_W),
+            4.1e-7 / (1.1e-10**2 * 6 * properties.atom_density_W),
+            4.1e-7 / (1.1e-10**2 * 6 * properties.atom_density_W),
+            4.1e-7 / (1.1e-10**2 * 6 * properties.atom_density_W),
+            4.1e-7 / (1.1e-10**2 * 6 * properties.atom_density_W),
+            4.1e-7 / (1.1e-10**2 * 6 * properties.atom_density_W),
+        ]
+    )
+    p_0s = np.array(
+        [
+            1e13,
+            1e13,
+            1e13,
+            1e13,
+            1e13,
+            1e13,
+        ]
+    )
+    ps = p_0s * np.exp(-E_ps / k_B / T)
+    ks = k_0s * np.exp(-E_ks / k_B / T)
+    cmax = r_p * flux / D
+    max_penetration_depth = r_p + r_d(cmax, implantation_time, D, ns, ks, ps)
+
+    a = 0.05 * dpa ** (-0.35)
+    b = -0.2 * np.log(dpa) + 3.7
+    tolerance = a * (T - 400) + b
+
+    modified_penetration_depth = max_penetration_depth * tolerance
+
+    return modified_penetration_depth
 
 
 def automatic_vertices(dpa, T, implantation_time, traps):
@@ -96,59 +221,68 @@ def automatic_vertices(dpa, T, implantation_time, traps):
     ks = k_0s * np.exp(-E_ks / k_B / T)
     cmax = r_p * flux / D
     max_penetration_depth = r_p + r_d(cmax, implantation_time, D, ns, ks, ps)
+    max_pen_1e05 = penetration_depth_at_1e05(dpa=dpa, T=T)
 
-    dx = 2e-3 / 500
-    # dx = 1e-8
+    if max_pen_1e05 > size:
+        max_pen_1e05 = size
+
+    dx_1 = max_pen_1e05 / 1000
+    dx_2 = 2e-3 / 100
+
     a = 0.05 * dpa ** (-0.35)
-    tolerance = a * (T - 400) + 6
-    # tolerance = 0.7
+    b = -0.2 * np.log(dpa) + 3.7
+    tolerance = a * (T - 400) + b
+
+    print(
+        "The estimated maximum penetration depth is: {:.2e} m".format(
+            max_penetration_depth
+        )
+    )
+
     print("Tolerance = {:.1f}".format(tolerance))
 
-    if max_penetration_depth * tolerance > size:
-        max_penetration_depth = size
-        print(
-            "The estimated maximum penetration depth is: {:.2e} m".format(
-                max_penetration_depth
-            )
-        )
-        vertices = np.concatenate(
-            [
-                np.linspace(0, 3 * r_p, 50),
-                np.linspace(
-                    3 * r_p,
-                    size,
-                    500,
-                ),
-            ]
-        )
-        vertices = np.sort(np.unique(vertices))
+    print("With correction: {:.2e} m".format(max_penetration_depth * tolerance))
 
-    else:
-        print(
-            "The estimated maximum penetration depth is: {:.2e} m".format(
-                max_penetration_depth * tolerance
-            )
-        )
+    # if max_penetration_depth * tolerance > size:
+    #     refinement = np.geomspace(1e-07, 1e-04, num=300)
+    #     end_refinement = np.ones(len(refinement)) * 2e-03 - refinement
+    #     vertices = np.concatenate(
+    #         [
+    #             np.linspace(0, size, 500),
+    #             # np.linspace(
+    #             #     0,
+    #             #     1.9e-03,
+    #             #     1000,
+    #             # ),
+    #             # end_refinement,
+    #             # np.array([2e-03]),
+    #         ]
+    #     )
+    # else:
+    depth_estimate = 1e-03
+    number_of_cells_required_1 = int(round(depth_estimate / dx_1))
+    number_of_cells_required_2 = int(
+        round(size - max_penetration_depth * tolerance / dx_2)
+    )
+    vertices = np.concatenate(
+        [
+            # np.linspace(
+            #     0,
+            #     max_penetration_depth * tolerance,
+            #     1000,
+            # ),
+            # np.linspace(
+            #     max_penetration_depth * tolerance,
+            #     size,
+            #     number_of_cells_required,
+            # ),
+            # start_refinement,
+            np.linspace(0, depth_estimate, number_of_cells_required_1),
+            # np.linspace(depth_estimate, size, 50),
+        ]
+    )
 
-        number_of_cells_required = int(
-            round((size - max_penetration_depth * tolerance) / dx)
-        )
-        vertices = np.concatenate(
-            [
-                np.linspace(0, 3 * r_p, 50),
-                np.linspace(
-                    3 * r_p,
-                    max_penetration_depth * tolerance,
-                    500,
-                ),
-                np.linspace(
-                    max_penetration_depth * tolerance,
-                    size,
-                    number_of_cells_required,
-                ),
-            ]
-        )
-        vertices = np.sort(np.unique(vertices))
+    vertices = np.sort(np.unique(vertices))
 
     print("The mesh size is: {}".format(len(vertices)))
 
