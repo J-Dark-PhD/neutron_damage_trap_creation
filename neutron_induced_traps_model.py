@@ -211,21 +211,21 @@ def festim_sim(
         F.TotalVolume("retention", volume=1),
         F.TotalVolume("1", volume=1),
         F.TotalVolume("2", volume=1),
-        # F.TotalVolume("3", volume=1),
-        # F.TotalVolume("4", volume=1),
-        # F.TotalVolume("5", volume=1),
-        # F.TotalVolume("6", volume=1),
+        F.TotalVolume("3", volume=1),
+        F.TotalVolume("4", volume=1),
+        F.TotalVolume("5", volume=1),
+        F.TotalVolume("6", volume=1),
     ]
 
     my_exports = F.Exports(
         [
-            # F.XDMFExport(
-            #     "solute",
-            #     label="solute",
-            #     folder=results_folder,
-            #     checkpoint=False,
-            #     mode=1,
-            # ),
+            F.XDMFExport(
+                "solute",
+                label="solute",
+                folder=results_folder,
+                checkpoint=False,
+                mode=1,
+            ),
             F.XDMFExport(
                 "retention",
                 label="retention",
@@ -233,68 +233,68 @@ def festim_sim(
                 checkpoint=False,
                 mode=1,
             ),
-            # F.XDMFExport(
-            #     "1", label="trap_W_1", folder=results_folder, checkpoint=False, mode=1
-            # ),
-            # F.XDMFExport(
-            #     "2", label="trap_W_2", folder=results_folder, checkpoint=False, mode=1
-            # ),
-            # F.XDMFExport(
-            #     "3",
-            #     label="trap_damaged_1",
-            #     folder=results_folder,
-            #     checkpoint=False,
-            #     mode=1,
-            # ),
-            # F.XDMFExport(
-            #     "4",
-            #     label="trap_damaged_2",
-            #     folder=results_folder,
-            #     checkpoint=False,
-            #     mode=1,
-            # ),
-            # F.XDMFExport(
-            #     "5",
-            #     label="trap_damaged_3",
-            #     folder=results_folder,
-            #     checkpoint=False,
-            #     mode=1,
-            # ),
-            # F.XDMFExport(
-            #     "6",
-            #     label="trap_damaged_4",
-            #     folder=results_folder,
-            #     checkpoint=False,
-            #     mode=1,
-            # ),
-            # F.TrapDensityXDMF(
-            #     trap_W_damage_1,
-            #     label="trap_damaged_1_density",
-            #     folder=results_folder,
-            #     checkpoint=False,
-            #     mode=1,
-            # ),
-            # F.TrapDensityXDMF(
-            #     trap_W_damage_2,
-            #     label="trap_damaged_2_density",
-            #     folder=results_folder,
-            #     checkpoint=False,
-            #     mode=1,
-            # ),
-            # F.TrapDensityXDMF(
-            #     trap_W_damage_3,
-            #     label="trap_damaged_3_density",
-            #     folder=results_folder,
-            #     checkpoint=False,
-            #     mode=1,
-            # ),
-            # F.TrapDensityXDMF(
-            #     trap_W_damage_4,
-            #     label="trap_damaged_4_density",
-            #     folder=results_folder,
-            #     checkpoint=False,
-            #     mode=1,
-            # ),
+            F.XDMFExport(
+                "1", label="trap_W_1", folder=results_folder, checkpoint=False, mode=1
+            ),
+            F.XDMFExport(
+                "2", label="trap_W_2", folder=results_folder, checkpoint=False, mode=1
+            ),
+            F.XDMFExport(
+                "3",
+                label="trap_damaged_1",
+                folder=results_folder,
+                checkpoint=False,
+                mode=1,
+            ),
+            F.XDMFExport(
+                "4",
+                label="trap_damaged_2",
+                folder=results_folder,
+                checkpoint=False,
+                mode=1,
+            ),
+            F.XDMFExport(
+                "5",
+                label="trap_damaged_3",
+                folder=results_folder,
+                checkpoint=False,
+                mode=1,
+            ),
+            F.XDMFExport(
+                "6",
+                label="trap_damaged_4",
+                folder=results_folder,
+                checkpoint=False,
+                mode=1,
+            ),
+            F.TrapDensityXDMF(
+                trap_W_damage_1,
+                label="trap_damaged_1_density",
+                folder=results_folder,
+                checkpoint=False,
+                mode=1,
+            ),
+            F.TrapDensityXDMF(
+                trap_W_damage_2,
+                label="trap_damaged_2_density",
+                folder=results_folder,
+                checkpoint=False,
+                mode=1,
+            ),
+            F.TrapDensityXDMF(
+                trap_W_damage_3,
+                label="trap_damaged_3_density",
+                folder=results_folder,
+                checkpoint=False,
+                mode=1,
+            ),
+            F.TrapDensityXDMF(
+                trap_W_damage_4,
+                label="trap_damaged_4_density",
+                folder=results_folder,
+                checkpoint=False,
+                mode=1,
+            ),
             my_derived_quantities,
         ]
     )
@@ -304,10 +304,10 @@ def festim_sim(
     if transient_run:
         my_model.dt = F.Stepsize(
             initial_value=0.1,
-            stepsize_change_ratio=1.02,
+            stepsize_change_ratio=1.05,
             dt_min=1e-8,
-            t_stop=1e05,
-            stepsize_stop_max=1e04,
+            # t_stop=1e05,
+            # stepsize_stop_max=1e04,
         )
         my_model.settings = F.Settings(
             transient=True,
@@ -330,10 +330,16 @@ def festim_sim(
 
 
 if __name__ == "__main__":
-    festim_sim(
-        dpa=1e02,
-        T=1200,
-        results_folder_name="Results/",
-        transient_run=True,
-        total_time=1e09,
-    )
+    temperature_values = np.linspace(400, 1300, num=50)
+    for T in temperature_values:
+        print("running case T={:.0f}".format(T))
+
+        festim_sim(
+            dpa=0,
+            T=T,
+            results_folder_name="Results/parametric_studies/case_24h/dpa=0/T={:.0f}/".format(
+                T
+            ),
+            transient_run=True,
+            total_time=3600 * 24,
+        )
