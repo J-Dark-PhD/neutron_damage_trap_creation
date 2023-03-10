@@ -221,17 +221,20 @@ def automatic_vertices(dpa, T, implantation_time, traps):
     ks = k_0s * np.exp(-E_ks / k_B / T)
     cmax = r_p * flux / D
     max_penetration_depth = r_p + r_d(cmax, implantation_time, D, ns, ks, ps)
-    max_pen_1e05 = penetration_depth_at_1e05(dpa=dpa, T=T)
 
-    if max_pen_1e05 > size:
-        max_pen_1e05 = size
+    dx = 2e-3 / 100
 
-    dx_1 = max_pen_1e05 / 1000
-    dx_2 = 2e-3 / 100
-
-    a = 0.05 * dpa ** (-0.35)
+    # a = 0.05 * dpa ** (-0.35)
+    # a = 0.02 * dpa ** (-0.375)
+    a = 0.09 * dpa ** (-0.25)
+    if a > 0.8:
+        a = 0.8
+    # b = -0.2 * np.log(dpa) + 3.8
     b = -0.2 * np.log(dpa) + 3.7
+    if b < 2.74:
+        b = 2.74
     tolerance = a * (T - 400) + b
+    # tolerance = a * (T - 400) + 6
 
     print(
         "The estimated maximum penetration depth is: {:.2e} m".format(
@@ -243,44 +246,28 @@ def automatic_vertices(dpa, T, implantation_time, traps):
 
     print("With correction: {:.2e} m".format(max_penetration_depth * tolerance))
 
-    # if max_penetration_depth * tolerance > size:
-    #     refinement = np.geomspace(1e-07, 1e-04, num=300)
-    #     end_refinement = np.ones(len(refinement)) * 2e-03 - refinement
-    #     vertices = np.concatenate(
-    #         [
-    #             np.linspace(0, size, 500),
-    #             # np.linspace(
-    #             #     0,
-    #             #     1.9e-03,
-    #             #     1000,
-    #             # ),
-    #             # end_refinement,
-    #             # np.array([2e-03]),
-    #         ]
-    #     )
-    # else:
-    depth_estimate = 1e-03
-    number_of_cells_required_1 = int(round(depth_estimate / dx_1))
-    number_of_cells_required_2 = int(
-        round(size - max_penetration_depth * tolerance / dx_2)
-    )
-    vertices = np.concatenate(
-        [
-            # np.linspace(
-            #     0,
-            #     max_penetration_depth * tolerance,
-            #     1000,
-            # ),
-            # np.linspace(
-            #     max_penetration_depth * tolerance,
-            #     size,
-            #     number_of_cells_required,
-            # ),
-            # start_refinement,
-            np.linspace(0, depth_estimate, number_of_cells_required_1),
-            # np.linspace(depth_estimate, size, 50),
-        ]
-    )
+    if max_penetration_depth * tolerance > size:
+        vertices = np.concatenate(
+            [
+                np.linspace(0, size, 500),
+            ]
+        )
+    else:
+        number_of_cells_required = int(
+            round((size - (max_penetration_depth * tolerance)) / dx)
+        )
+        vertices = np.concatenate(
+            [
+                np.linspace(
+                    0,
+                    max_penetration_depth * tolerance,
+                    500,
+                ),
+                np.linspace(
+                    max_penetration_depth * tolerance, size, number_of_cells_required
+                ),
+            ]
+        )
 
     vertices = np.sort(np.unique(vertices))
 
