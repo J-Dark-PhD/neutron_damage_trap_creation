@@ -95,7 +95,9 @@ def plot_inventory_varying_temperature_and_damage():
 
 def plot_inventory_varying_temperature_and_damage_expanded():
 
-    norm = LogNorm(vmin=min(test_dpa_range), vmax=max(test_dpa_range))
+    fpy = 3600 * 24 * 365
+    plot_dpa_range = test_dpa_range / fpy
+    norm = LogNorm(vmin=min(plot_dpa_range), vmax=max(plot_dpa_range))
     # colorbar = cm.viridis(np.linspace(0, 1, 200))
     # needed to avoidhaving white lines
     # colorbar = ListedColormap(colorbar[50:, :-1])
@@ -103,10 +105,10 @@ def plot_inventory_varying_temperature_and_damage_expanded():
     # https://stackoverflow.com/questions/51034408/how-to-make-the-color-of-one-end-of-colorbar-darker-in-matplotlib
     sm = plt.cm.ScalarMappable(cmap=colorbar, norm=norm)
 
-    colours = [colorbar(norm(dpa)) for dpa in test_dpa_range]
+    colours = [colorbar(norm(dpa)) for dpa in plot_dpa_range]
 
     plt.figure()
-    for inv, dpa, colour in zip(inventories_alt, test_dpa_range, colours):
+    for inv, dpa, colour in zip(inventories_alt, plot_dpa_range, colours):
         plt.plot(testing_T_range, inv, label="{} dpa/fpy".format(dpa), color=colour)
     plt.ylabel(r"T inventory (m$^{-3}$)")
     plt.xlabel(r"Temperature (K)")
@@ -118,7 +120,7 @@ def plot_inventory_varying_temperature_and_damage_expanded():
     ax.spines["right"].set_visible(False)
     plt.tight_layout()
     plt.subplots_adjust(wspace=0.112, hspace=0.071)
-    cb = plt.colorbar(sm, label=r"Damage rate (dpa/fpy)")
+    cb = plt.colorbar(sm, label=r"Damage rate (dpa s$^{-1}$)")
 
 
 def plot_normalised_inventory_varying_temperature_and_damage():
