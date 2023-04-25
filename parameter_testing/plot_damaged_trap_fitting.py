@@ -45,22 +45,22 @@ n_0 = 0
 
 trap1_K = 1.5e28
 trap1_n_max = 5.2e25
-trap1_label = r"Trap D1 ($E_{t} = 1.15$ eV)"
+trap1_label = r"Trap D1"
 trap1_fitting_label = r"Trap 2 fitting ($K = 1.5 \cdot 10^{28}$ s$^{-1}$, $n_{max, \phi} =  5.2 \cdot 10^{25}$ m$^{-3}$)"
 
 trap2_K = 4e27
 trap2_n_max = 4.5e25
-trap2_label = r"Trap D2 ($E_{t} = 1.35$ eV)"
+trap2_label = r"Trap D2"
 trap2_fitting_label = r"Trap 3 fitting ($K = 4.0 \cdot 10^{27}$ s$^{-1}$, $n_{max, \phi} =  4.5 \cdot 10^{25}$ m$^{-3}$)"
 
 trap3_K = 3e27
 trap3_n_max = 4e25
-trap3_label = r"Trap D3 ($E_{t} = 1.65$ eV)"
+trap3_label = r"Trap D3"
 trap3_fitting_label = r"Trap 4 fitting ($K = 3.0 \cdot 10^{27}$ s$^{-1}$, $n_{max, \phi} =  4.0 \cdot 10^{25}$ m$^{-3}$)"
 
 trap4_K = 9e27
 trap4_n_max = 4.2e25
-trap4_label = r"Trap D4 ($E_{t} = 1.85$ eV)"
+trap4_label = r"Trap D4"
 trap4_fitting_label = r"Trap 5 fitting ($K = 9.0 \cdot 10^{27}$ s$^{-1}$, $n_{max, \phi} =  4.2 \cdot 10^{25}$ m$^{-3}$)"
 
 phi = 2.5 / t_damage
@@ -693,7 +693,6 @@ def plot_all_with_fitting_presentation():
     plt.savefig("figure_fitted.svg")
 
 
-
 def plot_all_paper():
     # ## Plot
     fig = plt.figure(figsize=(4.5, 9))
@@ -785,7 +784,7 @@ values = [8, 7, 6, 5, 4, 3, 2, 1]
 
 # for i in values:
 # plot_all(i)
-    # plot_all_presentation(i)
+# plot_all_presentation(i)
 
 # plot_trap_1()
 # plot_trap_2()
@@ -793,7 +792,7 @@ values = [8, 7, 6, 5, 4, 3, 2, 1]
 # plot_trap_4()
 # plot_all_in_one()
 # plot_all_with_fitting()
-plot_all_with_fitting_presentation()
-# plot_all_paper()
+# plot_all_with_fitting_presentation()
+plot_all_paper()
 
 plt.show()
