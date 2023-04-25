@@ -6,8 +6,6 @@ from os.path import exists
 dpa_values = np.geomspace(1e-03, 1e03, num=50)
 temperature_values = np.linspace(1300, 400, num=50)
 
-dpa_values_1fpy = np.geomspace(1e-05, 1e03, num=9)
-
 
 def case_steady():
     for temperature in temperature_values:
@@ -48,7 +46,6 @@ def case_1e09s():
 
 def case_1fpy():
     test_dpa_values = np.geomspace(1e-05, 1e03, num=10)
-    test_dpa_values = test_dpa_values[3:-4]
     results_folder = "Results/parametric_studies/case_1fpy/"
 
     for dpa in test_dpa_values:
