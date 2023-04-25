@@ -34,7 +34,7 @@ def festim_sim(n1=1, n2=1, n3=1, n4=1, initial_number_cells=500):
     distribution = (
         1 / (width * (2 * 3.14) ** 0.5) * sp.exp(-0.5 * ((F.x - center) / width) ** 2)
     )
-
+ 
     my_model = F.Simulation(log_level=30)
 
     # define materials
