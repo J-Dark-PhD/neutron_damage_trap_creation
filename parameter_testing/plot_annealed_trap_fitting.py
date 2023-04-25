@@ -310,7 +310,7 @@ def plot_all_with_fitting_wo_t4():
         T_list,
         annealed_trap_1_densities,
         color=green_ryb,
-        label=r"Trap A3 ($E_{t} = 1.65$ eV)",
+        label=r"Trap 3",
     )
 
     # trap 2
@@ -326,7 +326,7 @@ def plot_all_with_fitting_wo_t4():
         T_list,
         annealed_trap_2_densities,
         color=firebrick,
-        label=r"Trap A4 ($E_{t} = 1.85$ eV)",
+        label=r"Trap 4",
     )
     h, l = plt.gca().get_legend_handles_labels()
     plt.xlabel(r"Annealing temperature (K)")
