@@ -40,22 +40,23 @@ from analytical_model_testing import (
 plt.rc("text", usetex=True)
 plt.rc("font", family="serif", size=12)
 
+
 def plot_trap_density_variation_with_temperature_standard_damage():
     plt.figure()
     plt.plot(T_range, trap_1_densities_by_T, label="Trap 1 (0.87 eV)", color="black")
     plt.plot(T_range, trap_2_densities_by_T, label="Trap 2 (1.00 eV)", color="grey")
     plt.plot(T_range, trap_3_densities_by_T, label="Trap D1 (1.15 eV)", color=firebrick)
     plt.plot(
-        T_range, trap_4_densities_by_T, label="Trap D2 (1.35 eV)", color=electric_blue
+        T_range, trap_4_densities_by_T, label="Trap D2 (1.35 eV)", color=pewter_blue
     )
     plt.plot(
-        T_range, trap_5_densities_by_T, label="Trap D3 (1.65 eV)", color=pewter_blue
+        T_range, trap_5_densities_by_T, label="Trap D3 (1.65 eV)", color=electric_blue
     )
     plt.plot(T_range, trap_6_densities_by_T, label="Trap D4 (1.85 eV)", color=green_ryb)
     plt.ylabel(r"Trap concentraion (m$^{-3}$)")
     plt.xlabel(r"Temperature (T)")
     plt.xlim(400, 1300)
-    plt.ylim(1e24, 1e26)
+    plt.ylim(1e23, 1e26)
     plt.yscale("log")
     # plt.legend()
     ax = plt.gca()
@@ -65,56 +66,173 @@ def plot_trap_density_variation_with_temperature_standard_damage():
 
 
 def plot_trap_density_variation_with_damage_standard_temperature():
-    fpy = 3600 * 24 * 365.25
-    alt_dpa_range_seconds = alt_dpa_range / fpy
+    # fpy = 3600 * 24 * 365.25
+    # alt_dpa_range_seconds = alt_dpa_range / fpy
 
     plt.figure()
     plt.plot(
-        alt_dpa_range_seconds,
+        alt_dpa_range,
         trap_1_densities_standard_temp,
         label="Trap 1 (0.87 eV)",
         color="black",
     )
     plt.plot(
-        alt_dpa_range_seconds,
+        alt_dpa_range,
         trap_2_densities_standard_temp,
         label="Trap 2 (1.00 eV)",
         color="grey",
     )
     plt.plot(
-        alt_dpa_range_seconds,
+        alt_dpa_range,
         trap_3_densities_standard_temp,
         label="Trap D1 (1.15 eV)",
         color=firebrick,
     )
     plt.plot(
-        alt_dpa_range_seconds,
+        alt_dpa_range,
         trap_4_densities_standard_temp,
         label="Trap D2 (1.35 eV)",
-        color=electric_blue,
-    )
-    plt.plot(
-        alt_dpa_range_seconds,
-        trap_5_densities_standard_temp,
-        label="Trap D3 (1.65 eV)",
         color=pewter_blue,
     )
     plt.plot(
-        alt_dpa_range_seconds,
+        alt_dpa_range,
+        trap_5_densities_standard_temp,
+        label="Trap D3 (1.65 eV)",
+        color=electric_blue,
+    )
+    plt.plot(
+        alt_dpa_range,
         trap_6_densities_standard_temp,
         label="Trap D4 (1.85 eV)",
         color=green_ryb,
     )
     plt.ylabel(r"Trap concentraion (m$^{-3}$)")
-    plt.xlabel(r"Damage rate (dpa/s)")
-    alt_alt_dpa_range = alt_dpa_range / fpy
-    plt.xlim(alt_alt_dpa_range[0], alt_alt_dpa_range[-1])
+    plt.xlabel(r"Damage rate (dpa/fpy)")
+    # alt_alt_dpa_range = alt_dpa_range / fpy
+    plt.xlim(alt_dpa_range[0], alt_dpa_range[-1])
+    plt.ylim(1e23, 1e26)
     plt.yscale("log")
     plt.xscale("log")
     plt.legend()
     ax = plt.gca()
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
+    plt.tight_layout()
+
+
+def plot_trap_variation_paper():
+
+    fig, axs = plt.subplots(nrows=1, ncols=2, sharey=True, figsize=([12, 4.8]))
+    # variation with temp
+    axs[0].plot(T_range, trap_1_densities_by_T, label="Trap 1 (0.87 eV)", color="black")
+    axs[0].plot(T_range, trap_2_densities_by_T, label="Trap 2 (1.00 eV)", color="grey")
+    axs[0].plot(
+        T_range, trap_3_densities_by_T, label="Trap D1 (1.15 eV)", color=firebrick
+    )
+    axs[0].plot(
+        T_range, trap_4_densities_by_T, label="Trap D2 (1.35 eV)", color=pewter_blue
+    )
+    axs[0].plot(
+        T_range, trap_5_densities_by_T, label="Trap D3 (1.65 eV)", color=electric_blue
+    )
+    axs[0].plot(
+        T_range, trap_6_densities_by_T, label="Trap D4 (1.85 eV)", color=green_ryb
+    )
+    axs[0].set_ylabel(r"Trap density (m$^{-3}$)")
+    axs[0].set_xlabel(r"Temperature (K)")
+    axs[0].set_xlim(400, 1300)
+    axs[0].set_ylim(1e23, 1e26)
+    axs[0].set_yscale("log")
+    axs[0].spines["top"].set_visible(False)
+    axs[0].spines["right"].set_visible(False)
+
+    # damage variation
+    axs[1].plot(
+        alt_dpa_range,
+        trap_1_densities_standard_temp,
+        label="Trap 1 (0.87 eV)",
+        color="black",
+    )
+    axs[1].plot(
+        alt_dpa_range,
+        trap_2_densities_standard_temp,
+        label="Trap 2 (1.00 eV)",
+        color="grey",
+    )
+    axs[1].plot(
+        alt_dpa_range,
+        trap_3_densities_standard_temp,
+        label="Trap D1 (1.15 eV)",
+        color=firebrick,
+    )
+    axs[1].plot(
+        alt_dpa_range,
+        trap_4_densities_standard_temp,
+        label="Trap D2 (1.35 eV)",
+        color=pewter_blue,
+    )
+    axs[1].plot(
+        alt_dpa_range,
+        trap_5_densities_standard_temp,
+        label="Trap D3 (1.65 eV)",
+        color=electric_blue,
+    )
+    axs[1].plot(
+        alt_dpa_range,
+        trap_6_densities_standard_temp,
+        label="Trap D4 (1.85 eV)",
+        color=green_ryb,
+    )
+    axs[1].set_xlabel(r"Damage rate (dpa/fpy)")
+    axs[1].set_xlim(alt_dpa_range[0], alt_dpa_range[-1])
+    axs[1].set_ylim(1e23, 1e26)
+    axs[1].set_yscale("log")
+    axs[1].set_xscale("log")
+    plt.legend()
+    axs[1].spines["top"].set_visible(False)
+    axs[1].spines["right"].set_visible(False)
+
+    # plt.subplots_adjust(wspace=0.4)
+    plt.tight_layout()
+    plt.subplots_adjust(wspace=0.15)
+
+    plt.figure()
+    # damage variation
+    plt.plot(
+        alt_dpa_range,
+        trap_3_densities_standard_temp,
+        label=r"Trap D1",
+        color=firebrick,
+    )
+    plt.plot(
+        alt_dpa_range,
+        trap_4_densities_standard_temp,
+        label=r"Trap D2",
+        color=pewter_blue,
+    )
+    plt.plot(
+        alt_dpa_range,
+        trap_5_densities_standard_temp,
+        label=r"Trap D3",
+        color=electric_blue,
+    )
+    plt.plot(
+        alt_dpa_range,
+        trap_6_densities_standard_temp,
+        label=r"Trap D4",
+        color=green_ryb,
+    )
+    plt.xlabel(r"Damage rate (dpa/fpy)")
+    plt.ylabel(r"Trap density (m$^{-3}$)")
+    plt.xlim(alt_dpa_range[0], alt_dpa_range[-1])
+    plt.ylim(1e23, 1e26)
+    plt.yscale("log")
+    plt.xscale("log")
+    plt.legend()
+    ax = plt.gca()
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+
     plt.tight_layout()
 
 
@@ -363,12 +481,13 @@ def plot_varying_all_traps_temp_and_damage_normalised(dpa_range_contour):
     )
 
 
-plot_trap_density_variation_with_temperature_standard_damage()
-plot_trap_density_variation_with_damage_standard_temperature()
-plot_total_trap_density_variation_with_damage_standard_temperature()
-plot_trap_6_density_varitation_with_temperature_and_damage()
-plot_varying_trap_6_temp_and_damage(dpa_range_contour)
-plot_varying_all_traps_temp_and_damage(dpa_range_contour)
-plot_varying_all_traps_temp_and_damage_normalised(dpa_range_contour)
+plot_trap_variation_paper()
+# plot_trap_density_variation_with_temperature_standard_damage()
+# plot_trap_density_variation_with_damage_standard_temperature()
+# plot_total_trap_density_variation_with_damage_standard_temperature()
+# plot_trap_6_density_varitation_with_temperature_and_damage()
+# plot_varying_trap_6_temp_and_damage(dpa_range_contour)
+# plot_varying_all_traps_temp_and_damage(dpa_range_contour)
+# plot_varying_all_traps_temp_and_damage_normalised(dpa_range_contour)
 
 plt.show()

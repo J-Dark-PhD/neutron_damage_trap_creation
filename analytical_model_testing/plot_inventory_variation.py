@@ -191,11 +191,77 @@ def plot_inventory_contour(dpa_range_contour):
     plt.tight_layout()
 
 
+def plot_paper(dpa_range_contour):
+
+    plot_dpa_range = test_dpa_range
+    norm = LogNorm(vmin=min(plot_dpa_range), vmax=max(plot_dpa_range))
+    colorbar = cm.viridis
+    sm = plt.cm.ScalarMappable(cmap=colorbar, norm=norm)
+
+    colours = [colorbar(norm(dpa)) for dpa in plot_dpa_range]
+
+    fig, axs = plt.subplots(nrows=2, ncols=2, sharex=True, figsize=([13, 9.6]))
+    # fig, axs = plt.subplots(nrows=2, ncols=2, sharex=True)
+
+    for inv, dpa, colour in zip(inventories_alt, plot_dpa_range, colours):
+        axs[0, 0].plot(
+            testing_T_range, inv, label="{} dpa/fpy".format(dpa), color=colour
+        )
+    axs[0, 0].set_ylabel(r"T inventory (m$^{-3}$)")
+    axs[0, 0].set_xlim(400, 1300)
+    axs[0, 0].set_ylim(1e16, 1e24)
+    axs[0, 0].set_yscale("log")
+    axs[0, 0].spines["top"].set_visible(False)
+    axs[0, 0].spines["right"].set_visible(False)
+
+    plt.colorbar(sm, label=r"Damage rate (dpa fpy$^{-1}$)", ax=axs[0, 0])
+
+    dpa_range_contour = np.array(dpa_range_contour)
+    X, Y = np.meshgrid(T_range_contour, dpa_range_contour)
+
+    # ##### normalised to 0 dpa ##### #
+    CS = axs[1, 0].contourf(
+        X,
+        Y,
+        normalised_inventories_contour,
+        norm=LogNorm(),
+        levels=np.geomspace(
+            np.min(normalised_inventories_contour),
+            np.max(normalised_inventories_contour),
+            num=1000,
+        ),
+        cmap="plasma",
+    )
+    for c in CS.collections:
+        c.set_edgecolor("face")
+    CS2 = axs[1, 0].contour(
+        X,
+        Y,
+        normalised_inventories_contour,
+        levels=[1e00, 1e01, 1e02, 1e03, 1e04],
+        colors="black",
+    )
+    axs[1, 0].clabel(CS2, inline=True, fontsize=10, fmt="%.0e")
+
+    plt.colorbar(
+        CS,
+        label=r"Normalised T retention (ret/ret$_{0 \ \mathrm{dpa}}$)",
+        format="%.0e",
+        ax=axs[1, 0],
+    )
+
+    axs[1, 0].set_yscale("log")
+    axs[1, 0].set_ylabel(r"Damage rate (dpa fpy$^{-1}$)")
+    axs[1, 0].set_xlabel(r"Temperature (K)")
+    plt.tight_layout()
+
+
 # plot_inventory_varying_damage_standard_temperature()
 # plot_normalised_inventory_varying_temperature_standard_dpa()
 # plot_inventory_varying_temperature_and_damage()
-plot_inventory_varying_temperature_and_damage_expanded()
+# plot_inventory_varying_temperature_and_damage_expanded()
 # plot_normalised_inventory_varying_temperature_and_damage()
 # plot_inventory_contour(dpa_range_contour)
+plot_paper(dpa_range_contour)
 
 plt.show()
