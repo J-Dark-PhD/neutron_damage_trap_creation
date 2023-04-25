@@ -224,17 +224,14 @@ def automatic_vertices(dpa, T, implantation_time, traps):
 
     dx = 2e-3 / 100
 
-    # a = 0.05 * dpa ** (-0.35)
-    # a = 0.02 * dpa ** (-0.375)
+    # suitable for 24h case
     a = 0.09 * dpa ** (-0.25)
     if a > 0.8:
         a = 0.8
-    # b = -0.2 * np.log(dpa) + 3.8
     b = -0.2 * np.log(dpa) + 3.7
     if b < 2.74:
         b = 2.74
     tolerance = a * (T - 400) + b
-    # tolerance = a * (T - 400) + 6
 
     print(
         "The estimated maximum penetration depth is: {:.2e} m".format(
@@ -249,7 +246,7 @@ def automatic_vertices(dpa, T, implantation_time, traps):
     if max_penetration_depth * tolerance > size:
         vertices = np.concatenate(
             [
-                np.linspace(0, size, 500),
+                np.linspace(0, size, 1000),
             ]
         )
     else:
