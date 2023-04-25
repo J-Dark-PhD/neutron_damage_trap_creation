@@ -3,6 +3,8 @@ from matplotlib import rc
 import numpy as np
 import csv
 import io
+from matplotlib import cm
+from matplotlib.colors import LogNorm
 
 plt.rc("text", usetex=True)
 plt.rc("font", family="serif", size=12)
@@ -1784,35 +1786,35 @@ def plot_dpa_0_1_detailed():
         trap_1_contrib,
         linestyle="dashed",
         color="black",
-        label=r"Trap 1 ($E_{t} = 1.00$ eV)",
+        label=r"Trap 1",
     )
     plt.plot(
         T_sim[1:],
         trap_2_contrib,
         linestyle="dashed",
         color=firebrick,
-        label=r"Trap D1 ($E_{t} = 1.15$ eV)",
+        label=r"Trap D1",
     )
     plt.plot(
         T_sim[1:],
         trap_3_contrib,
         linestyle="dashed",
         color=pewter_blue,
-        label=r"Trap D2 ($E_{t} = 1.35$ eV)",
+        label=r"Trap D2",
     )
     plt.plot(
         T_sim[1:],
         trap_4_contrib,
         linestyle="dashed",
         color=electric_blue,
-        label=r"Trap D3 ($E_{t} = 1.65$ eV)",
+        label=r"Trap D3",
     )
     plt.plot(
         T_sim[1:],
         trap_5_contrib,
         linestyle="dashed",
         color=green_ryb,
-        label=r"Trap D4 ($E_{t} = 1.85$ eV)",
+        label=r"Trap D4",
     )
     plt.fill_between(T_sim[1:], 0, trap_1_contrib, color="grey", alpha=0.1)
     plt.fill_between(T_sim[1:], 0, trap_2_contrib, color="grey", alpha=0.1)
@@ -1925,10 +1927,100 @@ def plot_alone():
     plot_dpa_2_5_solo()
 
 
+def plot_TDS_data_paper():
+
+    area = 12e-03 * 15e-03
+
+    dpa_values = [2.5, 0.5, 0.23, 0.1, 0.023, 0.005, 0.001, 0]
+
+    tds_T_and_flux = []
+    fitting_data = []
+
+    for dpa in dpa_values:
+        tds_data_file = "tds_data/{}_dpa.csv".format(dpa)
+        tds_data = np.genfromtxt(tds_data_file, delimiter=",", dtype=float)
+        tds_data_T = tds_data[:, 0]
+        tds_data_flux = tds_data[:, 1] / area
+        tds_T_and_flux.append([tds_data_T, tds_data_flux])
+
+        fitting_file = "Results/dpa_{}/last.csv".format(dpa)
+        T_sim = []
+        flux_1 = []
+        flux_2 = []
+        with open(fitting_file, "r") as csvfile:
+            plots = csv.reader(csvfile, delimiter=",")
+            for row in plots:
+                if "t(s)" not in row:
+                    if float(row[0]) >= implantation_time + resting_time * 0.75:
+                        T_sim.append(float(row[1]))
+                        flux_1.append(float(row[2]))
+                        flux_2.append(float(row[3]))
+        flux = -np.asarray(flux_1) - np.asarray(flux_2)
+        fitting_data.append([T_sim, flux])
+
+    plot_dpa_values = dpa_values[:-1]
+    norm = LogNorm(vmin=min(plot_dpa_values), vmax=max(plot_dpa_values))
+    colorbar = cm.viridis
+    sm = plt.cm.ScalarMappable(cmap=colorbar, norm=norm)
+
+    colours = [colorbar(norm(dpa)) for dpa in dpa_values]
+
+    plt.figure(figsize=(6.4, 5.5))
+    plt.plot(
+        tds_T_and_flux[-1][0],
+        tds_T_and_flux[-1][1],
+        label=r"undamaged",
+        linewidth=3,
+        color="black",
+    )
+
+    tds_T_and_flux = tds_T_and_flux[:-1]
+    for case, colour in zip(tds_T_and_flux, colours):
+        T_values = case[0]
+        flux_values = case[1]
+        plt.plot(T_values, flux_values, color=colour, linewidth=3)
+
+    for case in fitting_data[:-1]:
+        T_values = case[0]
+        flux_values = case[1]
+        plt.plot(
+            T_values,
+            flux_values,
+            color="grey",
+            linewidth=2,
+            linestyle="dashed",
+            alpha=0.5,
+        )
+    plt.plot(
+        fitting_data[-1][0],
+        fitting_data[-1][1],
+        color="grey",
+        linewidth=2,
+        linestyle="dashed",
+        alpha=0.5,
+        label="fittings",
+    )
+
+    plt.xlim(300, 1000)
+    plt.ylim(0, 1e17)
+    plt.xlabel(r"Temperature (K)")
+    plt.ylabel(r"Desorption flux (D m$ ^{-2}$ s$ ^{-1}$)")
+    plt.legend()
+    # plt.subplots_adjust(wspace=0.112, hspace=0.071)
+    # plt.colorbar(sm, label=r"Damage (dpa)")
+    ax = plt.gca()
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    plt.tight_layout()
+    plt.subplots_adjust(wspace=0.112, hspace=0.071)
+    plt.colorbar(sm, label=r"Damage (dpa)")
+
+
 # plot_alone()
 # plot_with_previous()
 plot_dpa_0_1_detailed()
 # plot_dpa_0_detailed()
 # plot_TDS_data()
+plot_TDS_data_paper()
 
 plt.show()
