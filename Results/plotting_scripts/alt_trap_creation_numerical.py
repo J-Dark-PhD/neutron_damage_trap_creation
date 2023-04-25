@@ -12,7 +12,7 @@ E_A = 0.2792
 n_0 = 0
 
 dpa_values = np.geomspace(1e-03, 1e04, num=50)
-T_values = np.linspace(1300, 400, num=500)
+T_values = np.linspace(1300, 700, num=50)
 t = np.geomspace(1e01, 1e09, int(1e04))
 
 trap_densities = []
@@ -68,8 +68,8 @@ plt.figure(figsize=[8, 4.8])
 day = 3600 * 24
 month = day * 31
 year = day * 365.25
-plt.hlines(day, 1e-03, 5e04, color="black", alpha=0.3, linestyle="dashed")
-plt.hlines(month, 1e-03, 5e04, color="black", alpha=0.3, linestyle="dashed")
+# plt.hlines(day, 1e-03, 5e04, color="black", alpha=0.3, linestyle="dashed")
+# plt.hlines(month, 1e-03, 5e04, color="black", alpha=0.3, linestyle="dashed")
 
 # dpa_values = dpa_valuses / year
 for T, char_times, colour in zip(T_values, characteristic_times, colours):
@@ -85,7 +85,10 @@ plt.xlabel(r"Damage rate (dpa/fpy)")
 plt.subplots_adjust(wspace=0.112, hspace=0.071)
 plt.colorbar(sm, label=r"Temperature (K)")
 plt.xlim(1e-03, 1e03)
-plt.ylim(1e03, 1e07)
+plt.ylim(1e03, 1e05)
+
+plt.hlines(day, 1e-03, 5e04, color="black", alpha=0.3, linestyle="dashed")
+plt.hlines(month, 1e-03, 5e04, color="black", alpha=0.3, linestyle="dashed")
 
 plt.annotate("1 day", [3e02, day * 1.1], color="black", alpha=0.3)
 plt.annotate("1 month", [1.5e02, month * 1.1], color="black", alpha=0.3)
