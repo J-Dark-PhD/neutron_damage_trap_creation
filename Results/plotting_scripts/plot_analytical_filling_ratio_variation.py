@@ -1,24 +1,34 @@
 import matplotlib.pyplot as plt
-from analytical_model import (
-    T_range,
-    trap_1_filling_ratios,
-    trap_2_filling_ratios,
-    trap_3_filling_ratios,
-    trap_4_filling_ratios,
-    trap_5_filling_ratios,
-    trap_6_filling_ratios,
+import numpy as np
+
+results_folder = "../analytical_model_testing/"
+T_range = np.genfromtxt(results_folder + "T_range.csv", delimiter=",")
+trap_1_filling_ratios = np.genfromtxt(
+    results_folder + "trap_1_filling_ratios.csv", delimiter=","
 )
+trap_d1_filling_ratios = np.genfromtxt(
+    results_folder + "trap_d1_filling_ratios.csv", delimiter=","
+)
+trap_d2_filling_ratios = np.genfromtxt(
+    results_folder + "trap_d2_filling_ratios.csv", delimiter=","
+)
+trap_d3_filling_ratios = np.genfromtxt(
+    results_folder + "trap_d3_filling_ratios.csv", delimiter=","
+)
+trap_d4_filling_ratios = np.genfromtxt(
+    results_folder + "trap_d4_filling_ratios.csv", delimiter=","
+)
+
 
 plt.rc("text", usetex=True)
 plt.rc("font", family="serif", size=12)
 
 plt.figure()
-plt.plot(T_range, trap_1_filling_ratios, label="Trap 1 (0.87 eV)")
-plt.plot(T_range, trap_2_filling_ratios, label="Trap 2 (1.00 eV)")
-plt.plot(T_range, trap_3_filling_ratios, label="Trap 3 (1.15 eV)")
-plt.plot(T_range, trap_4_filling_ratios, label="Trap 4 (1.35 eV)")
-plt.plot(T_range, trap_5_filling_ratios, label="Trap 5 (1.65 eV)")
-plt.plot(T_range, trap_6_filling_ratios, label="Trap 6 (1.85 eV)")
+plt.plot(T_range, trap_1_filling_ratios, label="Trap 1 (1.00 eV)")
+plt.plot(T_range, trap_d1_filling_ratios, label="Trap D1 (1.15 eV)")
+plt.plot(T_range, trap_d2_filling_ratios, label="Trap D2 (1.35 eV)")
+plt.plot(T_range, trap_d3_filling_ratios, label="Trap D3 (1.65 eV)")
+plt.plot(T_range, trap_d4_filling_ratios, label="Trap D4 (1.85 eV)")
 plt.ylabel(r"Filling ratio")
 plt.xlabel(r"Temperature (K)")
 plt.xlim(400, 1300)
