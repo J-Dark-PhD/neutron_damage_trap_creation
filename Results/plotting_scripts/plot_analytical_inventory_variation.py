@@ -1,24 +1,35 @@
 import matplotlib.pyplot as plt
 from matplotlib import ticker
 from matplotlib import cm
-from matplotlib.ticker import FormatStrFormatter
-from matplotlib.colors import LogNorm, ListedColormap
+from matplotlib.colors import LogNorm
 import numpy as np
-from analytical_model import (
-    alt_dpa_range,
-    inventories_standard_temp,
-    inventories_standard_temp_normalised,
-    dpa_range,
-    dpa_range_contour,
-    inventories,
-    inventories_normalised,
-    T_range,
-    T_range_contour,
-    inventories_contour,
-    normalised_inventories_contour,
-    inventories_alt,
-    test_dpa_range,
-    testing_T_range,
+
+results_folder = "../analytical_model_testing/"
+T_range = np.genfromtxt(results_folder + "T_range.csv", delimiter=",")
+T_range_contour = np.genfromtxt(results_folder + "T_range_contour.csv", delimiter=",")
+dpa_range = np.genfromtxt(results_folder + "dpa_range.csv", delimiter=",")
+dpa_range_contour = np.genfromtxt(
+    results_folder + "dpa_range_contour.csv", delimiter=","
+)
+
+inventories = np.genfromtxt(results_folder + "inventories.csv", delimiter=",")
+inventories_normalised = np.genfromtxt(
+    results_folder + "inventories_normalised.csv", delimiter=","
+)
+inventories_no_damage = np.genfromtxt(
+    results_folder + "inventories_no_damage.csv", delimiter=","
+)
+inventories_contour = np.genfromtxt(
+    results_folder + "inventories_contour.csv", delimiter=","
+)
+inventories_normalised_contour = np.genfromtxt(
+    results_folder + "inventories_normalised_contour.csv", delimiter=","
+)
+inventories_standard_temp = np.genfromtxt(
+    results_folder + "inventories_standard_temp.csv", delimiter=","
+)
+inventories_standard_temp_normalised = np.genfromtxt(
+    results_folder + "inventories_standard_temp_normalised.csv", delimiter=","
 )
 
 plt.rc("text", usetex=True)
@@ -27,10 +38,10 @@ plt.rc("font", family="serif", size=12)
 
 def plot_inventory_varying_damage_standard_temperature():
     plt.figure()
-    plot_dpa_range = alt_dpa_range / (3600 * 24 * 365.25)
-    plt.plot(alt_dpa_range, inventories_standard_temp, color="black", label="761 K")
+    plot_dpa_range = dpa_range_contour / (3600 * 24 * 365.25)
+    plt.plot(dpa_range, inventories_standard_temp, color="black", label="761 K")
     # plt.plot(plot_dpa_range, inventories_standard_temp, color="black", label="761 K")
-    plt.ylabel(r"T inventory (m$^{-3}$)")
+    plt.ylabel(r"T inventory (m$^{-2}$)")
     plt.xlabel(r"Damage rate (dpa/fpy)")
     # plt.xlabel(r"Damage rate (dpa/s)")
     # plt.xlim(plot_dpa_range[0], plot_dpa_range[-1])
@@ -46,7 +57,7 @@ def plot_inventory_varying_damage_standard_temperature():
 def plot_normalised_inventory_varying_temperature_standard_dpa():
     plt.figure()
     plt.plot(
-        alt_dpa_range,
+        dpa_range,
         inventories_standard_temp_normalised,
         color="black",
         label="761 K",
@@ -95,7 +106,7 @@ def plot_inventory_varying_temperature_and_damage():
 
 def plot_inventory_varying_temperature_and_damage_expanded():
     fpy = 3600 * 24 * 365
-    plot_dpa_range = test_dpa_range / fpy
+    plot_dpa_range = dpa_range / fpy
     norm = LogNorm(vmin=min(plot_dpa_range), vmax=max(plot_dpa_range))
     # colorbar = cm.viridis(np.linspace(0, 1, 200))
     # needed to avoidhaving white lines
@@ -107,8 +118,8 @@ def plot_inventory_varying_temperature_and_damage_expanded():
     colours = [colorbar(norm(dpa)) for dpa in plot_dpa_range]
 
     plt.figure()
-    for inv, dpa, colour in zip(inventories_alt, plot_dpa_range, colours):
-        plt.plot(testing_T_range, inv, label="{} dpa/fpy".format(dpa), color=colour)
+    for inv, dpa, colour in zip(inventories, plot_dpa_range, colours):
+        plt.plot(T_range, inv, label="{} dpa/fpy".format(dpa), color=colour)
     plt.ylabel(r"T inventory (m$^{-3}$)")
     plt.xlabel(r"Temperature (K)")
     plt.xlim(400, 1300)
@@ -161,7 +172,7 @@ def plot_inventory_contour(dpa_range_contour):
         cmap="viridis",
         locator=ticker.LogLocator(),
     )
-    plt.colorbar(CS, label=r"T Inventory (m$^{-3}$)", format="%.0e ")
+    plt.colorbar(CS, label=r"T Inventory (m$^{-2}$)", format="%.0e ")
     plt.yscale("log")
     plt.ylabel(r"Damage rate (dpa s$^{-1}$)")
     plt.xlabel(r"Temperature (K)")
@@ -173,7 +184,7 @@ def plot_inventory_contour(dpa_range_contour):
     CS = ax.contourf(
         X,
         Y,
-        normalised_inventories_contour,
+        inventories_normalised_contour,
         levels=1000,
         cmap="viridis",
         locator=ticker.LogLocator(),
@@ -189,76 +200,77 @@ def plot_inventory_contour(dpa_range_contour):
     plt.tight_layout()
 
 
-def plot_paper(dpa_range_contour):
-    plot_dpa_range = test_dpa_range
+def plot_inventory_variation_and_normalised(dpa_range_contour):
+    plot_dpa_range = dpa_range
     norm = LogNorm(vmin=min(plot_dpa_range), vmax=max(plot_dpa_range))
     colorbar = cm.viridis
     sm = plt.cm.ScalarMappable(cmap=colorbar, norm=norm)
 
     colours = [colorbar(norm(dpa)) for dpa in plot_dpa_range]
 
-    fig, axs = plt.subplots(nrows=2, ncols=2, sharex=True, figsize=([13, 9.6]))
-    # fig, axs = plt.subplots(nrows=2, ncols=2, sharex=True)
+    fig, axs = plt.subplots(nrows=2, ncols=1, sharex=True, figsize=([6.4, 9.6]))
 
-    for inv, dpa, colour in zip(inventories_alt, plot_dpa_range, colours):
-        axs[0, 0].plot(
-            testing_T_range, inv, label="{} dpa/fpy".format(dpa), color=colour
-        )
-    axs[0, 0].set_ylabel(r"T inventory (m$^{-3}$)")
-    axs[0, 0].set_xlim(400, 1300)
-    axs[0, 0].set_ylim(1e16, 1e24)
-    axs[0, 0].set_yscale("log")
-    axs[0, 0].spines["top"].set_visible(False)
-    axs[0, 0].spines["right"].set_visible(False)
+    for inv, colour in zip(inventories, colours):
+        axs[0].plot(T_range, inv, color=colour)
 
-    plt.colorbar(sm, label=r"Damage rate (dpa fpy$^{-1}$)", ax=axs[0, 0])
+    axs[0].plot(T_range, inventories_no_damage, label=r"undamaged", color="black")
+    axs[0].set_ylabel(r"T inventory (m$^{-2}$)")
+    axs[0].set_xlim(400, 1300)
+    axs[0].set_ylim(1e16, 1e24)
+    axs[0].set_yscale("log")
+    axs[0].spines["top"].set_visible(False)
+    axs[0].spines["right"].set_visible(False)
+    axs[0].legend()
+
+    plt.colorbar(sm, label=r"Damage rate (dpa fpy$^{-1}$)", ax=axs[0])
 
     dpa_range_contour = np.array(dpa_range_contour)
     X, Y = np.meshgrid(T_range_contour, dpa_range_contour)
 
     # ##### normalised to 0 dpa ##### #
-    CS = axs[1, 0].contourf(
+    CS = axs[1].contourf(
         X,
         Y,
-        normalised_inventories_contour,
+        inventories_normalised_contour,
         norm=LogNorm(),
         levels=np.geomspace(
-            np.min(normalised_inventories_contour),
-            np.max(normalised_inventories_contour),
+            np.min(inventories_normalised_contour),
+            np.max(inventories_normalised_contour),
             num=1000,
         ),
         cmap="plasma",
     )
     for c in CS.collections:
         c.set_edgecolor("face")
-    CS2 = axs[1, 0].contour(
+    CS2 = axs[1].contour(
         X,
         Y,
-        normalised_inventories_contour,
-        levels=[1e00, 1e01, 1e02, 1e03, 1e04],
+        inventories_normalised_contour,
+        levels=[1e00, 1e01, 1e02, 1e03, 1e04, 1e05],
         colors="black",
     )
-    axs[1, 0].clabel(CS2, inline=True, fontsize=10, fmt="%.0e")
+    axs[1].clabel(CS2, inline=True, fontsize=10, fmt="%.0e")
 
     plt.colorbar(
         CS,
-        label=r"Normalised T retention (ret/ret$_{0 \ \mathrm{dpa}}$)",
+        label=r"Normalised T inventory (inv/inv$_{0 \ \mathrm{dpa}}$)",
         format="%.0e",
-        ax=axs[1, 0],
+        ax=axs[1],
     )
 
-    axs[1, 0].set_yscale("log")
-    axs[1, 0].set_ylabel(r"Damage rate (dpa fpy$^{-1}$)")
-    axs[1, 0].set_xlabel(r"Temperature (K)")
+    axs[1].set_yscale("log")
+    axs[1].set_ylabel(r"Damage rate (dpa fpy$^{-1}$)")
+    axs[1].set_xlabel(r"Temperature (K)")
+
     plt.tight_layout()
 
 
-# plot_inventory_varying_damage_standard_temperature()
-# plot_normalised_inventory_varying_temperature_standard_dpa()
-# plot_inventory_varying_temperature_and_damage()
-# plot_inventory_varying_temperature_and_damage_expanded()
-# plot_normalised_inventory_varying_temperature_and_damage()
-# plot_inventory_contour(dpa_range_contour)
-plot_paper(dpa_range_contour)
+plot_inventory_varying_damage_standard_temperature()
+plot_normalised_inventory_varying_temperature_standard_dpa()
+plot_inventory_varying_temperature_and_damage()
+plot_inventory_varying_temperature_and_damage_expanded()
+plot_normalised_inventory_varying_temperature_and_damage()
+plot_inventory_contour(dpa_range_contour)
+plot_inventory_variation_and_normalised(dpa_range_contour)
 
 plt.show()

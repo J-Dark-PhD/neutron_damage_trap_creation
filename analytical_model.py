@@ -261,6 +261,8 @@ inventories_normalised = []
 inventories_standard_temp = []
 inventories_standard_temp_normalised = []
 inventories_contour = []
+inventories_no_damage_contour = []
+inventories_normalised_contour = []
 filling_ratios = []
 trap_d1_densities = []
 trap_d2_densities = []
@@ -277,20 +279,58 @@ trap_d3_detrapping_rates = []
 trap_d4_detrapping_rates = []
 annealing_rates = []
 
-# for dpa in dpa_range:
-#     phi = dpa / fpy
-#     (H_retention, trap_densities, trap_filling_ratios) = analytical_model(
-#         phi=phi, T=761
-#     )
-#     inventory_per_dpa = []
-#     trap_densities_per_dpa = []
-#     for T in T_range:
-#         phi = dpa / fpy
-#         (H_retention, trap_densities, trap_filling_ratios) = analytical_model(
-#             phi=phi, T=T
-#         )
-#         inventory_per_dpa.append(H_retention)
-#     inventories.append(inventory_per_dpa)
+for dpa in dpa_range:
+    phi = dpa / fpy
+    (
+        H_retention_standard_temp,
+        trap_densities_standard_temp,
+        trap_filling_ratios_standard_temp,
+    ) = analytical_model(phi=phi, T=700)
+    inventory_per_dpa = []
+    inventories_no_damage = []
+    inventories_standard_temp.append(H_retention_standard_temp)
+    for T in T_range:
+        (H_retention, trap_densities, trap_filling_ratios) = analytical_model(
+            phi=phi, T=T
+        )
+        (
+            H_retention_no_damage,
+            trap_densities_no_damage,
+            trap_filling_ratios_no_damage,
+        ) = analytical_model(phi=phi, T=T)
+        inventory_per_dpa.append(H_retention)
+        inventories_no_damage.append(H_retention_no_damage)
+
+        (H_retention, trap_densities, trap_filling_ratios) = analytical_model(
+            phi=10 / fpy, T=T
+        )
+        filling_ratios.append(trap_filling_ratios)
+
+        trap_1_detrapping_rates.append(de_trapping_rate(E_p=1.00, T=T))
+        trap_d1_detrapping_rates.append(de_trapping_rate(E_p=1.15, T=T))
+        trap_d2_detrapping_rates.append(de_trapping_rate(E_p=1.35, T=T))
+        trap_d3_detrapping_rates.append(de_trapping_rate(E_p=1.65, T=T))
+        trap_d4_detrapping_rates.append(de_trapping_rate(E_p=1.85, T=T))
+        annealing_rates.append(annealing_rate(T=T))
+    inventories.append(inventory_per_dpa)
+
+for dpa in dpa_range_contour:
+    phi = dpa / fpy
+    inventory_contour_per_dpa = []
+    inventories_no_damage_contour = []
+    for T in T_range_contour:
+        (H_retention, trap_densities, trap_filling_ratios) = analytical_model(
+            phi=phi, T=T
+        )
+        (
+            H_retention_no_damage,
+            trap_densities_no_damage,
+            trap_filling_ratios_no_damage,
+        ) = analytical_model(phi=0, T=T)
+        inventory_contour_per_dpa.append(H_retention)
+        inventories_no_damage_contour.append(H_retention_no_damage)
+    inventories_contour.append(inventory_contour_per_dpa)
+
 
 # for dpa in dpa_range_contour:
 #     phi = dpa / fpy
@@ -330,34 +370,29 @@ annealing_rates = []
 #     filling_ratios.append(trap_filling_ratios)
 #     trap_density_values_by_T.append(trap_densities)
 
-# contour_0_dpa_case = []
-# for T in T_range_contour:
-#     (H_retention, trap_densities, trap_filling_ratios) = analytical_model(phi=0, T=T)
-#     contour_0_dpa_case.append(H_retention)
-# contour_0_dpa_case = np.array(contour_0_dpa_case)
 
-for T in T_range:
-    dpa = 10
-    phi = dpa / fpy
-    (H_retention, trap_densities, trap_filling_ratios) = analytical_model(phi=phi, T=T)
-    filling_ratios.append(trap_filling_ratios)
+# for T in T_range:
+#     dpa = 10
+#     phi = dpa / fpy
+#     (H_retention, trap_densities, trap_filling_ratios) = analytical_model(phi=phi, T=T)
+#     filling_ratios.append(trap_filling_ratios)
 
-    trap_1_detrapping_rates.append(de_trapping_rate(E_p=1.00, T=T))
-    trap_d1_detrapping_rates.append(de_trapping_rate(E_p=1.15, T=T))
-    trap_d2_detrapping_rates.append(de_trapping_rate(E_p=1.35, T=T))
-    trap_d3_detrapping_rates.append(de_trapping_rate(E_p=1.65, T=T))
-    trap_d4_detrapping_rates.append(de_trapping_rate(E_p=1.85, T=T))
-    annealing_rates.append(annealing_rate(T=T))
+#     trap_1_detrapping_rates.append(de_trapping_rate(E_p=1.00, T=T))
+#     trap_d1_detrapping_rates.append(de_trapping_rate(E_p=1.15, T=T))
+#     trap_d2_detrapping_rates.append(de_trapping_rate(E_p=1.35, T=T))
+#     trap_d3_detrapping_rates.append(de_trapping_rate(E_p=1.65, T=T))
+#     trap_d4_detrapping_rates.append(de_trapping_rate(E_p=1.85, T=T))
+#     annealing_rates.append(annealing_rate(T=T))
 
 # ##### Post processing ##### #
 
-# for inv in inventories:
-#     normalised_values = np.array(inv) / np.array(inventories[0])
-#     inventories_normalised.append(normalised_values)
+for inv in inventories:
+    normalised_values = np.array(inv) / np.array(inventories[0])
+    inventories_normalised.append(normalised_values)
 
-# for inv in inventories_standard_temp:
-#     normalised_values = np.array(inv) / np.array(inventories_standard_temp[0])
-#     inventories_standard_temp_normalised.append(normalised_values)
+for inv in inventories_standard_temp:
+    normalised_values = np.array(inv) / np.array(inventories_standard_temp[0])
+    inventories_standard_temp_normalised.append(normalised_values)
 
 trap_1_filling_ratios = []
 trap_d1_filling_ratios, trap_d2_filling_ratios = [], []
@@ -372,7 +407,6 @@ trap_d3_filling_ratios, trap_d4_filling_ratios = [], []
 # trap_1_densities, trap_2_densities = [], []
 # trap_3_densities, trap_4_densities = [], []
 # trap_5_densities, trap_6_densities = [], []
-
 
 for ratios in filling_ratios:
     trap_1_filling_ratios.append(ratios[0])
@@ -425,9 +459,10 @@ for ratios in filling_ratios:
 
 # normalised_inventories_contour = []
 # inventories_contour = np.array(inventories_contour)
-# for inventory in inventories_contour:
-#     inventory = inventory / np.array(contour_0_dpa_case)
-#     normalised_inventories_contour.append(inventory)
+
+for case in inventories_contour:
+    inventory = case / np.array(inventories_no_damage_contour)
+    inventories_normalised_contour.append(inventory)
 
 # ##### Export results ##### #
 
@@ -436,6 +471,21 @@ results_folder = "Results/analytical_model_testing/"
 np.savetxt(
     results_folder + "T_range.csv",
     T_range,
+    delimiter=",",
+)
+np.savetxt(
+    results_folder + "T_range_contour.csv",
+    T_range_contour,
+    delimiter=",",
+)
+np.savetxt(
+    results_folder + "dpa_range.csv",
+    dpa_range,
+    delimiter=",",
+)
+np.savetxt(
+    results_folder + "dpa_range_contour.csv",
+    dpa_range_contour,
     delimiter=",",
 )
 
@@ -486,3 +536,45 @@ for case, filename in zip(filling_ratio_results, filling_ratio_case_names):
         case,
         delimiter=",",
     )
+
+# inventories
+np.savetxt(
+    results_folder + "inventories.csv",
+    inventories,
+    delimiter=",",
+)
+np.savetxt(
+    results_folder + "inventories_contour.csv",
+    inventories_contour,
+    delimiter=",",
+)
+np.savetxt(
+    results_folder + "inventories_no_damage.csv",
+    inventories_no_damage,
+    delimiter=",",
+)
+np.savetxt(
+    results_folder + "inventories_no_damage_contour.csv",
+    inventories_no_damage_contour,
+    delimiter=",",
+)
+np.savetxt(
+    results_folder + "inventories_normalised.csv",
+    inventories_normalised,
+    delimiter=",",
+)
+np.savetxt(
+    results_folder + "inventories_normalised_contour.csv",
+    inventories_normalised_contour,
+    delimiter=",",
+)
+np.savetxt(
+    results_folder + "inventories_standard_temp.csv",
+    inventories_standard_temp,
+    delimiter=",",
+)
+np.savetxt(
+    results_folder + "inventories_standard_temp_normalised.csv",
+    inventories_standard_temp_normalised,
+    delimiter=",",
+)
