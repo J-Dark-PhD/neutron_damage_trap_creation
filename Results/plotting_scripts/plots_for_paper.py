@@ -6,7 +6,7 @@ import numpy as np
 # from scipy.integrate import odeint
 import matplotlib.pyplot as plt
 from matplotlib import cm
-from analytical_model_testing import (
+from analytical_model import (
     dpa_range_contour,
     T_range_contour,
     normalised_inventories_contour,
@@ -21,7 +21,6 @@ plt.rc("font", family="serif", size=12)
 
 
 def plot_inventory_variation_and_normalised(dpa_range_contour):
-
     plot_dpa_range = dpa_range
     norm = LogNorm(vmin=min(plot_dpa_range), vmax=max(plot_dpa_range))
     colorbar = cm.viridis
@@ -87,7 +86,6 @@ def plot_inventory_variation_and_normalised(dpa_range_contour):
 
 
 def plot_inventories_transient_and_distribution():
-
     dpa_values = np.geomspace(1e-05, 1e03, num=10)
 
     norm = LogNorm(vmin=min(dpa_values), vmax=max(dpa_values))
