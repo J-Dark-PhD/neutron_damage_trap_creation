@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 from matplotlib import ticker
 import numpy as np
-from analytical_model_testing import (
+from analytical_model import (
     green_ryb,
     firebrick,
     pewter_blue,
@@ -121,7 +121,6 @@ def plot_trap_density_variation_with_damage_standard_temperature():
 
 
 def plot_trap_variation_paper():
-
     fig, axs = plt.subplots(nrows=1, ncols=2, sharey=True, figsize=([12, 4.8]))
     # variation with temp
     axs[0].plot(T_range, trap_1_densities_by_T, label="Trap 1 (0.87 eV)", color="black")
@@ -272,7 +271,6 @@ def plot_trap_6_density_varitation_with_temperature_and_damage():
 
 
 def plot_varying_trap_6_temp_and_damage(dpa_range_contour):
-
     dpa_range_contour = np.array(dpa_range_contour / (24 * 3600 * 365.25))
     X, Y = np.meshgrid(T_range_contour, dpa_range_contour)
 
@@ -298,7 +296,6 @@ def plot_varying_trap_6_temp_and_damage(dpa_range_contour):
 
 
 def plot_varying_all_traps_temp_and_damage(dpa_range_contour):
-
     dpa_range_contour = np.array(dpa_range_contour / (24 * 3600 * 365.25))
     X, Y = np.meshgrid(T_range_contour, dpa_range_contour)
 
@@ -390,7 +387,6 @@ def plot_varying_all_traps_temp_and_damage(dpa_range_contour):
 
 
 def plot_varying_all_traps_temp_and_damage_normalised(dpa_range_contour):
-
     dpa_range_contour = np.array(dpa_range_contour / (24 * 3600 * 365.25))
     X, Y = np.meshgrid(T_range_contour, dpa_range_contour)
 

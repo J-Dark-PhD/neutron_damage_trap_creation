@@ -4,7 +4,7 @@ from matplotlib import cm
 from matplotlib.ticker import FormatStrFormatter
 from matplotlib.colors import LogNorm, ListedColormap
 import numpy as np
-from analytical_model_testing import (
+from analytical_model import (
     alt_dpa_range,
     inventories_standard_temp,
     inventories_standard_temp_normalised,
@@ -94,7 +94,6 @@ def plot_inventory_varying_temperature_and_damage():
 
 
 def plot_inventory_varying_temperature_and_damage_expanded():
-
     fpy = 3600 * 24 * 365
     plot_dpa_range = test_dpa_range / fpy
     norm = LogNorm(vmin=min(plot_dpa_range), vmax=max(plot_dpa_range))
@@ -150,7 +149,6 @@ def plot_normalised_inventory_varying_temperature_and_damage():
 
 
 def plot_inventory_contour(dpa_range_contour):
-
     dpa_range_contour = np.array(dpa_range_contour / (24 * 3600 * 365.25))
     X, Y = np.meshgrid(T_range_contour, dpa_range_contour)
 
@@ -192,7 +190,6 @@ def plot_inventory_contour(dpa_range_contour):
 
 
 def plot_paper(dpa_range_contour):
-
     plot_dpa_range = test_dpa_range
     norm = LogNorm(vmin=min(plot_dpa_range), vmax=max(plot_dpa_range))
     colorbar = cm.viridis

@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-from analytical_model_testing import (
+from analytical_model import (
     T_range,
     trap_1_filling_ratios,
     trap_2_filling_ratios,
