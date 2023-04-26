@@ -19,9 +19,10 @@ E_A = 0.28
 # general trap parameters
 k_0 = 5.22e-17
 p_0 = 1e13
+trap_1_density = 2e22
 
 
-def trap_concentration(T, phi, K, n_max, A_0, E_A):
+def trap_density(T, phi, K, n_max, A_0, E_A):
     """
     Function to evaluate the trap concentration at a given temperature, T, and
     damage, phi, level
@@ -115,29 +116,28 @@ def retention(c_m, c_t, L):
 
 
 def analytical_model(phi=9 / fpy, T=700, L=0.002):
-    trap_1_density = 2e22
-    trap_d1_density = trap_concentration(
+    trap_d1_density = trap_density(
         T=T, phi=phi, K=1.5e28, n_max=5.2e25, A_0=A_0, E_A=E_A
     )
-    trap_d2_density = trap_concentration(
+    trap_d2_density = trap_density(
         T=T, phi=phi, K=4.0e27, n_max=4.5e25, A_0=A_0, E_A=E_A
     )
-    trap_d3_density = trap_concentration(
+    trap_d3_density = trap_density(
         T=T, phi=phi, K=3.0e27, n_max=4.0e25, A_0=A_0, E_A=E_A
     )
-    trap_d4_density = trap_concentration(
+    trap_d4_density = trap_density(
         T=T, phi=phi, K=9.0e27, n_max=4.2e25, A_0=A_0, E_A=E_A
     )
 
     c_m = mobile_H_concentration(T=T, imp_flux=imp_flux, r_p=r_p, D_0=D_0, E_D=E_D)
 
     c_t_1, filling_ratio_1 = trapped_H_concentration(
-        c_m=c_m, k_0=k_0_1, E_k=E_k, p_0=p_0, E_p=0.87, n_i=trap_1_density, T=T
+        c_m=c_m, k_0=k_0, E_k=E_D, p_0=p_0, E_p=0.87, n_i=trap_1_density, T=T
     )
     c_t_d1, filling_ratio_d1 = trapped_H_concentration(
         c_m=c_m,
-        k_0=k_0_1,
-        E_k=E_k,
+        k_0=k_0,
+        E_k=E_D,
         p_0=p_0,
         E_p=1.15,
         A_0=A_0,
@@ -147,8 +147,8 @@ def analytical_model(phi=9 / fpy, T=700, L=0.002):
     )
     c_t_d2, filling_ratio_d2 = trapped_H_concentration(
         c_m=c_m,
-        k_0=k_0_1,
-        E_k=E_k,
+        k_0=k_0,
+        E_k=E_D,
         p_0=p_0,
         E_p=1.35,
         A_0=A_0,
@@ -158,8 +158,8 @@ def analytical_model(phi=9 / fpy, T=700, L=0.002):
     )
     c_t_d3, filling_ratio_d3 = trapped_H_concentration(
         c_m=c_m,
-        k_0=k_0_1,
-        E_k=E_k,
+        k_0=k_0,
+        E_k=E_D,
         p_0=p_0,
         E_p=1.65,
         A_0=A_0,
@@ -169,8 +169,8 @@ def analytical_model(phi=9 / fpy, T=700, L=0.002):
     )
     c_t_d4, filling_ratio_d4 = trapped_H_concentration(
         c_m=c_m,
-        k_0=k_0_1,
-        E_k=E_k,
+        k_0=k_0,
+        E_k=E_D,
         p_0=p_0,
         E_p=1.85,
         A_0=A_0,
@@ -337,6 +337,11 @@ annealing_rates = []
 # contour_0_dpa_case = np.array(contour_0_dpa_case)
 
 for T in T_range:
+    dpa = 10
+    phi = dpa / fpy
+    (H_retention, trap_densities, trap_filling_ratios) = analytical_model(phi=phi, T=T)
+    filling_ratios.append(trap_filling_ratios)
+
     trap_1_detrapping_rates.append(de_trapping_rate(E_p=1.00, T=T))
     trap_d1_detrapping_rates.append(de_trapping_rate(E_p=1.15, T=T))
     trap_d2_detrapping_rates.append(de_trapping_rate(E_p=1.35, T=T))
@@ -354,9 +359,9 @@ for T in T_range:
 #     normalised_values = np.array(inv) / np.array(inventories_standard_temp[0])
 #     inventories_standard_temp_normalised.append(normalised_values)
 
-# trap_1_filling_ratios, trap_2_filling_ratios = [], []
-# trap_3_filling_ratios, trap_4_filling_ratios = [], []
-# trap_5_filling_ratios, trap_6_filling_ratios = [], []
+trap_1_filling_ratios = []
+trap_d1_filling_ratios, trap_d2_filling_ratios = [], []
+trap_d3_filling_ratios, trap_d4_filling_ratios = [], []
 # trap_1_densities_standard_temp, trap_2_densities_standard_temp = [], []
 # trap_3_densities_standard_temp, trap_4_densities_standard_temp = [], []
 # trap_5_densities_standard_temp, trap_6_densities_standard_temp = [], []
@@ -369,13 +374,12 @@ for T in T_range:
 # trap_5_densities, trap_6_densities = [], []
 
 
-# for ratios in filling_ratios:
-#     trap_1_filling_ratios.append(ratios[0])
-#     trap_2_filling_ratios.append(ratios[1])
-#     trap_3_filling_ratios.append(ratios[2])
-#     trap_4_filling_ratios.append(ratios[3])
-#     trap_5_filling_ratios.append(ratios[4])
-#     trap_6_filling_ratios.append(ratios[5])
+for ratios in filling_ratios:
+    trap_1_filling_ratios.append(ratios[0])
+    trap_d1_filling_ratios.append(ratios[1])
+    trap_d2_filling_ratios.append(ratios[2])
+    trap_d3_filling_ratios.append(ratios[3])
+    trap_d4_filling_ratios.append(ratios[4])
 
 # for density in trap_density_values_standard_temp:
 #     trap_1_densities_standard_temp.append(density[0])
@@ -436,7 +440,7 @@ np.savetxt(
 )
 
 # annealing vs detrapping
-annealing_vs_trapping_results = [
+annealing_detrapping_results = [
     trap_1_detrapping_rates,
     trap_d1_detrapping_rates,
     trap_d2_detrapping_rates,
@@ -444,7 +448,7 @@ annealing_vs_trapping_results = [
     trap_d4_detrapping_rates,
     annealing_rates,
 ]
-case_names = [
+annealing_detrapping_case_names = [
     "trap_1_detrapping_rates",
     "trap_d1_detrapping_rates",
     "trap_d2_detrapping_rates",
@@ -452,7 +456,31 @@ case_names = [
     "trap_d4_detrapping_rates",
     "annealing_rates",
 ]
-for case, filename in zip(annealing_vs_trapping_results, case_names):
+for case, filename in zip(
+    annealing_detrapping_results, annealing_detrapping_case_names
+):
+    np.savetxt(
+        results_folder + "{}.csv".format(filename),
+        case,
+        delimiter=",",
+    )
+
+# filling ratio variation
+filling_ratio_results = [
+    trap_1_filling_ratios,
+    trap_d1_filling_ratios,
+    trap_d2_filling_ratios,
+    trap_d3_filling_ratios,
+    trap_d4_filling_ratios,
+]
+filling_ratio_case_names = [
+    "trap_1_filling_ratios",
+    "trap_d1_filling_ratios",
+    "trap_d2_filling_ratios",
+    "trap_d3_filling_ratios",
+    "trap_d4_filling_ratios",
+]
+for case, filename in zip(filling_ratio_results, filling_ratio_case_names):
     np.savetxt(
         results_folder + "{}.csv".format(filename),
         case,
