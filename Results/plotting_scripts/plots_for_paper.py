@@ -2,19 +2,88 @@ import matplotlib.pyplot as plt
 from matplotlib import cm
 from matplotlib.colors import LogNorm
 import numpy as np
-
-# from scipy.integrate import odeint
 import matplotlib.pyplot as plt
 from matplotlib import cm
+
+# from analytical_model_testing import (
+#     dpa_range_contour,
+#     T_range_contour,
+#     normalised_inventories_contour,
+#     inventories,
+#     dpa_range,
+#     T_range,
+#     inventories_no_damage,
+# )
+import os, sys, inspect
+
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+parent2dir = os.path.dirname(parentdir)
+sys.path.insert(0, parent2dir)
+
 from analytical_model import (
-    dpa_range_contour,
-    T_range_contour,
-    normalised_inventories_contour,
-    inventories,
-    dpa_range,
     T_range,
-    inventories_no_damage,
+    T_range_contour,
+    dpa_range,
+    dpa_range_contour,
+    analytical_model,
+    fpy,
 )
+
+inventories = []
+inventories_no_damage = []
+inventories_contour = []
+inventories_no_damage_contour = []
+inventories_normalised_contour = []
+
+for dpa in dpa_range:
+    phi = dpa / fpy
+    (
+        H_retention_standard_temp,
+        trap_densities_standard_temp,
+        trap_filling_ratios_standard_temp,
+    ) = analytical_model(phi=phi, T=700)
+    inventory_per_dpa = []
+    inventories_no_damage = []
+    for T in T_range:
+        (
+            H_retention,
+            trap_densities,
+            trap_fdrssstg4wsfilling_ratios,
+        ) = analytical_model(phi=phi, T=T)
+        (
+            H_retention_no_damage,
+            trap_densities_no_damage,
+            trap_filling_ratios_no_damage,
+        ) = analytical_model(phi=phi, T=T)
+        inventory_per_dpa.append(H_retention)
+        inventories_no_damage.append(H_retention_no_damage)
+    inventories.append(inventory_per_dpa)
+
+for dpa in dpa_range_contour:
+    phi = dpa / fpy
+    inventory_contour_per_dpa = []
+    inventories_no_damage_contour = []
+    for T in T_range_contour:
+        (H_retention, trap_densities, trap_filling_ratios) = analytical_model(
+            phi=phi, T=T
+        )
+        (
+            H_retention_no_damage,
+            trap_densities_no_damage,
+            trap_filling_ratios_no_damage,
+        ) = analytical_model(phi=0, T=T)
+        inventory_contour_per_dpa.append(H_retention)
+        inventories_no_damage_contour.append(H_retention_no_damage)
+    inventories_contour.append(inventory_contour_per_dpa)
+
+for inv in inventories_standard_temp:
+    normalised_values = np.array(inv) / np.array(inventories_standard_temp[0])
+    inventories_standard_temp_normalised.append(normalised_values)
+
+for case in inventories_contour:
+    inventory = case / np.array(inventories_no_damage_contour)
+    inventories_normalised_contour.append(inventory)
 
 plt.rc("text", usetex=True)
 plt.rc("font", family="serif", size=12)
@@ -51,11 +120,11 @@ def plot_inventory_variation_and_normalised(dpa_range_contour):
     CS = axs[1].contourf(
         X,
         Y,
-        normalised_inventories_contour,
+        inventories_normalised_contour,
         norm=LogNorm(),
         levels=np.geomspace(
-            np.min(normalised_inventories_contour),
-            np.max(normalised_inventories_contour),
+            np.min(inventories_normalised_contour),
+            np.max(inventories_normalised_contour),
             num=1000,
         ),
         cmap="plasma",
@@ -65,7 +134,7 @@ def plot_inventory_variation_and_normalised(dpa_range_contour):
     CS2 = axs[1].contour(
         X,
         Y,
-        normalised_inventories_contour,
+        inventories_normalised_contour,
         levels=[1e00, 1e01, 1e02, 1e03, 1e04, 1e05],
         colors="black",
     )
