@@ -23,7 +23,6 @@ def festim_sim(
     transient_run=False,
     total_time=1e05,
 ):
-
     my_model = F.Simulation(log_level=40)
 
     # define materials
