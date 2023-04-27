@@ -68,8 +68,8 @@ def plot_transient_inventories_varying_T_and_damage_24h_alt(
 
     colours_paper = [colorbar(norm(dpa)) for dpa in dpa_values_paper]
 
-    normalised_inventories = np.loadtxt("normalised_inventories_24h")
-    inventories_paper = np.loadtxt("inventories_24h_paper")
+    normalised_inventories = np.loadtxt("../normalised_inventories_24h")
+    inventories_paper = np.loadtxt("../inventories_24h_paper")
 
     plt.rc("text", usetex=True)
     plt.rc("font", family="serif", size=12)
