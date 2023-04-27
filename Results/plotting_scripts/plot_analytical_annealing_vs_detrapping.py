@@ -1,24 +1,24 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import os, sys, inspect
 
-plt.rc("text", usetex=True)
-plt.rc("font", family="serif", size=12)
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+parent2dir = os.path.dirname(parentdir)
+sys.path.insert(0, parent2dir)
 
-results_folder = "../analytical_model_testing/"
-T_range = np.genfromtxt(results_folder + "T_range.csv", delimiter=",")
-trap_d1_detrapping_rates = np.genfromtxt(
-    results_folder + "trap_d1_detrapping_rates.csv", delimiter=","
-)
-trap_d2_detrapping_rates = np.genfromtxt(
-    results_folder + "trap_d2_detrapping_rates.csv", delimiter=","
-)
-trap_d3_detrapping_rates = np.genfromtxt(
-    results_folder + "trap_d3_detrapping_rates.csv", delimiter=","
-)
-trap_d4_detrapping_rates = np.genfromtxt(
-    results_folder + "trap_d4_detrapping_rates.csv", delimiter=","
-)
-annealing_rates = np.genfromtxt(results_folder + "annealing_rates.csv", delimiter=",")
+from analytical_model import compare_annealing_and_detrapping
+
+
+T_range = np.linspace(400, 1300, num=1000)
+(
+    trap_1_detrapping_rates,
+    trap_d1_detrapping_rates,
+    trap_d2_detrapping_rates,
+    trap_d3_detrapping_rates,
+    trap_d4_detrapping_rates,
+    annealing_rates,
+) = compare_annealing_and_detrapping(T_range)
 
 plt.rc("text", usetex=True)
 plt.rc("font", family="serif", size=12)

@@ -1,24 +1,22 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import os, sys, inspect
 
-results_folder = "../analytical_model_testing/"
-T_range = np.genfromtxt(results_folder + "T_range.csv", delimiter=",")
-trap_1_filling_ratios = np.genfromtxt(
-    results_folder + "trap_1_filling_ratios.csv", delimiter=","
-)
-trap_d1_filling_ratios = np.genfromtxt(
-    results_folder + "trap_d1_filling_ratios.csv", delimiter=","
-)
-trap_d2_filling_ratios = np.genfromtxt(
-    results_folder + "trap_d2_filling_ratios.csv", delimiter=","
-)
-trap_d3_filling_ratios = np.genfromtxt(
-    results_folder + "trap_d3_filling_ratios.csv", delimiter=","
-)
-trap_d4_filling_ratios = np.genfromtxt(
-    results_folder + "trap_d4_filling_ratios.csv", delimiter=","
-)
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+parent2dir = os.path.dirname(parentdir)
+sys.path.insert(0, parent2dir)
 
+from analytical_model import filling_ratio_evaluation
+
+T_range = np.linspace(400, 1300, num=1000)
+(
+    trap_1_filling_ratios,
+    trap_d1_filling_ratios,
+    trap_d2_filling_ratios,
+    trap_d3_filling_ratios,
+    trap_d4_filling_ratios,
+) = filling_ratio_evaluation(T_range)
 
 plt.rc("text", usetex=True)
 plt.rc("font", family="serif", size=12)

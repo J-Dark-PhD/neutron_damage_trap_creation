@@ -3,33 +3,32 @@ from matplotlib import ticker
 from matplotlib import cm
 from matplotlib.colors import LogNorm
 import numpy as np
+import os, sys, inspect
 
-results_folder = "../analytical_model_testing/"
-T_range = np.genfromtxt(results_folder + "T_range.csv", delimiter=",")
-T_range_contour = np.genfromtxt(results_folder + "T_range_contour.csv", delimiter=",")
-dpa_range = np.genfromtxt(results_folder + "dpa_range.csv", delimiter=",")
-dpa_range_contour = np.genfromtxt(
-    results_folder + "dpa_range_contour.csv", delimiter=","
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+parent2dir = os.path.dirname(parentdir)
+sys.path.insert(0, parent2dir)
+
+from analytical_model import (
+    inventory_variation_with_damage_and_temperature,
 )
 
-inventories = np.genfromtxt(results_folder + "inventories.csv", delimiter=",")
-inventories_normalised = np.genfromtxt(
-    results_folder + "inventories_normalised.csv", delimiter=","
-)
-inventories_no_damage = np.genfromtxt(
-    results_folder + "inventories_no_damage.csv", delimiter=","
-)
-inventories_contour = np.genfromtxt(
-    results_folder + "inventories_contour.csv", delimiter=","
-)
-inventories_normalised_contour = np.genfromtxt(
-    results_folder + "inventories_normalised_contour.csv", delimiter=","
-)
-inventories_standard_temp = np.genfromtxt(
-    results_folder + "inventories_standard_temp.csv", delimiter=","
-)
-inventories_standard_temp_normalised = np.genfromtxt(
-    results_folder + "inventories_standard_temp_normalised.csv", delimiter=","
+T_range = np.linspace(400, 1300, num=50)
+dpa_range = np.geomspace(1e-5, 1e03, num=10)
+T_range_contour = np.linspace(400, 1300, num=100)
+dpa_range_contour = np.geomspace(1e-3, 1e03, num=100)
+
+(
+    inventories,
+    inventories_no_damage,
+    inventories_normalised,
+    inventories_standard_temp,
+    inventories_standard_temp_normalised,
+    inventories_contour,
+    inventories_normalised_contour,
+) = inventory_variation_with_damage_and_temperature(
+    T_range, dpa_range, T_range_contour, dpa_range_contour
 )
 
 plt.rc("text", usetex=True)

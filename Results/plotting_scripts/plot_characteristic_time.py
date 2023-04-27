@@ -123,8 +123,8 @@ T_values_inv = T_values_inv[:34]
 #     T_values_inv=T_values_inv,
 # )
 
-saturation_time_traps = np.loadtxt("saturation_times_traps.txt")
-characteristic_times = np.loadtxt("characteristic_times_invs.txt")
+saturation_time_traps = np.loadtxt("../saturation_times_traps.txt")
+characteristic_times = np.loadtxt("../characteristic_times_invs.txt")
 
 # ##### Plotting ##### #
 
